@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { PiDotsNineThin } from "react-icons/pi";
 import { HiDotsVertical } from "react-icons/hi";
 import Tooltip from "./Tooltip";
+import TooltipContext from "../context/TooltipContext";
 
-const Habit = ({ habit, onMouseEnter, onMouseLeave, tooltipTagline }) => {
+const Habit = ({ habit }) => {
   const [loadMore, setLoadMore] = useState(false);
-  const iconMap = {};
+  const { tooltip, dispatch } = useContext(TooltipContext);
 
   return (
     <article className="border-[1px] border-slate-300 p-2 hover:bg-slate-100 cursor-pointer transition-colors">
@@ -33,13 +34,15 @@ const Habit = ({ habit, onMouseEnter, onMouseLeave, tooltipTagline }) => {
             className="cursor-pointer"
             onClick={() => setLoadMore(!loadMore)}
           />
-          <div className={`${tooltipTagline && "tooltip__container"}`}>
+          <div className={`${"tooltip__container"}`}>
             <MdDelete
               className="cp"
-              onMouseEnter={() => onMouseEnter("delete")}
-              onMouseLeave={onMouseLeave}
+              onMouseEnter={() =>
+                dispatch({ type: "delete", tooltip: "Delete habit" })
+              }
+              onMouseLeave={() => dispatch({ type: "clear", init: {} })}
             />
-            <Tooltip tagline={tooltipTagline} />
+            {tooltip?.delete && <Tooltip tagline={tooltip?.delete} />}
           </div>
           <HiDotsVertical className="cursor-pointer" />
         </div>

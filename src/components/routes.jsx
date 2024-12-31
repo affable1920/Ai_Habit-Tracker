@@ -1,8 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import TooltipProvider from "./Providers/TooltipProvider";
+import QueryProvider from "./Providers/QueryProvider";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import Layout from "./Layout";
-import HomePage from "./HomePage";
 import HabitsDash from "./HabitsDash";
 
 const router = createBrowserRouter([
@@ -10,12 +11,21 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: "habits", element: <HabitsDash /> },
+      { path: "", element: <HabitsDash /> },
       { path: "register", element: <RegisterForm /> },
       { path: "login", element: <LoginForm /> },
     ],
   },
 ]);
 
-export default router;
+const App = () => {
+  return (
+    <TooltipProvider>
+      <QueryProvider>
+        <RouterProvider router={router} />;
+      </QueryProvider>
+    </TooltipProvider>
+  );
+};
+
+export default App;

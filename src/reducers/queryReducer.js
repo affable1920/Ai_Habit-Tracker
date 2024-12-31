@@ -1,5 +1,4 @@
 const queryReducer = (state, action) => {
-  const init = state;
   switch (action.type) {
     case "set_currentPage":
       return { ...state, currentPage: action.currentPage };
@@ -12,7 +11,7 @@ const queryReducer = (state, action) => {
       };
 
     case "set_pageSize":
-      return { ...state, pageSize: action.pageSize };
+      return { ...state, pageSize: parseInt(action.pageSize) };
 
     case "reset":
       return action.state;

@@ -25,7 +25,7 @@ const Pagination = ({ paginated }) => {
             }
             name="pageSize"
             value={query.pageSize}
-            className="bg-gray-700 cursor-pointer rounded-md ml-2 outline-none text-white p-[1px]"
+            className="bg-slate-500 cursor-pointer rounded-md ml-2 outline-none text-white p-[2px] text-center"
           >
             <option value={10}>10</option>
             <option value={15}>15</option>
@@ -34,7 +34,7 @@ const Pagination = ({ paginated }) => {
             <option value={40}>40</option>
           </select>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <div className={`${tooltip.previousPage && "tooltip__container"}`}>
             <IoCaretBackSharp
               onMouseEnter={() =>
@@ -54,14 +54,14 @@ const Pagination = ({ paginated }) => {
                 })
               }
               className={`${
-                prevDisabled ? "text-gray-400" : "cp text-slate-800"
+                prevDisabled ? "text-gray-400" : "cp text-slate-700"
               }`}
             />
             {tooltip?.previousPage && (
               <Tooltip tagline={tooltip?.previousPage} />
             )}
           </div>
-          <span className="text-xs text-white font-bold inline-grid px-2 py-[2px] bg-gray-700 place-items-center rounded-md">
+          <span className="text-xs text-white font-bold inline-grid px-2 py-[2px] bg-slate-500 place-items-center rounded-md">
             {query.currentPage}
           </span>
           <div className={`${tooltip.nextPage && "tooltip__container"}`}>
@@ -76,14 +76,11 @@ const Pagination = ({ paginated }) => {
               onClick={() =>
                 dispatch({
                   type: "set_currentPage",
-                  currentPage:
-                    query.currentPage === disabled.length % query.pageSize
-                      ? query.currentPage
-                      : query.currentPage + 1,
+                  currentPage: query.currentPage + 1,
                 })
               }
               className={`${
-                nextDisabled ? "text-gray-400" : "cp text-slate-800"
+                nextDisabled ? "text-gray-400" : "cp text-slate-700"
               }`}
             />
             {tooltip?.nextPage && <Tooltip tagline={tooltip?.nextPage} />}

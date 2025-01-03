@@ -14,7 +14,12 @@ const tooltipReducer = (state, action) => {
       return { ...state, nextPage: action.tooltip, type: action.type };
 
     case "delete":
-      return { ...state, delete: action.tooltip, type: action.type };
+      return {
+        ...state,
+        delete: action.tooltip,
+        type: action.type,
+        id: action.id,
+      };
 
     case "clear":
       return action.init;

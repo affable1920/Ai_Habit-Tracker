@@ -5,6 +5,7 @@ import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import Layout from "./Layout";
 import HabitsDash from "./HabitsDash";
+import HabitsProvider from "./Providers/HabitsProvider";
 
 const router = createBrowserRouter([
   {
@@ -20,11 +21,13 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <TooltipProvider>
-      <QueryProvider>
-        <RouterProvider router={router} />;
-      </QueryProvider>
-    </TooltipProvider>
+    <HabitsProvider>
+      <TooltipProvider>
+        <QueryProvider>
+          <RouterProvider router={router} />;
+        </QueryProvider>
+      </TooltipProvider>
+    </HabitsProvider>
   );
 };
 

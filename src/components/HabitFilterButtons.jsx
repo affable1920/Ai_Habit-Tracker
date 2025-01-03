@@ -1,10 +1,17 @@
 import React, { useContext } from "react";
+import Tooltip from "./Tooltip";
+import SearchBar from "./SearchBar";
 import TooltipContext from "../context/TooltipContext";
 import QueryContext from "../context/QueryContext";
 import { BiReset } from "react-icons/bi";
-import SearchBar from "./SearchBar";
 
 const HabitFilterButtons = () => {
+  const queryObject = {
+    pageSize: 10,
+    searchQuery: "",
+    currentPage: 1,
+  };
+
   const { tooltip, dispatch: tooltipDispatch } = useContext(TooltipContext);
   const { dispatch: queryDispatch } = useContext(QueryContext);
 
@@ -14,7 +21,7 @@ const HabitFilterButtons = () => {
       <div className={`${tooltip && "tooltip__container"}`}>
         <BiReset
           onMouseEnter={() =>
-            handleMouseEnter({
+            tooltipDispatch({
               type: "reset",
               tooltip: "Reset all filters",
             })

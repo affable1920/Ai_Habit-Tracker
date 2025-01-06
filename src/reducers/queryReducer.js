@@ -7,11 +7,14 @@ const queryReducer = (state, action) => {
       return {
         ...state,
         searchQuery: action.searchQuery,
-        currentPage: action.currentPage,
+        currentPage: 1,
       };
 
     case "set_pageSize":
       return { ...state, pageSize: parseInt(action.pageSize) };
+
+    case "status":
+      return { ...state, status: action.status };
 
     case "reset":
       return action.state;

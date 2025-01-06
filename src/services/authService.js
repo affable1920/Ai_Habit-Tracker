@@ -3,12 +3,16 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 import app from "../firebaseConfig";
+import addUserToDB from "../Utils/registerUser";
 
 const auth = getAuth(app);
-const database = getFirestore(app);
+const firestore = getFirestore(app);
+const real_db = getDatabase(app);
 
 async function register(data) {
   try {
@@ -21,15 +25,12 @@ async function register(data) {
     await updateProfile(user, { displayName: data.username });
     user.reload();
 
-    const docRef = doc(database, "users", user.displayName);
-    await setDoc(docRef, {
-      id: user.uid,
-      teams: [],
-      tasks: [],
-      ...data,
-    });
+    const docRef = doc(firestore, "users", user.displayName);
+    const userToRegister = addUserToDB(user.toJSON());
+
+    await setDoc(docRef, userToRegister);
   } catch (err) {
-    throw new Error(err?.message);
+    throw err;
   }
 }
 
@@ -37,8 +38,12 @@ async function login(data) {
   try {
     await signInWithEmailAndPassword(auth, data.email, data.password);
   } catch (err) {
-    throw new Error(err?.message);
+    throw err;
   }
 }
 
-export default { auth, database, register, login };
+async function logout() {
+  await signOut(auth);
+}
+
+export default { auth, firestore, real_db, register, login, logout };

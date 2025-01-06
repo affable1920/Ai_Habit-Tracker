@@ -12,7 +12,6 @@ const SearchBar = () => {
           queryDispatch({
             type: "set_searchQuery",
             searchQuery: e.target.value,
-            currentPage: 1,
           });
         }}
         value={query.searchQuery}

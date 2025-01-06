@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Habit from "./Habit";
-import useDataFilters from "../hooks/useDataFilters";
+import AuthContext from "../context/AuthContext";
+import Spinner from "./Spinner";
+import NoAuthAndHabits from "./NoAuth&Habits";
+import AuthButNoHabits from "./AuthButNoHabits";
+import useHabits from "../hooks/useHabits";
 
 const HabitsList = () => {
-  const { paginatedHabits } = useDataFilters();
+  const { user } = useContext(AuthContext);
   const [selectedHabits, setSelectedHabits] = useState([]);
+  const { data: habits = [], isLoading } = useHabits();
+
+  const noAuthAndHabits = !user && (habits?.length === 0 || !habits);
+  const authButNoHabits = user && (habits?.length === 0 || !habits);
 
   const handleSelect = (habit) => {
     const ifSelected = !!selectedHabits.find((h) => h.id === habit.id);
@@ -23,7 +31,7 @@ const HabitsList = () => {
             Mark as completed!
           </button>
           <button
-            onClick={() => setSelectedHabits(paginatedHabits)}
+            onClick={() => setSelectedHabits([])}
             className="btn btn__accent text-xs"
           >
             Select all Tasks
@@ -34,9 +42,12 @@ const HabitsList = () => {
         </div>
       )}
       <section className="mt-2 table">
-        {paginatedHabits.map((habit) => (
+        {isLoading && <Spinner />}
+        {noAuthAndHabits && <NoAuthAndHabits />}
+        {authButNoHabits && <AuthButNoHabits />}
+        {habits?.map((habit) => (
           <Habit
-            key={habit.habit_id}
+            key={habit?.habit_id}
             onSelect={handleSelect}
             selectedHabits={selectedHabits}
             habit={habit}

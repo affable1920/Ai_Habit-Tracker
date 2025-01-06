@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import Joi from "joi";
+import { Link } from "react-router-dom";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import Joi from "joi";
 import authService from "../services/authService";
 import Form from "./common/Form";
 import Input from "./common/Input";
-import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),
@@ -25,8 +27,9 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     try {
       authService.register(data);
-    } catch (e) {
-      setError(e);
+      navigate("/");
+    } catch (err) {
+      setError(`${err?.name}: ${err?.code}`);
     }
   };
 
@@ -35,28 +38,29 @@ const RegisterForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input name="email" label="Email" register={register} errors={errors} />
         <Input
-          name="username"
-          label="Username"
-          register={register}
-          errors={errors}
-        />
-        <Input
           name="password"
           label="Password"
           type="password"
           register={register}
           errors={errors}
         />
-        {error && <div className="mt-3 text-red-600">{error}</div>}
-        <button className="btn btn__accent">Register</button>
+        <Input
+          name="username"
+          label="Username"
+          register={register}
+          errors={errors}
+        />
+        {error && (
+          <div className="mt-2 text-red-600 text-sm tracking-wide text-center">
+            {error}
+          </div>
+        )}
+
+        <button className="btn btn__primary w-full">Register</button>
+        <Link to="/login" className="form__link">
+          Already a User ?
+        </Link>
       </form>
-      <Link
-        to="/login"
-        className="text-sm mt-2 text-center text-color__accent focus:outline-none focus:underline"
-        href="#"
-      >
-        Already a User ?
-      </Link>
     </Form>
   );
 };

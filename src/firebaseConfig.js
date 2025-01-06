@@ -1,17 +1,14 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCuotpA3Bnsh3Ez_a1Fp7GY3VrUbNs_9d8",
-  authDomain: "react-vite-305eb.firebaseapp.com",
-  projectId: "react-vite-305eb",
-  storageBucket: "react-vite-305eb.firebasestorage.app",
-  messagingSenderId: "264391416659",
-  appId: "1:264391416659:web:fa648e95e5bb0ab3dd9fa6",
-  measurementId: "G-G8KSXJ5Q1S",
+  apiKey: "AIzaSyDnSGqbRGo0gc3rjvoVUn6IXFNP0MuGiFo",
+  authDomain: "habit-ai-c6477.firebaseapp.com",
+  databaseURL: "https://habit-ai-c6477-default-rtdb.firebaseio.com",
+  projectId: "habit-ai-c6477",
+  storageBucket: "habit-ai-c6477.firebasestorage.app",
+  messagingSenderId: "315137954203",
+  appId: "1:315137954203:web:17e892e28935124b57d13e",
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
 export default app;

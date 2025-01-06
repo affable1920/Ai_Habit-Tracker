@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 import TooltipContext from "../context/TooltipContext";
 import QueryContext from "../context/QueryContext";
 import { BiReset } from "react-icons/bi";
+import StatusFilter from "./StatusFilter";
 
 const HabitFilterButtons = () => {
   const queryObject = {
@@ -18,19 +19,26 @@ const HabitFilterButtons = () => {
   return (
     <div className="flex items-center justify-between">
       <SearchBar />
-      <div className={`${tooltip && "tooltip__container"}`}>
-        <BiReset
-          onMouseEnter={() =>
-            tooltipDispatch({
-              type: "reset",
-              tooltip: "Reset all filters",
-            })
-          }
-          onMouseLeave={() => tooltipDispatch({ type: "clear", init: {} })}
-          className="cp"
-          onClick={() => queryDispatch({ type: "reset", state: queryObject })}
-        />
-        {tooltip?.reset && <Tooltip tagline={tooltip?.reset} />}
+      <div
+        className={`${tooltip && "tooltip__container"} flex items-center gap-4`}
+      >
+        <div>
+          <StatusFilter />
+        </div>
+        <div>
+          <BiReset
+            onMouseEnter={() =>
+              tooltipDispatch({
+                type: "reset",
+                tooltip: "Reset all filters",
+              })
+            }
+            onMouseLeave={() => tooltipDispatch({ type: "clear" })}
+            className="cp"
+            onClick={() => queryDispatch({ type: "reset", state: queryObject })}
+          />
+          {tooltip?.reset && <Tooltip tagline={tooltip?.reset} />}
+        </div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ const QueryProvider = ({ children }) => {
     pageSize: 10,
     searchQuery: "",
     currentPage: 1,
+    status: null,
   };
   const [query, dispatch] = useReducer(queryReducer, queryObject);
 

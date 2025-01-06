@@ -18,7 +18,7 @@ const Habit = ({ habit, onSelect, selectedHabits }) => {
     }, THRESHOLD__TIME);
   };
 
-  const ifSelected = !!selectedHabits.find((h) => h.id === habit.id);
+  const ifSelected = !!selectedHabits.find((h) => h.id === habit.id) || false;
 
   return ifSelected ? (
     <Selectedhabit onClick={() => onSelect(habit)} habit={habit} />
@@ -39,13 +39,13 @@ const Habit = ({ habit, onSelect, selectedHabits }) => {
         <div className="flex items-center gap-2">
           <span
             className={`${
-              habit.habit_completed ? "bg-color__light__shadow" : "bg-red-100"
+              habit?.habit_completed ? "bg-color__light__shadow" : "bg-red-100"
             } rounded-md px-3 py-1 text-xs tracking-tight font-semibold leading-[1.1]`}
           >
-            {habit.habit_completed ? "Done" : "Yet to be Done"}
+            {habit?.habit_completed ? "Done" : "Yet to be Done"}
           </span>
           <span className="text-xs bg-red-100 py-1 px-2 rounded-lg font-black tracking-wide">
-            {habit.habit_frequency}
+            {habit?.habit_frequency}
           </span>
         </div>
         <HabitButtons
@@ -59,10 +59,11 @@ const Habit = ({ habit, onSelect, selectedHabits }) => {
         }`}
       >
         <p className=" text-xs tracking-wide ml-5 md:ml-6">
-          {habit.habit_description?.substring(0, 50)}
+          {habit?.habit_description}
         </p>
         <span className="tracking-wide text-xs font-font_eng">
-          Habit start_date: {habit.habit_start_date}
+          Habit start_date:
+          {new Date(habit?.habits_start_data?.nanoseconds).getDate()}
         </span>
       </div>
     </article>

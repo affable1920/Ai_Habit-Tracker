@@ -12,11 +12,11 @@ const ThemeToggler = () => {
   }, [isDark]);
 
   return (
-    <button className="nav__btn__icon" onClick={() => setIsDark(!isDark)}>
+    <button className="icon__with__bg" onClick={() => setIsDark(!isDark)}>
       {isDark ? (
-        <FaRegLightbulb className="text-lg " color="orange" />
+        <FaRegLightbulb className="icon active:hover:text-orange-500" />
       ) : (
-        <MdDarkMode className="text-lg" />
+        <MdDarkMode className="icon" />
       )}
     </button>
   );

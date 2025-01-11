@@ -6,9 +6,11 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import authService from "../services/authService";
 import Form from "./common/Form";
 import Input from "./common/Input";
+import Spinner from "./Spinner";
 
 const LoginForm = () => {
   const [error, setError] = useState("");
+  const [isLoggingIn, setIsLogginIn] = useState(false);
   const navigate = useNavigate();
 
   const schema = Joi.object({
@@ -25,6 +27,7 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     try {
       await authService.login(data);
+      setIsLogginIn(true);
       navigate("/");
     } catch (err) {
       setError(`${err?.name}: ${err?.code}`);

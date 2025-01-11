@@ -10,7 +10,10 @@ const Dashboard = () => {
         <h1 className="headings__large text-center mt-2 md:mt-3 ">Dashboard</h1>
       </header>
       <section className="p-3 grid xl:grid-cols-2 px-10 mt-6 md:grid md:grid-cols-2 gap-3 md:gap-6">
-        <section className="flex flex-col justify-center border-[2px] border-slate-300 rounded-md p-4 shadow-xl">
+        <section
+          className="flex flex-col justify-center rounded-md p-4 dark:gradient__primary 
+        border-[1px] border-slate-300 shadow-xl dark:shadow-black dark:border-slate-700"
+        >
           <HabitFilterButtons />
           <HabitsList />
           <Pagination />

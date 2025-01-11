@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import HabitButtons from "./HabitButtons";
-import { PiDotsNineThin } from "react-icons/pi";
 import Selectedhabit from "./Selectedhabit";
+import { PiDotsNineThin } from "react-icons/pi";
+import getStreakTitle, { streakMap } from "../Utils/getHabitStreak";
 
 const Habit = ({ habit, onSelect, selectedHabits }) => {
   const [loadMore, setLoadMore] = useState(false);
@@ -19,33 +20,31 @@ const Habit = ({ habit, onSelect, selectedHabits }) => {
   };
 
   const ifSelected = !!selectedHabits.find((h) => h.id === habit.id) || false;
+  const streakType = getStreakTitle(habit.streak);
 
   return ifSelected ? (
     <Selectedhabit onClick={() => onSelect(habit)} habit={habit} />
   ) : (
-    <article
-      onMouseDown={handleMouseDown}
-      onMouseUp={() => (holdRef.current = false)}
-      onMouseLeave={() => (holdRef.current = false)}
-      className="border-[1px] border-slate-300 p-2 hover:bg-slate-100 cursor-pointer transition-colors"
-    >
-      <header className="flex items-center justify-between gap-2 ">
+    <article className="habit">
+      <header
+        onMouseDown={handleMouseDown}
+        onMouseUp={() => (holdRef.current = false)}
+        onMouseLeave={() => (holdRef.current = false)}
+        className="flex items-center justify-between gap-2 "
+      >
         <div className="flex items-center gap-[8px]">
-          <PiDotsNineThin className="cursor-grab" />
-          <h6 className="text-sm tracking-normal leading-tight font-medium">
-            {habit.habit_name}
-          </h6>
+          <PiDotsNineThin className="icon hover:cursor-grab" />
+          <h6 className="habit__title">{habit.title}</h6>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`${
-              habit?.habit_completed ? "bg-color__light__shadow" : "bg-red-100"
-            } rounded-md px-3 py-1 text-xs tracking-tight font-semibold leading-[1.1]`}
+            className={`rounded-md text-xs mr-2 tracking-normal bg-slate-100 p-[4px] font-medium
+               dark:bg-color__fill border-[1px] border-slate-300 dark:border-slate-700`}
           >
-            {habit?.habit_completed ? "Done" : "Yet to be Done"}
+            {habit.status}
           </span>
-          <span className="text-xs bg-red-100 py-1 px-2 rounded-lg font-black tracking-wide">
-            {habit?.habit_frequency}
+          <span className="text-xs py-1 px-2 rounded-lg font-black tracking-wide capitalize">
+            {habit.frequency?.type}
           </span>
         </div>
         <HabitButtons
@@ -54,16 +53,20 @@ const Habit = ({ habit, onSelect, selectedHabits }) => {
         />
       </header>
       <div
-        className={`habit_body flex items-center justify-between text-sm ${
+        className={`habit_body pt-2 flex justify-between items-center text-sm ${
           loadMore ? "" : "hidden"
         }`}
       >
-        <p className=" text-xs tracking-wide ml-5 md:ml-6">
-          {habit?.habit_description}
+        <p className="text-xs ml-5 md:ml-6 font-mono tracking-tight">
+          {habit?.description}
         </p>
-        <span className="tracking-wide text-xs font-font_eng">
-          Habit start_date:
-          {new Date(habit?.habits_start_data?.nanoseconds).getDate()}
+        <span className="tracking-wide text-xs font-mono">
+          Streak:
+          <span
+            className={`${streakMap[streakType]} rounded-lg p-1 ml-2 py-[2px] text-white`}
+          >
+            {habit.streak}
+          </span>
         </span>
       </div>
     </article>

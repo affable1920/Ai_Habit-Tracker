@@ -13,7 +13,10 @@ const Pagination = ({ paginated }) => {
 
   return (
     <div className=" flex justify-end mt-3">
-      <div className="flex items-center bg-slate-200 ring-slate-300 ring-[1px] gap-2 p-2 ml-auto rounded-md ">
+      <div
+        className="flex items-center rounded-md px-2 gap-2 bg-slate-50 py-1 border-[1px] 
+      border-slate-300 dark:border-slate-700 dark:bg-inherit"
+      >
         <div className="text-xs font-semibold tracking-wide">
           <label htmlFor="pageSize">Habits per page:</label>
           <select
@@ -25,7 +28,8 @@ const Pagination = ({ paginated }) => {
             }
             name="pageSize"
             value={query.pageSize}
-            className="bg-slate-500 cursor-pointer rounded-md ml-2 outline-none text-white p-[2px] text-center"
+            className=" cp rounded-md ml-2 outline-none p-[2px] text-center border-[1px] 
+            border-slate-300 dark:bg-slate-800 dark:border-slate-700"
           >
             <option value={10}>10</option>
             <option value={15}>15</option>
@@ -34,8 +38,8 @@ const Pagination = ({ paginated }) => {
             <option value={40}>40</option>
           </select>
         </div>
-        <div className="flex items-center gap-1">
-          <div className={`${tooltip.previousPage && "tooltip__container"}`}>
+        <div className="flex items-center">
+          <div className={`${tooltip?.previousPage && "tooltip__container"}`}>
             <IoCaretBackSharp
               onMouseEnter={() =>
                 tooltipDispatch({
@@ -54,14 +58,19 @@ const Pagination = ({ paginated }) => {
                 })
               }
               className={`${
-                prevDisabled ? "text-gray-400" : "cp text-slate-700"
+                prevDisabled
+                  ? "text-slate-300 dark:text-slate-700"
+                  : "cp text-slate-700 dark:text-slate-300"
               }`}
             />
             {tooltip?.previousPage && (
               <Tooltip tagline={tooltip?.previousPage} />
             )}
           </div>
-          <span className="text-xs text-white font-bold inline-grid px-2 py-[2px] bg-slate-500 place-items-center rounded-md">
+          <span
+            className="text-xs font-mono font-bold inline-grid px-2 py-[2px] bg-slate-300 dark:bg-slate-800 
+            place-items-center rounded-md"
+          >
             {query.currentPage}
           </span>
           <div className={`${tooltip.nextPage && "tooltip__container"}`}>
@@ -80,7 +89,9 @@ const Pagination = ({ paginated }) => {
                 })
               }
               className={`${
-                nextDisabled ? "text-gray-400" : "cp text-slate-700"
+                nextDisabled
+                  ? "text-slate-300 dark:text-slate-700"
+                  : "cp text-slate-700 dark:text-slate-300"
               }`}
             />
             {tooltip?.nextPage && <Tooltip tagline={tooltip?.nextPage} />}

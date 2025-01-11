@@ -11,8 +11,8 @@ const HabitsList = () => {
   const [selectedHabits, setSelectedHabits] = useState([]);
   const { data: habits = [], isLoading } = useHabits();
 
-  const noAuthAndHabits = !user && (habits?.length === 0 || !habits);
-  const authButNoHabits = user && (habits?.length === 0 || !habits);
+  const noAuthAndHabits = !user && habits?.length === 0 && !isLoading;
+  const authButNoHabits = user && habits?.length === 0 && !isLoading;
 
   const handleSelect = (habit) => {
     const ifSelected = !!selectedHabits.find((h) => h.id === habit.id);
@@ -36,7 +36,7 @@ const HabitsList = () => {
           >
             Select all Tasks
           </button>
-          <span className="bg-gray-600 text-white mt-3 rounded-md font-bold px-2 text-xs py-1">
+          <span className="bg-slate-700 mt-5 rounded-md font-bold font-mono px-2 text-xs py-1">
             {selectedHabits.length}
           </span>
         </div>

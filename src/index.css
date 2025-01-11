@@ -10,44 +10,101 @@
 }
 
 @layer base {
+  .dark {
+    @apply bg-color__primary text-slate-300;
+  }
   .cp {
     @apply cursor-pointer;
+  }
+  .transition__colors {
+    @apply transition-colors;
+  }
+  .gradient__primary {
+    @apply bg-gradient-to-r from-color__from to-color__to;
+  }
+  .gradient__secondary {
+    @apply bg-gradient-to-l from-color__to to-color__primary;
   }
 }
 
 @layer utilities {
+  .input {
+    @apply rounded-md text-xs placeholder:text-xs placeholder:opacity-70 tracking-wide
+     pl-2 py-2 shadow-md max-h-8 outline-none hidden md:block font-mono
+     px-20 dark:bg-color__fill border-[1px] border-slate-600 border-b-2
+     focus:ring-[1px] dark:ring-slate-500 transition__colors;
+  }
+
+  .input__secondary {
+    @apply px-4 py-2 rounded-md transition-colors tracking-wide text-xs bg-slate-100 focus:bg-slate-50 
+    border-[1px] border-slate-700 focus:border-color__accent__primary outline-none focus:shadow-md dark:gradient__primary 
+    dark:focus:bg-color__primary dark:focus:border-slate-400 dark:shadow-black
+    dark:placeholder:opacity-70;
+  }
+
+  .input__add {
+    @apply border-[1.5px] px-3 border-slate-300 focus:border-sky-500 focus:shadow-md
+    outline-none transition-all duration-300 rounded-md py-1 text-sm dark:placeholder:opacity-70 bg-slate-50
+    dark:border-slate-600 dark:focus:border-slate-400 dark:mb-1
+    dark:bg-gray-950 placeholder:text-xs;
+  }
+
+  .habit {
+    @apply border-[1px] p-2 border-slate-300 shadow-sm rounded-sm dark:border-slate-700 
+    dark:shadow-black cp hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors;
+  }
+
+  .habit__title {
+    @apply text-sm tracking-wide leading-tight font-medium font-mono;
+  }
+
+  .icon {
+    @apply cp text-sm dark:text-slate-400 dark:active:text-white md:text-lg;
+  }
+  .icon__with__bg {
+    @apply bg-white shadow-md p-1 rounded-md dark:bg-slate-800 text-xl dark:shadow-black;
+  }
+
   .btn {
     @apply transition-all duration-200 text-gray-100 hover:text-white rounded-lg p-2 
     outline-none font-semibold tracking-wider mt-5 focus:ring-[2px];
   }
+
   .btn__primary {
     @apply bg-color__primary focus:ring-offset-blue-600 focus:bg-color__secondary;
   }
+
   .btn__secondary {
     @apply bg-color__shadow;
   }
+
   .btn__accent {
-    @apply bg-color__accent focus:hover:bg-color__accent__2 ring-color__accent__2 ring-2;
+    @apply bg-sky-600 text-slate-200 hover:bg-sky-700 hover:text-white focus:ring-2 
+    ring-sky-900 dark:ring-sky-700;
   }
-  .btn__indigo {
-    @apply bg-indigo-600 from-indigo-700 to-indigo-900;
+
+  .error__input {
+    @apply bg-red-100 p-1 text-red-800 dark:bg-inherit dark:text-red-400 tracking-wider 
+    rounded-md text-xs flex items-center justify-between;
   }
+
+  .label {
+    @apply text-sm opacity-70 tracking-tight leading-[1.1] mb-1;
+  }
+
   .tooltip {
-    @apply bg-slate-800 text-white text-[7px] font-bold tracking-wide absolute p-[2px] 
+    @apply text-slate-100 bg-slate-700 text-[7px] font-bold tracking-wide absolute p-[2px] 
     -top-7 -right-8 rounded-sm;
   }
   .tooltip__container {
     @apply relative;
   }
   .headings__large {
-    @apply font-black tracking-wide text-2xl text-color__primary;
+    @apply font-black tracking-wide text-2xl text-color__primary dark:text-slate-200;
   }
   .form__link {
-    @apply text-xs focus:text-sm mt-3 tracking-wide text-color__accent w-full flex 
-    justify-center outline-none focus:text-color__accent__2 focus:font-semibold;
-  }
-  .nav__btn__icon {
-    @apply bg-white p-[3px] rounded-md shadow-lg transition-colors;
+    @apply text-xs focus:text-sm mt-3 tracking-wide text-color__accent__primary w-full flex 
+    justify-center outline-none focus:text-color__accent__primary focus:font-semibold;
   }
   .error__component {
     @apply grid place-items-center text-xs tracking-wide font-semibold text-red-800 bg-blue-100 shadow-sm rounded-md 
@@ -55,6 +112,19 @@
   }
   .navigation__link {
     @apply text-black font-bold bg-red-200 p-1 rounded-md m-1;
+  }
+  .options {
+    @apply text-xs gap-1 bg-gradient-to-l from-slate-600 to-slate-700 text-white rounded-md flex
+    flex-col ring-[1px] ring-slate-600  items-center overflow-hidden absolute -right-10 top-0;
+  }
+  .nav__list {
+    @apply text-xs font-semibold tracking-wide gap-8 py-4 w-full text-center 
+    transition-all duration-300 opacity-80 md:flex md:w-auto md:p-0 
+    md:justify-self-end;
+  }
+  .nav__link {
+    @apply hover:bg-slate-200 self-center rounded-md transition-colors duration-200
+     cp p-2 dark:hover:bg-slate-800;
   }
 }
 

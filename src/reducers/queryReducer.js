@@ -1,20 +1,39 @@
 const queryReducer = (state, action) => {
   switch (action.type) {
-    case "set_currentPage":
-      return { ...state, currentPage: action.currentPage };
+    case "current_page_increment":
+      return { ...state, currentPage: state.currentPage + 1 };
+
+    case "current_page_decrement":
+      return {
+        ...state,
+        currentPage: state.currentPage === 1 ? 1 : state.currentPage - 1,
+      };
 
     case "set_searchQuery":
       return {
         ...state,
+        status: null,
         searchQuery: action.searchQuery,
         currentPage: 1,
       };
 
     case "set_pageSize":
-      return { ...state, pageSize: parseInt(action.pageSize) };
+      return {
+        ...state,
+        pageSize: action.pageSize, // 3
+        currentPage:
+          state.currentPage === 1
+            ? 1
+            : action.pageSize > state.pageSize
+            ? action?.maxPages - 1
+            : Math.floor(action?.count / action.pageSize),
+      };
 
-    case "status":
-      return { ...state, status: action.status };
+    case "complete":
+      return { ...state, status: action.type };
+
+    case "incomplete":
+      return { ...state, status: action.type };
 
     case "reset":
       return action.state;

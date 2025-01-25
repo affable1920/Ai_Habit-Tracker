@@ -35,6 +35,9 @@ const tooltipReducer = (state, action) => {
         inputName: action.name,
       };
 
+    case "count":
+      return { count: action.tooltip, type: action.type };
+
     case "clear":
       return {};
   }

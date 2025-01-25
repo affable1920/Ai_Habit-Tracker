@@ -35,7 +35,7 @@ const HabitOptions = ({ habit }) => {
         }}
         className="text-xs text-slate-400"
       />
-      {tooltip.id === habit.id && tooltip?.options && (
+      {tooltip?.id === habit.id && tooltip?.options && (
         <Tooltip tagline={tooltip?.options} />
       )}
       {showOptions && (

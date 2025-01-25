@@ -7,20 +7,22 @@ import QueryContext from "../context/QueryContext";
 import StatusFilter from "./StatusFilter";
 import { BiReset } from "react-icons/bi";
 import { RiAddBoxFill } from "react-icons/ri";
-import { RiTimerFlashLine } from "react-icons/ri";
+import useHabits from "../hooks/useHabits";
 
 const HabitFilterButtons = () => {
   const queryObject = {
     pageSize: 10,
     searchQuery: "",
     currentPage: 1,
+    status: null,
   };
 
   const { tooltip, dispatch: tooltipDispatch } = useContext(TooltipContext);
   const { dispatch: queryDispatch } = useContext(QueryContext);
+  const { data } = useHabits();
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between justify-self-start">
       <div className="flex items-center gap-2">
         <Link to="/add">
           <RiAddBoxFill
@@ -44,7 +46,7 @@ const HabitFilterButtons = () => {
         <div>
           <StatusFilter />
         </div>
-        <div>
+        <div className="flex items-center gap-1">
           <BiReset
             onMouseEnter={() =>
               tooltipDispatch({
@@ -57,6 +59,19 @@ const HabitFilterButtons = () => {
             onClick={() => queryDispatch({ type: "reset", state: queryObject })}
           />
           {tooltip?.reset && <Tooltip tagline={tooltip?.reset} />}
+          <div className={`${tooltip && "tooltip_container"}`}>
+            <span
+              onMouseEnter={() =>
+                tooltipDispatch({ type: "count", tooltip: `Total Habits` })
+              }
+              onMouseLeave={() => tooltipDispatch({ type: "clear" })}
+              className="cp font-semibold border-slate-300 p-[2px] px-[3px] rounded-md ml-2 mr-1 
+              text-xs font-mono bg-color__accent__primary text-white block"
+            >
+              {data?.habits?.length}
+            </span>
+            {tooltip?.count && <Tooltip tagline={tooltip?.count} />}
+          </div>
         </div>
       </div>
     </div>

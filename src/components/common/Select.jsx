@@ -10,16 +10,12 @@ const Select = ({ name, label, register, errors, optional, options }) => {
       <select
         className="input__add cp w-1/2"
         name={name}
-        register={register}
         errors={errors}
+        {...register(name)}
       >
         <option value="" defaultChecked></option>
         {options.map((option) => (
-          <option
-            className="text-xs flex items-start justify-start"
-            key={option}
-            value={option}
-          >
+          <option className="text-xs" key={option} value={option}>
             {option}
           </option>
         ))}

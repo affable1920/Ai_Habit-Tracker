@@ -1,13 +1,15 @@
 import React, { useContext } from "react";
 import TooltipContext from "../context/TooltipContext";
 import { MdDelete } from "react-icons/md";
+import useMutateHabit from "./../hooks/useMutateHabit";
 
 const DeleteIcon = ({ habitId }) => {
   const { dispatch } = useContext(TooltipContext);
+  const { mutate } = useMutateHabit();
 
   return (
     <MdDelete
-      onClick={() => console.log("Deleted" + habitId)}
+      onClick={() => mutate({ action: "delete", habitId })}
       className="icon"
       onMouseEnter={() =>
         dispatch({

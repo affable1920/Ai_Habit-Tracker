@@ -6,21 +6,17 @@ import { MdCloudDone } from "react-icons/md";
 import { FaArrowsTurnToDots } from "react-icons/fa6";
 
 const StatusFilter = () => {
-  const [statusFilter, setStatusFilter] = useState(null);
+  const [status, setStatus] = useState(null);
   const { tooltip, dispatch } = useContext(TooltipContext);
   const { dispatch: queryDispatch } = useContext(QueryContext);
-
-  const handleStatusFilter = () => {
-    setStatusFilter(statusFilter === null ? true : !statusFilter);
-    queryDispatch({ type: "status", status: statusFilter });
-  };
 
   const handleMouseEnter = () => {
     dispatch({
       type: "status",
-      tooltip: statusFilter
-        ? "Show Incomplete habits"
-        : "Show habits to complete",
+      tooltip:
+        status === "complete"
+          ? "Show habits to complete !"
+          : "Show completeted habits !",
     });
   };
 
@@ -28,19 +24,31 @@ const StatusFilter = () => {
     dispatch({ type: "clear" });
   };
 
+  const handleClick = (type) => {
+    setStatus(
+      status === null
+        ? "complete"
+        : status === "complete"
+        ? "incomplete"
+        : "complete"
+    );
+    queryDispatch({ type });
+  };
+
   return (
     <>
-      {!statusFilter ? (
+      {(status === "incomplete" || status === null) && (
         <MdCloudDone
           className="icon"
-          onClick={handleStatusFilter}
+          onClick={() => handleClick("complete")}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         />
-      ) : (
+      )}
+      {status === "complete" && (
         <FaArrowsTurnToDots
           className="icon"
-          onClick={handleStatusFilter}
+          onClick={() => handleClick("incomplete")}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         />

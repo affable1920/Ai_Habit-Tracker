@@ -3,16 +3,15 @@ import Habit from "./Habit";
 import AuthContext from "../context/AuthContext";
 import Spinner from "./Spinner";
 import NoAuthAndHabits from "./NoAuth&Habits";
-import AuthButNoHabits from "./AuthButNoHabits";
 import useHabits from "../hooks/useHabits";
 
 const HabitsList = () => {
-  const { user } = useContext(AuthContext);
   const [selectedHabits, setSelectedHabits] = useState([]);
-  const { data: habits = [], isLoading } = useHabits();
+  const { user } = useContext(AuthContext);
+  const { data, isLoading, isSuccess, isError, refetch } = useHabits();
 
-  const noAuthAndHabits = !user && habits?.length === 0 && !isLoading;
-  const authButNoHabits = user && habits?.length === 0 && !isLoading;
+  const noAuth = !user && !data && !isLoading;
+  const authButNoHabits = user && data?.habits?.length === 0 && !isLoading;
 
   const handleSelect = (habit) => {
     const ifSelected = !!selectedHabits.find((h) => h.id === habit.id);
@@ -41,11 +40,23 @@ const HabitsList = () => {
           </span>
         </div>
       )}
-      <section className="mt-2 table">
+      <section className="mt-2 table h-full">
         {isLoading && <Spinner />}
-        {noAuthAndHabits && <NoAuthAndHabits />}
-        {authButNoHabits && <AuthButNoHabits />}
-        {habits?.map((habit) => (
+        {noAuth && <NoAuthAndHabits />}
+        {authButNoHabits && !isLoading && (
+          <div className="text-s text-red-700 font-semibold font-mono text-center">
+            No Habits .!
+            {isError && (
+              <button
+                onClick={refetch}
+                className="btn__primary px-5 py-1 rounded-md text-slate-100 ml-2"
+              >
+                Try Again !
+              </button>
+            )}
+          </div>
+        )}
+        {data?.habits?.map((habit) => (
           <Habit
             key={habit?.habit_id}
             onSelect={handleSelect}

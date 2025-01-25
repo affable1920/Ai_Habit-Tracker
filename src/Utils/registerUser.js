@@ -1,5 +1,5 @@
 const addUserToDB = (JSONUser) => {
-  const userToRegister = { habits: [] };
+  const userToRegister = {};
 
   Object.entries(JSONUser).map(
     (property) => (userToRegister[property[0]] = property[1] || "")

@@ -6,13 +6,11 @@ import {
   signOut,
 } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { getDatabase } from "firebase/database";
 import app from "../firebaseConfig";
 import addUserToDB from "../Utils/registerUser";
 
 const auth = getAuth(app);
 const firestore = getFirestore(app);
-const real_db = getDatabase(app);
 
 async function register(data) {
   try {
@@ -25,7 +23,7 @@ async function register(data) {
     await updateProfile(user, { displayName: data.username });
     user.reload();
 
-    const docRef = doc(firestore, "users", user.displayName);
+    const docRef = doc(firestore, "users", user.uid);
     const userToRegister = addUserToDB(user.toJSON());
 
     await setDoc(docRef, userToRegister);
@@ -46,4 +44,4 @@ async function logout() {
   await signOut(auth);
 }
 
-export default { auth, firestore, real_db, register, login, logout };
+export default { auth, firestore, register, login, logout };

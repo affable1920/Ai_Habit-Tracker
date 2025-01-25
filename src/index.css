@@ -59,7 +59,7 @@
   }
 
   .icon {
-    @apply cp text-sm dark:text-slate-400 dark:active:text-white md:text-lg;
+    @apply cp text-sm dark:text-slate-400 dark:active:text-white md:text-lg text-slate-800;
   }
   .icon__with__bg {
     @apply bg-white shadow-md p-1 rounded-md dark:bg-slate-800 text-xl dark:shadow-black;
@@ -132,11 +132,35 @@
   @apply w-10 h-10 border-4 border-cyan-800 rounded-[50%] animate-[spinner] duration-1000 flex items-center justify-center m-auto;
 }
 
+.alert {
+  @apply flex items-center justify-center gap-2 bg-slate-100 shadow-md relative p-1 rounded-sm px-4 
+  animate-[alert];
+}
+
+.alert__container {
+  @apply fixed top-9 left-1/2 md:top-14 -translate-x-1/2;
+}
+
 @keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes alert {
   0% {
-    transform: rotate(0);
+    transform: scaleX(1);
+  }
+  25% {
+    transform: scaleX(0.75);
+  }
+  50% {
+    transform: scaleX(0.5);
+  }
+  75% {
+    transform: scaleX(0.25);
   }
   100% {
-    transform: rotate(360deg);
+    transform: scaleX(1);
   }
 }

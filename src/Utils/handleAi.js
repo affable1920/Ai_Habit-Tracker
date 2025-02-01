@@ -1,24 +1,19 @@
 export function getPrompt(habits) {
-  if (habits?.length === 0) {
-    return `The user has no recorded habits yet. 
-    Generate a motivational message encouraging the user to add and start tracking habits`;
-  }
+  if (habits.length === 0 || !habits) return JSON.stringify([]);
 
   return JSON.stringify(
-    habits.map((habit) => ({
+    habits?.map((habit) => ({
       title: habit.title,
       description: habit.description,
-      frequency: habit.frequency || "Not Frequent",
       priority: habit.priority || "Medium",
-    })),
-    null,
-    ",\n"
+      frequency: habit.frequency || "Not frequent",
+    }))
   );
 }
 export function handleGeminiResponse(initialText) {
   const transformedString = initialText.slice(
     initialText.indexOf("{"),
-    initialText.indexOf("}") + 1
+    initialText.lastIndexOf("}") + 1
   );
   try {
     return JSON.parse(transformedString);

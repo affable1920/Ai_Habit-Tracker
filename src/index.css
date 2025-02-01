@@ -67,7 +67,7 @@
 
   .btn {
     @apply transition-all duration-200 text-gray-100 hover:text-white rounded-lg p-2 
-    outline-none font-semibold tracking-wider mt-5 focus:ring-[2px];
+    outline-none font-semibold tracking-wider mt-5 focus:ring-[1.5px];
   }
 
   .btn__primary {
@@ -75,7 +75,7 @@
   }
 
   .btn__secondary {
-    @apply bg-color__shadow;
+    @apply bg-gradient-to-r from-color__from to-color__to focus:bg-gradient-to-l;
   }
 
   .btn__accent {
@@ -126,6 +126,10 @@
     @apply hover:bg-slate-200 self-center rounded-md transition-colors duration-200
      cp p-2 dark:hover:bg-slate-800;
   }
+  .modal {
+    @apply bg-white shadow-lg border-[1px] border-slate-300 p-4 rounded-lg flex flex-col
+    w-fit m-auto absolute top-32 left-1/2 -translate-x-1/2 max-w-[400px];
+  }
 }
 
 .spinner {
@@ -133,8 +137,13 @@
 }
 
 .alert {
-  @apply flex items-center justify-center gap-2 bg-slate-100 shadow-md relative p-1 rounded-sm px-4 
-  animate-[alert];
+  @apply flex items-center justify-center gap-2 bg-slate-100 shadow-md relative p-1 rounded-sm px-4
+  after:absolute after:w-full after:h-[109%] after:top-0 after:left-0 after:z-[-5] after:rounded-sm;
+}
+
+.alert::after {
+  animation: alert 4000ms ease-in;
+  transform-origin: 0%;
 }
 
 .alert__container {
@@ -148,19 +157,7 @@
 }
 
 @keyframes alert {
-  0% {
-    transform: scaleX(1);
-  }
-  25% {
-    transform: scaleX(0.75);
-  }
-  50% {
-    transform: scaleX(0.5);
-  }
-  75% {
-    transform: scaleX(0.25);
-  }
-  100% {
-    transform: scaleX(1);
+  to {
+    transform: scaleX(0);
   }
 }

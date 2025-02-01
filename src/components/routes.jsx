@@ -8,6 +8,7 @@ import Dashboard from "./HabitsDash";
 import AuthProvider from "./Providers/AuthProvider";
 import Logout from "./Logout";
 import AddHabitComponent from "./AddHabitComponent";
+import Modal from "./Modal";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <Dashboard /> },
       { path: "add", element: <AddHabitComponent /> },
+      { path: "update/:id", element: <AddHabitComponent /> },
       { path: "login", element: <LoginForm /> },
       { path: "register", element: <RegisterForm /> },
       { path: "logout", element: <Logout /> },

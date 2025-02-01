@@ -10,12 +10,13 @@ const queryReducer = (state, action) => {
       };
 
     case "set_searchQuery":
-      return {
+      let queryToSet = {
         ...state,
-        status: null,
         searchQuery: action.searchQuery,
         currentPage: 1,
       };
+      queryToSet.status && delete queryToSet.status;
+      return queryToSet;
 
     case "set_pageSize":
       return {

@@ -12,9 +12,7 @@ import useHabits from "../hooks/useHabits";
 const HabitFilterButtons = () => {
   const queryObject = {
     pageSize: 10,
-    searchQuery: "",
     currentPage: 1,
-    status: null,
   };
 
   const { tooltip, dispatch: tooltipDispatch } = useContext(TooltipContext);

@@ -5,13 +5,10 @@ import QueryContext from "../../context/QueryContext";
 const QueryProvider = ({ children }) => {
   const queryObject = {
     pageSize: 10,
-    searchQuery: "",
     currentPage: 1,
-    status: null,
-    lastDoc: null,
   };
-  const [query, dispatch] = useReducer(queryReducer, queryObject);
 
+  const [query, dispatch] = useReducer(queryReducer, queryObject);
   return (
     <QueryContext.Provider value={{ query, dispatch }}>
       {children}

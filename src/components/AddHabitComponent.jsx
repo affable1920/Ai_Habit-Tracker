@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import Joi from "joi";
@@ -7,11 +7,13 @@ import Tooltip from "../components/Tooltip";
 import InputAdd from "./common/InputAdd";
 import Select from "./common/Select";
 import useMutateHabit from "../hooks/useMutateHabit";
-import Alert from "./Alert";
+import Modal from "./Modal";
 
 const AddHabitComponent = () => {
   const { tooltip } = useContext(TooltipContext);
-  const { mutate, error, isSuccess } = useMutateHabit();
+  const { mutate, error } = useMutateHabit();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const schema = Joi.object({
     title: Joi.string().required().label("Title"),
@@ -50,12 +52,11 @@ const AddHabitComponent = () => {
 
   return (
     <>
-      {(error || isSuccess) && (
-        <Alert
-          ifSuccessfull={isSuccess}
-          errorMessage={error?.message ? error?.message : "Operation Failed !"}
-        />
-      )}
+      <Modal
+        isOpen={isOpen}
+        message={error?.message}
+        onClose={() => setIsOpen(false)}
+      />
       <div className="grid md:grid-cols-2 p-10">
         <form className="m-8 mt-4 font-mono " onSubmit={handleSubmit(onSubmit)}>
           <h1 className="headings__large text-center mb-6 md:mb-4">
@@ -108,6 +109,7 @@ const AddHabitComponent = () => {
                 errors={errors}
                 placeholder="Days to track this habit !"
                 type="number"
+                optional
               />
               {tooltip?.input && tooltip.inputName === "target" && (
                 <Tooltip tagline={tooltip?.input} />
@@ -120,6 +122,7 @@ const AddHabitComponent = () => {
                 register={register}
                 errors={errors}
                 short
+                optional
               />
               <InputAdd
                 name="startDate"
@@ -127,6 +130,7 @@ const AddHabitComponent = () => {
                 register={register}
                 errors={errors}
                 type="datetime-local"
+                optional
               />
             </div>
           </div>

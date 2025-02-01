@@ -7,7 +7,9 @@ const HabitsTracker = () => {
   return (
     <>
       <header>
-        <h1 className="headings__large text-center mt-2 md:mt-3 ">Dashboard</h1>
+        <h1 className="headings__large text-center mt-2 md:mt-3 mb-0 ">
+          Dashboard
+        </h1>
       </header>
       <section
         className="flex flex-col rounded-md p-4 dark:gradient__primary 

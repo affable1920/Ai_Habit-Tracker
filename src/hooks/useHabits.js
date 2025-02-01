@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
-  and,
   collection,
   getDocs,
   limit,
@@ -22,7 +21,7 @@ const useHabits = () => {
   return useQuery({
     queryKey: [user?.uid, "habits", queryObject],
     queryFn: async () => {
-      const fallbackObject = { habits: [] };
+      const fallbackObject = { habits: [], maxPages: 0, count: 0 };
       const habitsCollection = collection(
         auth.firestore,
         "users",
@@ -33,6 +32,7 @@ const useHabits = () => {
       const all = await getDocs(
         query(habitsCollection, orderBy("creationTime", "desc"))
       );
+
       const count = all.docs.length;
       if (count === 0 || !all.docs) return fallbackObject;
 
@@ -67,7 +67,7 @@ const useHabits = () => {
       };
     },
     staleTime: 6 * 60 * 60 * 1000, // 6hr
-    enabled: !!user?.uid,
+    enabled: Boolean(user?.uid),
   });
 };
 

@@ -5,12 +5,19 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArchive } from "react-icons/io";
 import { RiTimerFlashFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const HabitOptions = ({ habit }) => {
+  const navigate = useNavigate();
   const options = [
     {
       label: "edit",
-      component: <CiEdit className="text-xs h-3 w-3" />,
+      component: (
+        <CiEdit
+          onClick={() => navigate(`/update/${habit.id}`)}
+          className="text-xs h-3 w-3"
+        />
+      ),
     },
     {
       label: "timer",

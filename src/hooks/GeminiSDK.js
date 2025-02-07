@@ -9,6 +9,7 @@ const schema = {
       message: { type: "string" },
       alignmentWithCurrentGoals: { type: "string" },
       benefits: { type: "string" },
+      status: { type: "string" },
       resources: {
         type: "object",
         properties: {
@@ -27,7 +28,7 @@ class Gemini {
     this.prompt = prompt;
     this.autoFetch = autoFetch;
     this.model = new GoogleGenerativeAI(key).getGenerativeModel({
-      model: "gemini-1.5-flash-002",
+      model: "gemini-2.0-flash-001",
       systemInstruction: instructions,
       generationConfig: {
         responseMimeType: "application/json",

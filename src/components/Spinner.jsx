@@ -1,7 +1,7 @@
 import React from "react";
 
-const Spinner = () => {
-  return <div className="spinner"></div>;
+const Spinner = ({ text = "" }) => {
+  return <div className="spinner">{text}</div>;
 };
 
 export default Spinner;

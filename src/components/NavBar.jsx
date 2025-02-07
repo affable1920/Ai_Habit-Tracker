@@ -7,8 +7,9 @@ import { FaUser } from "react-icons/fa";
 import { FaGithubSquare } from "react-icons/fa";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { LuLogOut } from "react-icons/lu";
+import { GiSolarSystem } from "react-icons/gi";
 
-const NavBar = () => {
+const NavBar = ({ onModalClick }) => {
   const { user } = useContext(AuthContext);
   const [showLinks, setShowLinks] = useState(false);
 
@@ -56,6 +57,7 @@ const NavBar = () => {
         className="flex rounded-md shadow-md justify-end p-2 gap-4 items-center 
       place-self-end dark:shadow-slate-950"
       >
+        <GiSolarSystem className="cp icon__with__bg" onClick={onModalClick} />
         <ThemeToggler />
         {user && (
           <Link to="/">

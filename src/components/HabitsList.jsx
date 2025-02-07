@@ -8,7 +8,7 @@ import useHabits from "../hooks/useHabits";
 const HabitsList = () => {
   const [selectedHabits, setSelectedHabits] = useState([]);
   const { user } = useContext(AuthContext);
-  const { data, isLoading, isSuccess, isError, refetch } = useHabits();
+  const { data, isLoading, isError, refetch } = useHabits();
 
   const noAuth = !user && !data && !isLoading;
   const authButNoHabits = user && data?.habits?.length === 0 && !isLoading;
@@ -40,7 +40,7 @@ const HabitsList = () => {
           </span>
         </div>
       )}
-      <section className="mt-2 table h-full">
+      <section className="mt-2 table h-full relative">
         {isLoading && <Spinner />}
         {noAuth && <NoAuthAndHabits />}
         {authButNoHabits && !isLoading && (

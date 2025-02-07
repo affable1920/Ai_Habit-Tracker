@@ -8,7 +8,6 @@ import Dashboard from "./HabitsDash";
 import AuthProvider from "./Providers/AuthProvider";
 import Logout from "./Logout";
 import AddHabitComponent from "./AddHabitComponent";
-import Modal from "./Modal";
 
 const router = createBrowserRouter([
   {

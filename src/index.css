@@ -62,7 +62,8 @@
     @apply cp text-sm dark:text-slate-400 dark:active:text-white md:text-lg text-slate-800;
   }
   .icon__with__bg {
-    @apply bg-white shadow-md p-1 rounded-md dark:bg-slate-800 text-xl dark:shadow-black;
+    @apply bg-white shadow-md p-1 rounded-md dark:bg-slate-800 text-xl dark:shadow-black
+    border-[1px] border-slate-200 dark:border-slate-800;
   }
 
   .btn {
@@ -81,6 +82,11 @@
   .btn__accent {
     @apply bg-sky-600 text-slate-200 hover:bg-sky-700 hover:text-white focus:ring-2 
     ring-sky-900 dark:ring-sky-700;
+  }
+
+  .btn__generate {
+    @apply bg-color__accent__primary p-2 rounded-lg ring-2 ring-color__accent__dark 
+    text-white font-mono flex items-center gap-2;
   }
 
   .error__input {
@@ -126,14 +132,23 @@
     @apply hover:bg-slate-200 self-center rounded-md transition-colors duration-200
      cp p-2 dark:hover:bg-slate-800;
   }
+  .recommendation {
+    @apply bg-color__to text-slate-200 border-[1px] border-slate-700 shadow-md
+    rounded-lg p-4 text-xs dark:shadow-black italic font-medium max-w-[400px];
+  }
+  .overlay {
+    @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-start justify-center 
+    pt-28;
+  }
   .modal {
-    @apply bg-white shadow-lg border-[1px] border-slate-300 p-4 rounded-lg flex flex-col
-    w-fit m-auto absolute top-32 left-1/2 -translate-x-1/2 max-w-[400px];
+    @apply bg-white rounded-xl pb-6 dark:gradient__primary p-2 shadow-md shadow-black
+    max-w-[80%] max-h-[80%] mx-auto transition-all duration-300;
   }
 }
 
 .spinner {
-  @apply w-10 h-10 border-4 border-cyan-800 rounded-[50%] animate-[spinner] duration-1000 flex items-center justify-center m-auto;
+  @apply w-10 h-10 border-4 border-slate-700 rounded-[50%] animate-[spinner] duration-[infinite]
+  font-medium absolute left-1/2 -translate-x-1/2;
 }
 
 .alert {
@@ -150,6 +165,10 @@
   @apply fixed top-9 left-1/2 md:top-14 -translate-x-1/2;
 }
 
+.modal {
+  animation: scale 275ms ease-out;
+}
+
 @keyframes spinner {
   to {
     transform: rotate(360deg);
@@ -159,5 +178,14 @@
 @keyframes alert {
   to {
     transform: scaleX(0);
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
   }
 }

@@ -4,7 +4,7 @@ import HabitsTracker from "./HabitsTracker";
 const Dashboard = () => {
   return (
     <>
-      <section className="p-3 px-10">
+      <section className="p-3 px-8">
         <HabitsTracker />
       </section>
     </>

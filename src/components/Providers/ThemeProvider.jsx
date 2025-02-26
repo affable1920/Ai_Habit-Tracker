@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 
-const ThemeProvider = () => {
-  const ThemeContext = React.createContext();
-  ThemeContext.displayName = "ThemeContext";
+export const ThemeContext = React.createContext();
+ThemeContext.displayName = "ThemeContext";
 
-  const [isDark, setIsDark] = useState(true);
-
-  return <div>ThemeProvider</div>;
+const ThemeProvider = ({ children }) => {
+  const [isDark, setIsDark] = useState(false);
+  return (
+    <ThemeContext.Provider value={{ isDark, setIsDark }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 export default ThemeProvider;

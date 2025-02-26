@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Joi from "joi";
 import authService from "../services/authService";
 import Form from "./common/Form";
-import Input from "./common/Input";
+import InputAdd from "./common/InputAdd";
 
 const RegisterForm = () => {
   const [error, setError] = useState("");
@@ -36,15 +36,20 @@ const RegisterForm = () => {
   return (
     <Form label="Sign Up">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input name="email" label="Email" register={register} errors={errors} />
-        <Input
+        <InputAdd
+          name="email"
+          label="Email"
+          register={register}
+          errors={errors}
+        />
+        <InputAdd
           name="password"
           label="Password"
           type="password"
           register={register}
           errors={errors}
         />
-        <Input
+        <InputAdd
           name="username"
           label="Username"
           register={register}

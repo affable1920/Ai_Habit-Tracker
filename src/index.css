@@ -2,16 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-#root {
-  padding: 0;
+*,
+*::after,
+*::before {
   margin: 0;
-  text-align: initial;
-  max-width: initial;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
 }
 
 @layer base {
   .dark {
-    @apply bg-color__primary text-slate-300;
+    @apply bg-color__secondary text-slate-200;
   }
   .cp {
     @apply cursor-pointer;
@@ -19,85 +29,73 @@
   .transition__colors {
     @apply transition-colors;
   }
-  .gradient__primary {
-    @apply bg-gradient-to-r from-color__from to-color__to;
-  }
-  .gradient__secondary {
-    @apply bg-gradient-to-l from-color__to to-color__primary;
-  }
 }
 
 @layer utilities {
   .input {
-    @apply rounded-md text-xs placeholder:text-xs placeholder:opacity-70 tracking-wide
-     pl-2 py-2 shadow-md max-h-8 outline-none hidden md:block font-mono
-     px-20 dark:bg-color__fill border-[1px] border-slate-600 border-b-2
-     focus:ring-[1px] dark:ring-slate-500 transition__colors;
+    @apply rounded-lg text-xs placeholder:text-xs tracking-wide
+     pl-2 py-2 outline-none hidden lg:block font-mono px-24 transition__colors;
   }
 
   .input__secondary {
-    @apply px-4 py-2 rounded-md transition-colors tracking-wide text-xs bg-slate-100 focus:bg-slate-50 
-    border-[1px] border-slate-700 focus:border-color__accent__primary outline-none focus:shadow-md dark:gradient__primary 
+    @apply px-4 py-2 rounded-lg transition-colors tracking-wide text-xs bg-slate-100 focus:bg-slate-50 
+    border-[1px] border-slate-700  outline-none focus:shadow-lg
     dark:focus:bg-color__primary dark:focus:border-slate-400 dark:shadow-black
     dark:placeholder:opacity-70;
   }
 
   .input__add {
-    @apply border-[1.5px] px-3 border-slate-300 focus:border-sky-500 focus:shadow-md
-    outline-none transition-all duration-300 rounded-md py-1 text-sm dark:placeholder:opacity-70 bg-slate-50
+    @apply border-[1.5px] px-3 border-slate-300 focus:border-sky-500 focus:shadow-lg
+    outline-none transition-all duration-300 rounded-lg py-1 dark:placeholder:opacity-70 bg-slate-50
     dark:border-slate-600 dark:focus:border-slate-400 dark:mb-1
-    dark:bg-gray-950 placeholder:text-xs;
+    dark:bg-gray-950 placeholder:text-xs text-xs tracking-widest;
   }
 
   .habit {
     @apply border-[1px] p-2 border-slate-300 shadow-sm rounded-sm dark:border-slate-700 
-    dark:shadow-black cp hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors;
+    dark:shadow-black cp hover:bg-slate-100
+    dark:hover:bg-color__secondary__lighter transition-colors mt-1;
   }
 
   .habit__title {
-    @apply text-sm tracking-wide leading-tight font-medium font-mono;
+    @apply text-sm tracking-wider leading-tight font-medium font-mono;
   }
 
   .icon {
-    @apply cp text-sm dark:text-slate-400 dark:active:text-white md:text-lg text-slate-800;
+    @apply cp text-sm dark:text-slate-300 dark:active:text-white lg:text-lg text-slate-800;
   }
   .icon__with__bg {
-    @apply bg-white shadow-md p-1 rounded-md dark:bg-slate-800 text-xl dark:shadow-black
+    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-slate-800 text-xl dark:shadow-black
+    border-[1px] border-slate-200 dark:border-slate-800;
+  }
+  .icon__with__bg__large {
+    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-slate-800 text-2xl dark:shadow-black
     border-[1px] border-slate-200 dark:border-slate-800;
   }
 
   .btn {
-    @apply transition-all duration-200 text-gray-100 hover:text-white rounded-lg p-2 
-    outline-none font-semibold tracking-wider mt-5 focus:ring-[1.5px];
+    @apply transition-all duration-200 rounded-lg p-2 
+    outline-none font-semibold tracking-wider;
   }
 
   .btn__primary {
-    @apply bg-color__primary focus:ring-offset-blue-600 focus:bg-color__secondary;
-  }
-
-  .btn__secondary {
-    @apply bg-gradient-to-r from-color__from to-color__to focus:bg-gradient-to-l;
-  }
-
-  .btn__accent {
-    @apply bg-sky-600 text-slate-200 hover:bg-sky-700 hover:text-white focus:ring-2 
-    ring-sky-900 dark:ring-sky-700;
+    @apply bg-color__primary dark:bg-slate-400 dark:text-black 
+    focus:ring-offset-blue-600 text-slate-100 focus:text-white focus:bg-color__secondary;
   }
 
   .btn__generate {
-    @apply bg-color__accent__primary p-2 rounded-lg ring-2 ring-color__accent__dark 
-    text-white font-mono flex items-center gap-2;
+    @apply p-2 rounded-lg ring-2 text-white font-mono flex items-center gap-2;
+  }
+
+  .btn__accent {
+    @apply shadow-lg active:border-[1.2px] active:border-color__accent dark:active:border-color__accent__lighter
+    focus:border-color__accent duration-300 bg-color__accent__lighter text-white dark:bg-color__accent;
   }
 
   .error__input {
-    @apply bg-red-100 p-1 text-red-800 dark:bg-inherit dark:text-red-400 tracking-wider 
-    rounded-md text-xs flex items-center justify-between;
+    @apply p-1 px-2 text-red-700 italic dark:bg-inherit dark:text-red-400 tracking-wider 
+    text-xs text-center leading-4;
   }
-
-  .label {
-    @apply text-sm opacity-70 tracking-tight leading-[1.1] mb-1;
-  }
-
   .tooltip {
     @apply text-slate-100 bg-slate-700 text-[7px] font-bold tracking-wide absolute p-[2px] 
     -top-7 -right-8 rounded-sm;
@@ -109,40 +107,32 @@
     @apply font-black tracking-wide text-2xl text-color__primary dark:text-slate-200;
   }
   .form__link {
-    @apply text-xs focus:text-sm mt-3 tracking-wide text-color__accent__primary w-full flex 
-    justify-center outline-none focus:text-color__accent__primary focus:font-semibold;
+    @apply text-xs tracking-wider outline-none font-medium bg-slate-700 text-white
+    p-2 px-3 rounded-lg hover:border-[1px] hover:border-slate-700 transition-colors duration-200 flex justify-center 
+    mt-2 max-w-fit mx-auto shadow-lg;
   }
   .error__component {
-    @apply grid place-items-center text-xs tracking-wide font-semibold text-red-800 bg-blue-100 shadow-sm rounded-md 
+    @apply grid place-items-center text-xs tracking-wide font-semibold text-red-800 bg-blue-100 shadow-sm rounded-lg 
     p-2 ring-2 border-2;
   }
   .navigation__link {
-    @apply text-black font-bold bg-red-200 p-1 rounded-md m-1;
+    @apply text-black font-bold bg-red-200 p-1 rounded-lg m-1;
   }
   .options {
-    @apply text-xs gap-1 bg-gradient-to-l from-slate-600 to-slate-700 text-white rounded-md flex
+    @apply text-xs gap-1  from-slate-600 to-slate-700 text-white rounded-lg flex
     flex-col ring-[1px] ring-slate-600  items-center overflow-hidden absolute -right-10 top-0;
   }
-  .nav__list {
-    @apply text-xs font-semibold tracking-wide gap-8 py-4 w-full text-center 
-    transition-all duration-300 opacity-80 md:flex md:w-auto md:p-0 
-    md:justify-self-end;
-  }
-  .nav__link {
-    @apply hover:bg-slate-200 self-center rounded-md transition-colors duration-200
-     cp p-2 dark:hover:bg-slate-800;
-  }
   .recommendation {
-    @apply bg-color__to text-slate-200 border-[1px] border-slate-700 shadow-md
+    @apply border-[1px] border-slate-200 m-2 shadow-lg
     rounded-lg p-4 text-xs dark:shadow-black italic font-medium max-w-[400px];
   }
   .overlay {
     @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-start justify-center 
-    pt-28;
+    pt-28 z-[999];
   }
   .modal {
-    @apply bg-white rounded-xl pb-6 dark:gradient__primary p-2 shadow-md shadow-black
-    max-w-[80%] max-h-[80%] mx-auto transition-all duration-300;
+    @apply bg-white rounded-xl pb-6 p-2 shadow-lg shadow-black min-h-fit
+    max-w-[80%] max-h-[80%] transition-all duration-300 text-xs;
   }
 }
 
@@ -152,7 +142,7 @@
 }
 
 .alert {
-  @apply flex items-center justify-center gap-2 bg-slate-100 shadow-md relative p-1 rounded-sm px-4
+  @apply flex items-center justify-center gap-2 bg-slate-100 shadow-lg relative p-1 rounded-sm px-4
   after:absolute after:w-full after:h-[109%] after:top-0 after:left-0 after:z-[-5] after:rounded-sm;
 }
 
@@ -162,7 +152,7 @@
 }
 
 .alert__container {
-  @apply fixed top-9 left-1/2 md:top-14 -translate-x-1/2;
+  @apply fixed top-9 left-1/2 lg:top-14 -translate-x-1/2;
 }
 
 .modal {

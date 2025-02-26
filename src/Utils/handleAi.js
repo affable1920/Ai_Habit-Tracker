@@ -1,14 +1,14 @@
-export function getPrompt(habits) {
-  if (habits.length === 0 || !habits) return JSON.stringify([]);
-
-  return JSON.stringify(
-    habits?.map((habit) => ({
-      title: habit.title,
-      description: habit.description,
-      priority: habit.priority || "Medium",
-      frequency: habit.frequency || "Not frequent",
-    }))
-  );
+export function getPrompt(habits, recs) {
+  let prompt = "";
+  if (habits.length === 0) return JSON.stringify([]);
+  else {
+    prompt = {
+      habits: JSON.stringify(habits),
+      recommendations: JSON.stringify(recs),
+    };
+    prompt = JSON.stringify(prompt).replaceAll("\\", "");
+  }
+  return prompt;
 }
 export function handleGeminiResponse(initialText) {
   const transformedString = initialText.slice(

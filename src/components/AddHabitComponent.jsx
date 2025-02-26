@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import Joi from "joi";
@@ -8,12 +8,14 @@ import InputAdd from "./common/InputAdd";
 import Select from "./common/Select";
 import useMutateHabit from "../hooks/useMutateHabit";
 import Modal from "./Modal";
+import { useLocation } from "react-router-dom";
 
 const AddHabitComponent = () => {
   const { tooltip } = useContext(TooltipContext);
   const { mutate, error } = useMutateHabit();
 
   const [isOpen, setIsOpen] = useState(false);
+  const { state } = useLocation();
 
   const schema = Joi.object({
     title: Joi.string().required().label("Title"),
@@ -22,17 +24,7 @@ const AddHabitComponent = () => {
     target: Joi.string().optional().allow("").default(""),
     frequency: Joi.string().valid().optional().allow("").default(""),
     startDate: Joi.date().optional().allow("").default(""),
-    reminder: Joi.bool()
-      .optional()
-      .default("false")
-      .allow("")
-      .valid("yes", "no")
-      .default(""),
-    reminderTimes: Joi.when("reminder", {
-      is: true,
-      then: Joi.array().items(Joi.date().iso().min(1).required()),
-      otherwise: Joi.forbidden(),
-    }),
+    reminder: Joi.bool().optional(),
     priority: Joi.string().optional().allow("").default(""),
     duration: Joi.string().optional().allow("").default(""),
   }).messages({
@@ -44,7 +36,24 @@ const AddHabitComponent = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
+    watch,
+    setValue,
   } = useForm({ resolver: joiResolver(schema) });
+  let reminder = watch("reminder");
+  let showReminderInput = (reminder && reminder === "YES") || false;
+
+  useEffect(() => {
+    if (state) {
+      const { rec = {} } = state;
+      state.type === "rec"
+        ? reset({
+            title: rec?.alignmentWithCurrentGoals,
+            description: rec?.benefits,
+          })
+        : reset(rec);
+    }
+  }, [state]);
 
   const onSubmit = async (data) => {
     mutate({ action: "add", newHabit: data });
@@ -74,6 +83,7 @@ const AddHabitComponent = () => {
               label="Describe your habit"
               register={register}
               errors={errors}
+              large={true}
             />
             <div className="flex">
               <Select
@@ -116,14 +126,51 @@ const AddHabitComponent = () => {
               )}
             </div>
             <div className="flex w-full gap-5 items-center">
-              <InputAdd
+              {/* <Select
                 name="reminder"
                 label="Want a reminder ?"
                 register={register}
                 errors={errors}
-                short
+                options={["YES", "NO"]}
                 optional
-              />
+              /> */}
+              {showReminderInput && (
+                <Modal
+                  open={showReminderInput}
+                  position={"bottom"}
+                  small={true}
+                  onClose={() => setValue("reminder", "NO")}
+                >
+                  <div className="flex flex-col gap-2 justify-center">
+                    <div className="flex gap-2">
+                      <InputAdd
+                        name={"reminderTimes"}
+                        label="Just Say When"
+                        register={register}
+                        errors={errors}
+                        optional
+                        type="datetime-local"
+                      />
+                      <button
+                        onClick={() => console.log("Time set")}
+                        className="btn btn__secondary"
+                      >
+                        Set
+                      </button>
+                    </div>
+                    <div className="flex">
+                      <InputAdd
+                        name="recurring"
+                        label="Recurring ?"
+                        register={register}
+                        errors={errors}
+                        optional
+                        type="checkbox"
+                      />
+                    </div>
+                  </div>
+                </Modal>
+              )}
               <InputAdd
                 name="startDate"
                 label="When to start ?"
@@ -136,7 +183,6 @@ const AddHabitComponent = () => {
           </div>
           <button className="btn btn__accent w-20">Add</button>
         </form>
-        <section></section>
       </div>
     </>
   );

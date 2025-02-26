@@ -9,7 +9,7 @@ const schema = {
       message: { type: "string" },
       alignmentWithCurrentGoals: { type: "string" },
       benefits: { type: "string" },
-      status: { type: "string" },
+      status: { type: "string", enum: ["New", "Highly Beneficial"] },
       resources: {
         type: "object",
         properties: {
@@ -41,7 +41,7 @@ class Gemini {
   componentDidMount() {
     if (this.autoFetch) this.fetch(this.prompt);
   }
-  async fetch() {
+  fetch = async () => {
     const { response } = await this.model.generateContent({
       contents: [
         {
@@ -55,7 +55,7 @@ class Gemini {
     });
 
     return await response.text();
-  }
+  };
 }
 
 export default Gemini;

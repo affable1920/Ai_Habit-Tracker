@@ -81,10 +81,6 @@ const useMutateHabit = () => {
         if (count > 0) {
           if (habitExists(newHabit.title, newHabit.description))
             throw Error("A same habit already exists in your collection !");
-
-          genAi.prompt = getPrompt([...habits, { ...habitRequest.newHabit }]);
-          const ifSimilar = JSON.parse(await genAi.fetch());
-          if (ifSimilar) throw Error("A similar habit might already exist !");
         } else {
           addHabit(habitRequest.newHabit);
           return "Habit successfully added !";
@@ -113,7 +109,7 @@ const useMutateHabit = () => {
     },
 
     onError: (error, newHabit, context) => {
-      if (!context || !error) return;
+      if (!context) return;
       return queryClient.setQueryData(
         [...key, query],
         () => context.prevHabits

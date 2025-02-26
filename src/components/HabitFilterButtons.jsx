@@ -63,8 +63,8 @@ const HabitFilterButtons = () => {
                 tooltipDispatch({ type: "count", tooltip: `Total Habits` })
               }
               onMouseLeave={() => tooltipDispatch({ type: "clear" })}
-              className="cp font-semibold border-slate-300 p-[2px] px-[3px] rounded-md ml-2 mr-1 
-              text-xs font-mono bg-color__accent__primary text-white block"
+              className="cp font-semibold border-slate-300 p-[4px] bg-color__secondary__lighter text-white
+               rounded-md ml-2 mr-1 text-xs font-mono bg-color__accent__primary block dark:bg-slate-300 dark:text-black"
             >
               {data?.habits?.length}
             </span>

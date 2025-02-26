@@ -2,6 +2,7 @@ import React from "react";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
 import HabitFilterButtons from "./HabitFilterButtons";
+import tensorflow from "../Utils/Tensor_flow";
 
 const HabitsTracker = () => {
   return (
@@ -13,7 +14,7 @@ const HabitsTracker = () => {
       </header>
       <section
         className="flex flex-col rounded-md p-4 dark:gradient__primary 
-        border-[1px] border-slate-300 shadow-xl dark:shadow-black dark:border-slate-700"
+        border-[1px] border-slate-200 shadow-xl dark:shadow-black/50 dark:border-slate-700"
       >
         <HabitFilterButtons />
         <HabitsList />

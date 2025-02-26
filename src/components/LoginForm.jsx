@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import authService from "../services/authService";
 import Form from "./common/Form";
-import Input from "./common/Input";
-import Spinner from "./Spinner";
+import InputAdd from "./common/InputAdd";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginForm = () => {
   const [error, setError] = useState("");
@@ -30,15 +30,27 @@ const LoginForm = () => {
       setIsLogginIn(true);
       navigate("/");
     } catch (err) {
-      setError(`${err?.name}: ${err?.code}`);
+      setError(err?.message);
+    } finally {
+      setIsLogginIn(false);
     }
+  };
+
+  const googleSignIn = async () => {
+    authService.loginWithGoogle();
+    navigate("/");
   };
 
   return (
     <Form label="Login">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input name="email" register={register} errors={errors} label="Email" />
-        <Input
+        <InputAdd
+          name="email"
+          register={register}
+          errors={errors}
+          label="Email"
+        />
+        <InputAdd
           name="password"
           register={register}
           errors={errors}
@@ -46,15 +58,17 @@ const LoginForm = () => {
           type="password"
         />
         {error && (
-          <div className="mt-2 text-red-600 text-sm tracking-wide text-center">
+          <div className="mt-2 text-red-700 text-xs italic tracking-widest text-center font-medium">
             {error}
           </div>
         )}
-        <button className="btn btn__primary w-full">Login</button>
+        <button className="btn btn__primary w-full mt-2">Login</button>
       </form>
-      <Link className="form__link" to="">
-        Forgot Password
-      </Link>
+      <button className="btn btn__accent w-full mt-4" onClick={googleSignIn}>
+        <Link className="text-xs flex items-center justify-center gap-3">
+          Sign in with <FcGoogle />
+        </Link>
+      </button>
     </Form>
   );
 };

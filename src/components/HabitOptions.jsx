@@ -14,7 +14,11 @@ const HabitOptions = ({ habit }) => {
       label: "edit",
       component: (
         <CiEdit
-          onClick={() => navigate(`/update/${habit.id}`)}
+          onClick={() =>
+            navigate(`/update/${habit.id}`, {
+              state: { type: "update", habit },
+            })
+          }
           className="text-xs h-3 w-3"
         />
       ),

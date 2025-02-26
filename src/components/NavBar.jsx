@@ -1,87 +1,75 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ThemeToggler from "./ThemeToggler";
 import NavSearch from "./NavSearch";
-import AuthContext from "../context/AuthContext";
-import { FaUser } from "react-icons/fa";
 import { FaGithubSquare } from "react-icons/fa";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { LuLogOut } from "react-icons/lu";
-import { GiSolarSystem } from "react-icons/gi";
+import NavFeatures from "./NavFeatures";
+import ThemeToggler from "./ThemeToggler";
+import { FaChevronDown } from "react-icons/fa";
 
 const NavBar = ({ onModalClick }) => {
-  const { user } = useContext(AuthContext);
   const [showLinks, setShowLinks] = useState(false);
 
   const navLinks = [
     { page: "Home", path: "/" },
     { page: "Dashboard", path: "/" },
-    { page: "Analytics", path: "/" },
-    { page: "Pricing", path: "/" },
+    { page: "Products", path: "/" },
+    { page: "Docs", path: "/" },
+    { page: "About us", path: "/" },
   ];
 
   return (
-    <header>
-      <nav className="flex flex-wrap justify-between p-2 items-center dark:bg-[#000] border-b-[1px] border-slate-300 dark:border-slate-700">
-        <div>
-          <Link to="/">
-            <FaGithubSquare className="cp" />
-          </Link>
-        </div>
-        <div className="flex justify-center">
-          <NavSearch />
-          <span className="icon__container">
+    <>
+      <header className="relative w-full z-10">
+        <nav
+          className="shadow-md fixed w-full flex justify-between items-center px-12 py-4 flex-wrap bg-white
+        dark:shadow-black border-b-[1px] border-slate-100 dark:border-slate-800 dark:bg-color__primary"
+        >
+          <div className="">
+            <Link to="/">
+              <FaGithubSquare className="cp" />
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <NavSearch />
+            <ThemeToggler />
             <HiMenuAlt3
-              className="cp icon md:hidden"
+              className="cp icon__with__bg__large lg:hidden"
               onClick={() => setShowLinks(!showLinks)}
             />
-          </span>
-        </div>
-        <ul
-          className={`nav__list ${showLinks ? " flex flex-col" : "hidden"} 
+          </div>
+          <ul
+            className={`w-full text-xs tracking-widest border-l-[1px] 
+              border-slate-200 dark:border-slate-800 mt-2 lg:mt-0 lg:flex gap-12 lg:border-0 lg:w-auto
+              opacity-0 absolute pointer-events-none transition-opacity duration-300 ease-out
+               ${
+                 showLinks && "opacity-100 relative pointer-events-auto"
+               } lg:opacity-100 lg:relative lg:pointer-events-auto
         `}
-        >
-          {navLinks.map((link) => (
-            <li className="nav__link" key={link}>
-              <Link
-                to={link.path}
-                className="hover:text-black dark:hover:text-white"
+          >
+            {navLinks.map((link, index) => (
+              <li
+                className={`hover:bg-slate-200 hover:shadow-sm rounded-lg cp p-2 
+              dark:hover:bg-slate-800 mt-4 lg:mt-0 transition-colors duration-200 ease-out ${
+                showLinks && "rounded-none"
+              }`}
+                key={link}
               >
-                {link.page}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <div
-        className="flex rounded-md shadow-md justify-end p-2 gap-4 items-center 
-      place-self-end dark:shadow-slate-950"
-      >
-        <GiSolarSystem className="cp icon__with__bg" onClick={onModalClick} />
-        <ThemeToggler />
-        {user && (
-          <Link to="/">
-            <FaUser className="icon__with__bg" />
-          </Link>
-        )}
-        {user && (
-          <Link to="/logout">
-            <LuLogOut className="icon__with__bg" />
-          </Link>
-        )}
-        {!user && (
-          <Link to="/register" className="grid">
-            <button
-              className="tracking-wider shadow-md bg-gradient-to-r from-color__accent__primary to-color__accent__dark 
-              text-slate-200 rounded-md px-4 py-1 text-xs font-semibold text-center justify-self-end 
-              active:from-color__accent__dark active:to-color__accent__primary"
-            >
-              Register
-            </button>
-          </Link>
-        )}
-      </div>
-    </header>
+                <Link
+                  to={link.path}
+                  className="hover:text-black dark:hover:text-white flex justify-between items-center lg:gap-3"
+                >
+                  {link.page}
+                  {(index === 2 || index === 3) && (
+                    <FaChevronDown className="text-color__accent" size={10} />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
+    </>
   );
 };
 

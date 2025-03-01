@@ -32,14 +32,31 @@ body {
 }
 
 @layer utilities {
+  .label {
+    @apply text-xs tracking-wider font-medium opacity-75 ml-[2px];
+  }
+  .input__group {
+    @apply flex flex-col gap-1.5 mb-3;
+  }
   .input {
     @apply rounded-lg text-xs placeholder:text-xs tracking-wide
      pl-2 py-2 outline-none hidden lg:block font-mono px-24 transition__colors;
   }
 
+  .input__teritiary {
+    @apply bg-gray-100 py-[6px] pl-3 pr-7 rounded-md outline-none text-xs font-medium tracking-widest text-slate-800
+    focus:shadow-sm focus:ring-1 focus:ring-color__accent/50 dark:bg-color__secondary__lighter 
+    dark:shadow-md dark:focus:shadow-lg dark:focus:ring-sky-700/80 border-[1px] border-gray-300 dark:border-zinc-700;
+  }
+
+  .link__with__bg {
+    @apply underline p-1 hover:bg-color__accent__lighter/60 rounded-md outline-0
+    focus:bg-color__accent__lighter/60 transition-colors duration-200;
+  }
+
   .input__secondary {
     @apply px-4 py-2 rounded-lg transition-colors tracking-wide text-xs bg-slate-100 focus:bg-slate-50 
-    border-[1px] border-slate-700  outline-none focus:shadow-lg
+    border-[1px] border-zinc-700  outline-none focus:shadow-lg
     dark:focus:bg-color__primary dark:focus:border-slate-400 dark:shadow-black
     dark:placeholder:opacity-70;
   }
@@ -52,9 +69,8 @@ body {
   }
 
   .habit {
-    @apply border-[1px] p-2 border-slate-300 shadow-sm rounded-sm dark:border-slate-700 
-    dark:shadow-black cp hover:bg-slate-100
-    dark:hover:bg-color__secondary__lighter transition-colors mt-1;
+    @apply border-[1px] p-2 border-slate-300 shadow-sm rounded-sm dark:border-zinc-700 
+    dark:shadow-black cp hover:bg-slate-100 dark:hover:bg-color__secondary__lighter transition-colors mt-1;
   }
 
   .habit__title {
@@ -62,19 +78,22 @@ body {
   }
 
   .icon {
-    @apply cp text-sm dark:text-slate-300 dark:active:text-white lg:text-lg text-slate-800;
+    @apply cp text-sm dark:text-slate-300 dark:active:text-white lg:text-lg text-zinc-800;
   }
   .icon__with__bg {
-    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-slate-800 text-xl dark:shadow-black
-    border-[1px] border-slate-200 dark:border-slate-800;
+    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-zinc-800 text-xl dark:shadow-black
+    border-[1px] border-slate-200 dark:border-zinc-700 dark:text-slate-200 focus:text-white;
   }
   .icon__with__bg__large {
-    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-slate-800 text-2xl dark:shadow-black
+    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-zinc-800 text-2xl dark:shadow-black
     border-[1px] border-slate-200 dark:border-slate-800;
+  }
+  .option__icon__container {
+    @apply text-xs font-medium tracking-wider flex flex-col items-center gap-2;
   }
 
   .btn {
-    @apply transition-all duration-200 rounded-lg p-2 
+    @apply transition-all duration-200 rounded-lg p-2 focus:outline-none
     outline-none font-semibold tracking-wider;
   }
 
@@ -88,8 +107,8 @@ body {
   }
 
   .btn__accent {
-    @apply shadow-lg active:border-[1.2px] active:border-color__accent dark:active:border-color__accent__lighter
-    focus:border-color__accent duration-300 bg-color__accent__lighter text-white dark:bg-color__accent;
+    @apply shadow-lg active:border-[1.5px] dark:active:border-color__accent__lighter
+    focus:bg-green-600 focus:border-color__accent__lighter duration-300 bg-color__accent__lighter text-white dark:bg-color__accent;
   }
 
   .error__input {
@@ -97,7 +116,7 @@ body {
     text-xs text-center leading-4;
   }
   .tooltip {
-    @apply text-slate-100 bg-slate-700 text-[7px] font-bold tracking-wide absolute p-[2px] 
+    @apply text-slate-100 bg-zinc-700 text-[7px] font-bold tracking-wide absolute p-[2px] 
     -top-7 -right-8 rounded-sm;
   }
   .tooltip__container {
@@ -107,8 +126,8 @@ body {
     @apply font-black tracking-wide text-2xl text-color__primary dark:text-slate-200;
   }
   .form__link {
-    @apply text-xs tracking-wider outline-none font-medium bg-slate-700 text-white
-    p-2 px-3 rounded-lg hover:border-[1px] hover:border-slate-700 transition-colors duration-200 flex justify-center 
+    @apply text-xs tracking-wider outline-none font-medium bg-zinc-700 text-white
+    p-2 px-3 rounded-lg hover:border-[1px] hover:border-zinc-700 transition-colors duration-200 flex justify-center 
     mt-2 max-w-fit mx-auto shadow-lg;
   }
   .error__component {
@@ -119,25 +138,31 @@ body {
     @apply text-black font-bold bg-red-200 p-1 rounded-lg m-1;
   }
   .options {
-    @apply text-xs gap-1  from-slate-600 to-slate-700 text-white rounded-lg flex
+    @apply text-xs gap-1  from-slate-600 to-zinc-700 text-white rounded-lg flex
     flex-col ring-[1px] ring-slate-600  items-center overflow-hidden absolute -right-10 top-0;
   }
   .recommendation {
-    @apply border-[1px] border-slate-200 m-2 shadow-lg
-    rounded-lg p-4 text-xs dark:shadow-black italic font-medium max-w-[400px];
+    @apply border-[2px] border-slate-200 m-2 shadow-lg dark:border-zinc-700
+    rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;
   }
   .overlay {
     @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-start justify-center 
     pt-28 z-[999];
   }
   .modal {
-    @apply bg-white rounded-xl pb-6 p-2 shadow-lg shadow-black min-h-fit
-    max-w-[80%] max-h-[80%] transition-all duration-300 text-xs;
+    @apply bg-white rounded-xl p-12 shadow-lg shadow-black min-h-fit
+    max-w-[80%] max-h-[80%] transition-all duration-300 text-xs dark:bg-color__secondary__lighter ring-1 
+    ring-zinc-600;
+  }
+
+  /* Animations */
+  .animate__arrow__spin {
+    animation: arrow__spin infinite ease-out 1s;
   }
 }
 
 .spinner {
-  @apply w-10 h-10 border-4 border-slate-700 rounded-[50%] animate-[spinner] duration-[infinite]
+  @apply w-10 h-10 border-4 border-zinc-700 rounded-[50%] animate-[spinner] duration-[infinite]
   font-medium absolute left-1/2 -translate-x-1/2;
 }
 
@@ -177,5 +202,11 @@ body {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes arrow__spin {
+  to {
+    transform: rotate(1turn);
   }
 }

@@ -56,9 +56,8 @@ const HabitsList = () => {
             )}
           </div>
         )}
-        {data?.habits?.map((habit) => (
+        {data?.habits?.map((habit, index) => (
           <Habit
-            key={habit?.habit_id}
             onSelect={handleSelect}
             selectedHabits={selectedHabits}
             habit={habit}

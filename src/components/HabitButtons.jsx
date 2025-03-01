@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import Tooltip from "./Tooltip";
 import TooltipContext from "../context/TooltipContext";
+import { ModalContext } from "./Providers/ModalProvider";
 import { IoMdArrowDropdown } from "react-icons/io";
 import HabitOptions from "./HabitOptions";
-import DeleteIcon from "./DeleteIcon";
+import { MdDelete } from "react-icons/md";
 
 const HabitButtons = ({ onDropdownClick, habit }) => {
   const { tooltip } = useContext(TooltipContext);
+  const { dispatch } = useContext(ModalContext);
 
   return (
     <div className="flex items-center gap-1 relative">
@@ -15,7 +17,16 @@ const HabitButtons = ({ onDropdownClick, habit }) => {
         {habit.id === tooltip?.id && tooltip?.delete && (
           <Tooltip tagline={tooltip?.delete} />
         )}
-        <DeleteIcon habitId={habit.id} />
+        <MdDelete
+          onClick={() =>
+            dispatch({
+              type: "OPEN_MODAL",
+              modalToShow: "deleteModal",
+              props: { id: habit.id },
+            })
+          }
+          className="icon__with__bg"
+        />
       </div>
       <HabitOptions habit={habit} />
     </div>

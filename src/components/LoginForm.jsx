@@ -49,6 +49,7 @@ const LoginForm = () => {
           register={register}
           errors={errors}
           label="Email"
+          teritiary={true}
         />
         <InputAdd
           name="password"
@@ -56,6 +57,7 @@ const LoginForm = () => {
           errors={errors}
           label="Password"
           type="password"
+          teritiary={true}
         />
         {error && (
           <div className="mt-2 text-red-700 text-xs italic tracking-widest text-center font-medium">

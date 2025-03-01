@@ -1,15 +1,11 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import TooltipProvider from "./Providers/TooltipProvider";
-import QueryProvider from "./Providers/QueryProvider";
-import ThemeProvider from "./Providers/ThemeProvider";
+import { createBrowserRouter } from "react-router-dom";
 import RegisterForm from "./RegisterForm";
+import AddHabitComponent from "./AddHabitComponent";
+import Logout from "./Logout";
+import Chat from "./Chat";
 import Layout from "./Layout";
 import LoginForm from "./LoginForm";
 import Dashboard from "./HabitsDash";
-import AuthProvider from "./Providers/AuthProvider";
-import Logout from "./Logout";
-import AddHabitComponent from "./AddHabitComponent";
-import Chat from "./Chat";
 
 const router = createBrowserRouter([
   {
@@ -27,18 +23,4 @@ const router = createBrowserRouter([
   },
 ]);
 
-const App = () => {
-  return (
-    <ThemeProvider>
-      <AuthProvider>
-        <TooltipProvider>
-          <QueryProvider>
-            <RouterProvider router={router} />;
-          </QueryProvider>
-        </TooltipProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  );
-};
-
-export default App;
+export default router;

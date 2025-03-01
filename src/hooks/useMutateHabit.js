@@ -5,7 +5,6 @@ import { v4 } from "uuid";
 import auth from "../services/authService";
 import AuthContext from "../context/AuthContext";
 import QueryContext from "../context/QueryContext";
-import { getPrompt } from "./../Utils/handleAi";
 import Gemini from "../hooks/GeminiSDK";
 import useHabits from "./useHabits";
 
@@ -74,18 +73,8 @@ const useMutateHabit = () => {
   return useMutation({
     mutationKey: key,
     mutationFn: async (habitRequest) => {
-      const { newHabit = {} } = habitRequest;
       if (habitRequest.action === "delete") deleteHabit(habitRequest.habitId);
-
-      if (habitRequest.action === "add") {
-        if (count > 0) {
-          if (habitExists(newHabit.title, newHabit.description))
-            throw Error("A same habit already exists in your collection !");
-        } else {
-          addHabit(habitRequest.newHabit);
-          return "Habit successfully added !";
-        }
-      }
+      if (habitRequest.action === "add") addHabit(habitRequest.newHabit);
     },
 
     onMutate: (habitRequest) => {

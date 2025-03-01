@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import key from "../apiKey";
+const key = import.meta.env.VITE_API_KEY;
 
 const schema = {
   type: "array",

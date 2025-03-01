@@ -7,10 +7,10 @@ const Form = ({ children, label }) => {
     bg-gradient-to-r from-color__from to-color__to"
     >
       <div
-        className="shadow-xl rounded-md border-[1.2px] border-slate-200 dark:border-color__secondary__lighter
-       max-w-md md:p-12 w-full px-10 py-10 pt-4"
+        className="shadow-xl border-[2px] border-slate-200 rounded-md 
+      dark:border-color__secondary__lighter dark:shadow-black/80 p-8"
       >
-        <h1 className="text-2xl font-bold text-center tracking-wide mb-6">
+        <h1 className="text-2xl font-bold text-center tracking-wide mb-6 -mt-3">
           {label}
         </h1>
         {children}

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { GrResources } from "react-icons/gr";
 import { IoIosThumbsDown, IoIosThumbsUp, IoMdAdd } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
+import { ModalContext } from "./Providers/ModalProvider";
 
 const alignment = "alignmentWithCurrentGoals";
-const Recommendation = ({ rec, onClose, handleRecFeedback }) => {
+const Recommendation = ({ rec, handleRecFeedback }) => {
   const [showResources, setShowResources] = useState(false);
+  const { dispatch } = useContext(ModalContext);
 
   const common = "cp icon__with__bg";
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const Recommendation = ({ rec, onClose, handleRecFeedback }) => {
               className={`${common}`}
               onClick={() => {
                 navigate("/add", { state: { type: "rec", rec } });
-                onClose();
+                dispatch({ type: "CLOSE_MODAL" });
               }}
             />
             <IoIosThumbsDown

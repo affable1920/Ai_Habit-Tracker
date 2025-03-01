@@ -11,12 +11,13 @@ const InputAdd = ({
   optional,
   placeholder = "",
   large = false,
+  teritiary = false,
 }) => {
   const { dispatch } = useContext(TooltipContext);
 
   if (large)
     return (
-      <div className="flex flex-col">
+      <div className="input__group">
         <label className="label" htmlFor="description">
           Describe your habit
         </label>
@@ -29,12 +30,10 @@ const InputAdd = ({
     );
 
   return (
-    <div className={`flex flex-col gap-[8px] mb-3`}>
+    <div className={`input__group`}>
       {label && (
         <label
-          className={`text-xs tracking-wider font-medium opacity-75 ${
-            name === "reminderTimes" && "text-center"
-          }`}
+          className={`label ${name === "reminderTimes" && "text-center"}`}
           htmlFor="title"
         >
           {label} {!optional && "*"}
@@ -45,7 +44,7 @@ const InputAdd = ({
         onMouseLeave={() => dispatch({ type: "clear" })}
         placeholder={placeholder}
         type={type}
-        className={`input__add ${
+        className={`${teritiary ? "input__teritiary" : "input__add"} ${
           errors[name] &&
           "border-red-800 focus:border-red-800 dark:border-red-800 dark:focus:border-red-800 focus:mb-2"
         } ${type === "datetime-local" && "uppercase tracking-wide cp"}`}

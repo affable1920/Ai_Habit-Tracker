@@ -16,7 +16,7 @@ const HabitFilterButtons = () => {
   };
 
   const { tooltip, dispatch: tooltipDispatch } = useContext(TooltipContext);
-  const { dispatch: queryDispatch } = useContext(QueryContext);
+  const { query, dispatch: queryDispatch } = useContext(QueryContext);
   const { data } = useHabits();
 
   return (
@@ -41,7 +41,11 @@ const HabitFilterButtons = () => {
       <div
         className={`${tooltip && "tooltip__container"} flex items-center gap-4`}
       >
-        <div>
+        <div className="flex items-center gap-4">
+          <button
+            className={`p-2 bg-color__accent__lighter/80 rounded-md`}
+            onClick={() => queryDispatch({})}
+          />
           <StatusFilter />
         </div>
         <div className="flex items-center gap-1">

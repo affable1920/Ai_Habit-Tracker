@@ -21,11 +21,6 @@ const NavFeatures = ({ onModalClick }) => {
             <FaUser className="icon__with__bg" />
           </Link>
         )}
-        {user && (
-          <Link to="/logout">
-            <LuLogOut className="icon__with__bg" />
-          </Link>
-        )}
         {!user && (
           <Link to="/register" className="grid">
             <button

@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
-import { getPrompt } from "../Utils/handleAi";
+import getPrompt from "../Utils/handleAi";
 import useHabits from "../hooks/useHabits";
 import Gemini from "../hooks/GeminiSDK";
 import Recommendation from "./Recommendation";
 import Spinner from "./Spinner";
-import authService from "../services/authService";
+import { firestore } from "../services/authService";
 import AuthContext from "../context/AuthContext";
 import { IoMdSettings } from "react-icons/io";
 import { RiAiGenerate } from "react-icons/ri";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { SiLivechat } from "react-icons/si";
+import { ModalContext } from "./Providers/ModalProvider";
 
 const systemInstruction = `
 You are an AI assistant that generates powerful, high-performance, must do habit recommendations that align with the
@@ -51,12 +52,8 @@ const RecommendationSystem = ({ onClose }) => {
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const recRef = collection(
-    authService.firestore,
-    "users",
-    user.uid,
-    "recommendations"
-  );
+  const recRef = collection(firestore, "users", user?.uid, "recommendations");
+
   const [prompt, setPrompt] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
 
@@ -66,22 +63,26 @@ const RecommendationSystem = ({ onClose }) => {
   const ifNext = currentIndex < recommendations.length - 1;
   const ifPrevious = currentIndex != 0;
 
+  const { dispatch } = useContext(ModalContext);
   const { data = [] } = useQuery({
     queryKey: ["recommendations"],
     queryFn: async () => {
       return (await getDocs(recRef)).docs.map((doc) => doc.data());
     },
   });
+
   useEffect(() => {
     setPrompt(getPrompt(habits, data));
   }, [habits]);
 
   const genAi = new Gemini(systemInstruction, prompt);
   let notRecommendations = !recommendations || recommendations.length === 0;
+
   async function getRecommendations() {
     setIsLoading(true);
     try {
       const parsed = JSON.parse(await genAi.fetch());
+      console.log(parsed);
       setRecommendations(parsed.map((rec) => ({ id: v4(), ...rec })));
     } catch (err) {
       alert(err);
@@ -111,95 +112,90 @@ const RecommendationSystem = ({ onClose }) => {
   };
 
   return (
-    <section
-      className={`${notRecommendations && "min-h-[400px] min-w-[400px]"}`}
-    >
-      <header className="flex mt-1 gap-1 justify-end items-center">
-        <IoMdSettings className="cp icon__with__bg" />
-      </header>
-      <section>
-        <h4 className="font-mono font-semibold text-center mb-2 rec">
+    <section className={``}>
+      <header className="flex items-start relative justify-center">
+        <h4 className="font-mono font-semibold text-center mb-2">
           Recommendation System
         </h4>
-        <div>
-          <div className="flex flex-col">
-            {!notRecommendations && (
-              <>
-                <ul className="flex gap-2">
-                  {recommendations?.map((rec, index) => (
-                    <li
-                      className={`${
-                        index === currentIndex ? "block" : "hidden"
-                      } md:block`}
-                    >
-                      <Recommendation
-                        rec={rec}
-                        onClose={onClose}
-                        handleRecFeedback={{ onThumbsUp, onThumbsDown }}
-                      />
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  className={`flex gap-2 m-2 justify-center md:hidden ${
-                    recommendations.length <= 1 && "hidden"
-                  }`}
-                >
-                  <MdNavigateBefore
-                    onClick={() =>
-                      setCurrentIndex(
-                        ifPrevious ? currentIndex - 1 : currentIndex
-                      )
-                    }
-                    className={`cp icon__with__bg ${
-                      ifPrevious
-                        ? "text-slate-800"
-                        : "pointer-events-none text-slate-300"
-                    }`}
-                  />
-                  <MdNavigateNext
-                    className={`cp icon__with__bg ${
-                      ifNext
-                        ? "text-slate-800"
-                        : "pointer-events-none text-slate-300"
-                    }`}
-                    onClick={() =>
-                      setCurrentIndex(ifNext ? currentIndex + 1 : currentIndex)
-                    }
-                  />
-                </div>
-              </>
-            )}
-          </div>
-          <div className={`mt-4 relative`}>
-            {isLoading && <Spinner />}
-            <div
-              className={`flex gap-2 items-end ${
-                notRecommendations
-                  ? "flex-col items-center pt-20"
-                  : "justify-end"
-              }`}
-            >
-              <button
-                className={`btn btn__accent text-white flex items-center gap-2`}
-                onClick={getRecommendations}
-              >
-                {notRecommendations ? "Generate" : "Re-Generate"}
-                <RiAiGenerate />
-              </button>
-              <SiLivechat
-                onClick={() => {
-                  navigate("/chat");
-                  onClose();
-                }}
-                className={`cp icon__with__bg ${
-                  isLoading && "pointer-events-none"
+        <IoMdSettings className="cp icon__with__bg absolute -top-4 -right-10" />
+      </header>
+      <div>
+        <div className="flex flex-col">
+          {!notRecommendations && (
+            <>
+              <ul className="flex gap-2">
+                {recommendations?.map((rec, index) => (
+                  <li
+                    className={`${
+                      index === currentIndex ? "block" : "hidden"
+                    } md:block`}
+                  >
+                    <Recommendation
+                      rec={rec}
+                      onClose={onClose}
+                      handleRecFeedback={{ onThumbsUp, onThumbsDown }}
+                    />
+                  </li>
+                ))}
+              </ul>
+              <div
+                className={`flex gap-2 m-2 justify-center md:hidden ${
+                  recommendations.length <= 1 && "hidden"
                 }`}
-              />
-            </div>
+              >
+                <MdNavigateBefore
+                  onClick={() =>
+                    setCurrentIndex(
+                      ifPrevious ? currentIndex - 1 : currentIndex
+                    )
+                  }
+                  className={`cp icon__with__bg ${
+                    ifPrevious
+                      ? "text-slate-800"
+                      : "pointer-events-none text-slate-300"
+                  }`}
+                />
+                <MdNavigateNext
+                  className={`cp icon__with__bg ${
+                    ifNext
+                      ? "text-slate-800"
+                      : "pointer-events-none text-slate-300"
+                  }`}
+                  onClick={() =>
+                    setCurrentIndex(ifNext ? currentIndex + 1 : currentIndex)
+                  }
+                />
+              </div>
+            </>
+          )}
+        </div>
+        <div className={`mt-4 relative`}>
+          {isLoading && <Spinner />}
+          <div
+            className={`flex gap-2 items-end ${
+              notRecommendations ? "flex-col items-center pt-20" : "justify-end"
+            }`}
+          >
+            <button
+              className={`btn btn__accent text-white flex items-center gap-2`}
+              onClick={getRecommendations}
+            >
+              {notRecommendations ? "Generate" : "Re-Generate"}
+              <RiAiGenerate />
+            </button>
+            <SiLivechat
+              onClick={() => {
+                navigate("/chat");
+                dispatch({ type: "CLOSE_MODAL" });
+                onClose();
+              }}
+              className={`cp icon__with__bg ${
+                isLoading && "pointer-events-none"
+              }`}
+            />
           </div>
         </div>
-      </section>
+      </div>
     </section>
   );
 };

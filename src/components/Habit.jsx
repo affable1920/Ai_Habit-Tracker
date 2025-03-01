@@ -1,19 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import HabitButtons from "./HabitButtons";
 import Selectedhabit from "./Selectedhabit";
 import { PiDotsNineThin } from "react-icons/pi";
 import getStreakTitle, { streakMap } from "../Utils/getHabitStreak";
 import { GoChevronRight } from "react-icons/go";
-import Modal from "./Modal";
 import useUpdateHabit from "./../hooks/useUpdateHabit";
+import { ModalContext } from "./Providers/ModalProvider";
 
 const Habit = ({ habit, onSelect, selectedHabits }) => {
   const [loadMore, setLoadMore] = useState(false);
   const THRESHOLD__TIME = 750;
 
   let holdRef = useRef(false);
-
-  const [showEditBtn, setShowEditBtn] = useState(false);
   const handleMouseDown = () => {
     if (selectedHabits.length !== 0) onSelect(habit);
     holdRef.current = true;
@@ -26,39 +24,45 @@ const Habit = ({ habit, onSelect, selectedHabits }) => {
   const ifSelected = !!selectedHabits.find((h) => h.id === habit.id) || false;
   const streakType = getStreakTitle(habit.streak);
 
-  const { mutate, isSuccess } = useUpdateHabit();
+  const { modal, dispatch } = useContext(ModalContext);
+  const onEditStatusClick = () => {
+    if (habit.status === "complete") return;
+    dispatch({
+      type: "OPEN_MODAL",
+      modalToShow: "editHabitModal",
+      props: { id: habit.id },
+    });
+  };
+
   return ifSelected ? (
     <Selectedhabit onClick={() => onSelect(habit)} habit={habit} />
   ) : (
     <>
-      <article className="habit">
+      <article className="habit" key={habit.id}>
         <div>
           <article
-            className={`text-[9px] z-10 font-medium tracking-widest text-black p-2 rounded-md justify-self-end mb-2 relative ${
+            className={`text-[9px] font-medium tracking-widest text-black p-2 rounded-md shadow-sm justify-self-end mb-2 relative ${
               habit.status === "complete"
                 ? "bg-color__accent__lighter"
                 : "bg-yellow-400"
             }`}
           >
             <button
-              onClick={() => setShowEditBtn(!showEditBtn)}
+              onClick={onEditStatusClick}
               className="flex items-center gap-2"
             >
               {habit.status[0].toUpperCase() + habit.status.slice(1)}
-              <GoChevronRight className="font-bold" />
+              {
+                <GoChevronRight
+                  className={`font-bold ${
+                    modal?.modalName === "editHabitModal" &&
+                    modal.props.id === habit.id &&
+                    "animate__arrow__spin"
+                  } `}
+                />
+              }
             </button>
           </article>
-          {habit.status === "incomplete" && (
-            <Modal open={showEditBtn} onClose={() => setShowEditBtn(false)}>
-              <button
-                onClick={() => mutate(habit.id)}
-                className={`text-xs font-medium bg-color__accent__lighter p-2 rounded-md
-                italic mt-4 shadow-md tracking-wider`}
-              >
-                Mark_complete
-              </button>
-            </Modal>
-          )}
         </div>
         <header
           onMouseDown={handleMouseDown}

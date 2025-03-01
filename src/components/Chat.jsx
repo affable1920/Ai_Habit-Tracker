@@ -7,8 +7,10 @@ import { AiTwotoneAudio } from "react-icons/ai";
 import { SiAudiomack } from "react-icons/si";
 import { IoMdAddCircle } from "react-icons/io";
 import { MdNavigateBefore } from "react-icons/md";
-import key from "../apiKey";
 import { v4 } from "uuid";
+import { FaFolder } from "react-icons/fa6";
+import { FaCamera } from "react-icons/fa6";
+import { FaRegImage } from "react-icons/fa6";
 
 const Chat = () => {
   const {
@@ -28,58 +30,55 @@ const Chat = () => {
     ],
   };
 
-  const common = "icon__with__bg__general cp";
-  const genAi = new GoogleGenerativeAI(key).getGenerativeModel({
-    model: "gemini-2.0-flash-001",
-  });
-
-  const [showExtra, setShowExtra] = useState(true);
+  const common = "cp icon__with__bg";
+  const [showExtra, setShowExtra] = useState(false);
   const [files, setFiles] = useState(null);
 
   const [inputs, setInputs] = useState([]);
   const [aiResponse, setAiResponse] = useState([]);
 
-  const run = async () => {
-    let chat = genAi.startChat({
-      systemInstruction,
-      generationConfig: { temperature: 0.25, maxOutputTokens: 480 },
-      history,
-    });
-    let { response } = await chat.sendMessage("");
-  };
-
   const onSubmit = (e) => {
     console.log(e);
   };
 
-  const handleFileUpload = (e) => {
-    let files = e.target.files;
-
-    let selectedtFiles = [];
-    if (files)
-      for (let file of files) {
-        let fileObj = {
-          id: v4(),
-          type: file.type.toLowerCase().startsWith("image") ? "image" : "video",
-          url: URL.createObjectURL(file),
-        };
-
-        selectedtFiles.push(fileObj);
-        setFiles(selectedtFiles);
-      }
-  };
-
   return (
-    <section className="">
-      <section>{/* Responses */}</section>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        <input
-          type="text"
-          className="border-[1px] border-slate-200 w-full p-2 rounded-md bg-slate-50
-           shadow-sm outline-none italic text-xs"
-          placeholder="Message GPT_"
-        />
-      </form>
+    <section className="h-full">
+      <section className="h-full flex justify-center flex-col mx-12">
+        <form onSubmit={handleSubmit(onSubmit)} className="relative">
+          <div
+            className={`flex gap-12 absolute opacity-0 -top-[180%] pointer-events-none bg-white 
+              shadow-md p-2 rounded-sm size-full lg:w-auto min-h-[80px] border-2 border-slate-100 flex-wrap ${
+                showExtra &&
+                "opacity-100 pointer-events-auto transition-opacity duration-300"
+              }`}
+          >
+            <div className="option__icon__container">
+              <FaRegImage className={common} />
+              Photos
+            </div>
+            <div className="option__icon__container">
+              <FaCamera className={common} />
+              Camera
+            </div>
+            <div className="option__icon__container">
+              <FaFolder className={common} />
+              Files
+            </div>
+          </div>
+          <div className="relative">
+            <input
+              type="text"
+              className="border-[1px] border-slate-200 rounded-md bg-slate-50
+            shadow-sm outline-none italic text-xs p-4 px-12 w-full"
+              placeholder="Message GPT_"
+            />
+            <IoMdAddCircle
+              className="cp icon__with__bg absolute bottom-[50%] translate-y-[50%] left-2"
+              onClick={() => setShowExtra(!showExtra)}
+            />
+          </div>
+        </form>
+      </section>
     </section>
   );
 };

@@ -59,6 +59,7 @@ const useHabits = () => {
 
       const habitDocs = await getDocs(habitsQuery);
       const maxPages = Math.ceil(count / pageSize);
+      habitDocs.docs.map((doc) => console.log(doc.data()));
 
       return {
         habits: habitDocs.docs.map((doc) => doc.data()),

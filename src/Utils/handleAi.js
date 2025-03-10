@@ -1,13 +1,22 @@
-const getPrompt = (habits, recs) => {
+const getPrompt = (habits, recsOrNewHabit) => {
   let prompt = "";
+
   if (habits.length === 0) return JSON.stringify([]);
-  else {
+
+  if (Array.isArray(recsOrNewHabit))
     prompt = {
       habits: JSON.stringify(habits),
-      recommendations: JSON.stringify(recs),
+
+      recommendations: JSON.stringify(recsOrNewHabit),
     };
-    prompt = JSON.stringify(prompt).replaceAll("\\", "");
-  }
+  else
+    prompt = {
+      habits: JSON.stringify(habits),
+
+      newHabit: JSON.stringify(recsOrNewHabit),
+    };
+  prompt = JSON.stringify(prompt).replaceAll("\\", "");
+
   return prompt;
 };
 

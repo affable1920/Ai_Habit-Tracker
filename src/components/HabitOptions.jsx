@@ -1,6 +1,4 @@
-import React, { useContext, useState } from "react";
-import Tooltip from "./Tooltip";
-import TooltipContext from "../context/TooltipContext";
+import React, { useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArchive } from "react-icons/io";
@@ -15,7 +13,7 @@ const HabitOptions = ({ habit }) => {
       component: (
         <CiEdit
           onClick={() =>
-            navigate(`/update/${habit.id}`, {
+            navigate(`/add/${habit.id}`, {
               state: { type: "update", habit },
             })
           }
@@ -30,25 +28,14 @@ const HabitOptions = ({ habit }) => {
     { label: "archive", component: <IoMdArchive className="h-3 w-3" /> },
   ];
 
-  const { tooltip, dispatch } = useContext(TooltipContext);
   const [showOptions, setShowOptions] = useState(false);
 
   return (
     <div>
       <SlOptionsVertical
         onClick={() => setShowOptions(!showOptions)}
-        onMouseEnter={() =>
-          dispatch({ type: "options", tooltip: "View Options", id: habit.id })
-        }
-        onMouseLeave={() => {
-          dispatch({ type: "clear" });
-          // setTimeout(() => setShowOptions(false), 400);
-        }}
-        className="text-xs text-slate-400"
+        className="text-xs text-slate-400 icon__with__bg"
       />
-      {tooltip?.id === habit.id && tooltip?.options && (
-        <Tooltip tagline={tooltip?.options} />
-      )}
       {showOptions && (
         <ul className="options">
           {options.map((option) => (
@@ -60,9 +47,6 @@ const HabitOptions = ({ habit }) => {
               {option.component}
             </li>
           ))}
-          {tooltip.option && habit.id === tooltip.id && (
-            <Tooltip tagline={tooltip.option} />
-          )}
         </ul>
       )}
     </div>

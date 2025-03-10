@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import Modal from "./Modal";
+import Tooltip from "./Tooltip";
+import tootlipStore from "../Tooltip/store";
 
 const Layout = () => {
+  let { element, setPosition } = tootlipStore();
+
+  useEffect(() => {
+    if (element) {
+      try {
+        const rect = document.querySelector(element).getBoundingClientRect();
+        const tooltip = document.querySelector(".tooltip");
+
+        const observer = new IntersectionObserver((e) => {
+          if (e[0].isIntersecting) {
+            tooltip.style.opacity = 100;
+
+            tooltip.style.pointerEvents = "auto";
+          }
+        });
+
+        observer.observe(tooltip);
+
+        setPosition({ x: rect.left - 20, y: rect.top - 90 });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [element]);
+
   return (
     <>
       <Modal />
       <NavBar />
-      <main className="relative h-full pt-20">
+      <main className="relative h-full pt-8">
+        <Tooltip />
         <Outlet />
       </main>
     </>

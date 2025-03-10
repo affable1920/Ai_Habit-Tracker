@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import Tooltip from "./Tooltip";
 import SearchBar from "./SearchBar";
-import TooltipContext from "../context/TooltipContext";
-import QueryContext from "../context/QueryContext";
 import StatusFilter from "./StatusFilter";
 import { BiReset } from "react-icons/bi";
 import { RiAddBoxFill } from "react-icons/ri";
 import useHabits from "../hooks/useHabits";
+import { MdArchive } from "react-icons/md";
+import AuthContext from "../context/AuthContext";
+import tootlipStore from "../Tooltip/store";
+import { QueryContext } from "./Providers/QueryProvider";
 
 const HabitFilterButtons = () => {
   const queryObject = {
@@ -15,65 +16,51 @@ const HabitFilterButtons = () => {
     currentPage: 1,
   };
 
-  const { tooltip, dispatch: tooltipDispatch } = useContext(TooltipContext);
-  const { query, dispatch: queryDispatch } = useContext(QueryContext);
+  const { dispatch: queryDispatch } = useContext(QueryContext);
+
   const { data } = useHabits();
+  const { user } = useContext(AuthContext);
+
+  const { show, hide } = tootlipStore();
 
   return (
     <div className="flex items-center justify-between justify-self-start">
       <div className="flex items-center gap-2">
-        <Link to="/add">
-          <RiAddBoxFill
-            size={25}
-            className="dark:slate-400"
-            onMouseEnter={() =>
-              tooltipDispatch({
-                type: "add",
-                tooltip: "Add a habit !",
-              })
-            }
-            onMouseLeave={() => tooltipDispatch({ type: "clear" })}
-          />
-        </Link>
-        {tooltip?.add && <Tooltip tagline={tooltip?.add} />}
+        {(user || (user && data?.habits.length !== 0)) && (
+          <Link to="/add">
+            <RiAddBoxFill className="icon__with__bg__large cp" />
+          </Link>
+        )}
         <SearchBar />
       </div>
-      <div
-        className={`${tooltip && "tooltip__container"} flex items-center gap-4`}
-      >
-        <div className="flex items-center gap-4">
-          <button
-            className={`p-2 bg-color__accent__lighter/80 rounded-md`}
-            onClick={() => queryDispatch({})}
-          />
-          <StatusFilter />
+      <div className="flex items-center gap-4">
+        <div className="relative">
+          <Link to="/archived">
+            <MdArchive
+              className="archive"
+              onMouseEnter={() =>
+                show({ msg: "View Archived", element: ".archive" })
+              }
+              onMouseLeave={hide}
+            />
+          </Link>
         </div>
+        <StatusFilter />
         <div className="flex items-center gap-1">
           <BiReset
-            onMouseEnter={() =>
-              tooltipDispatch({
-                type: "reset",
-                tooltip: "Reset all filters",
-              })
-            }
-            onMouseLeave={() => tooltipDispatch({ type: "clear" })}
-            className="icon"
+            className="reset icon"
             onClick={() => queryDispatch({ type: "reset", state: queryObject })}
+            onMouseEnter={() =>
+              show({ msg: "Reset queries", element: ".reset" })
+            }
+            onMouseLeave={hide}
           />
-          {tooltip?.reset && <Tooltip tagline={tooltip?.reset} />}
-          <div className={`${tooltip && "tooltip_container"}`}>
-            <span
-              onMouseEnter={() =>
-                tooltipDispatch({ type: "count", tooltip: `Total Habits` })
-              }
-              onMouseLeave={() => tooltipDispatch({ type: "clear" })}
-              className="cp font-semibold border-slate-300 p-[4px] bg-color__secondary__lighter text-white
-               rounded-md ml-2 mr-1 text-xs font-mono bg-color__accent__primary block dark:bg-slate-300 dark:text-black"
-            >
-              {data?.habits?.length}
-            </span>
-            {tooltip?.count && <Tooltip tagline={tooltip?.count} />}
-          </div>
+          <span
+            className="cp font-semibold border-slate-300 p-[4px] bg-secondary__lighter text-white
+          rounded-md ml-2 mr-1 text-xs font-mono bg-accent__primary block dark:bg-slate-300 dark:text-black"
+          >
+            {data?.habits?.length}
+          </span>
         </div>
       </div>
     </div>

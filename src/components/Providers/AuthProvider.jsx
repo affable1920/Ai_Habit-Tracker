@@ -5,17 +5,30 @@ import authService from "../../services/authService";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const subscribe = onAuthStateChanged(authService.auth, (user) => {
-      setUser(user);
-    });
+    const unSubscribe = onAuthStateChanged(
+      authService.auth,
+      (user) => {
+        setUser(user);
+        setLoading(false);
+      },
+      (error) => {
+        setError(error);
+        setLoading(false);
+      }
+    );
 
-    return () => subscribe();
+    return () => unSubscribe();
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, error }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

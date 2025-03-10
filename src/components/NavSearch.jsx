@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { ModalContext } from "./Providers/ModalProvider";
 import AuthContext from "../context/AuthContext";
@@ -16,18 +16,18 @@ const NavSearch = () => {
       });
   };
   return (
-    <div className="flex justify-center items-center relative">
+    <div className="flex justify-center items-center relative text-xs">
       <input
         type="text"
-        className="input shadow-md dark:bg-color__secondary border-[1px] border-slate-300
-         dark:border-[2px] dark:border-stone-800"
+        className="input shadow-md dark:bg-secondary border-[1px] border-slate-300
+         dark:border-[2px] dark:border-stone-800 lg:px-2"
         placeholder="Search ..."
       />
       <div className="absolute right-2 flex items-center gap-2">
         <button
           onClick={generateModal}
           className="text-xs bg-transparent border-[2px] p-1 w-20 py-[2px] rounded-md border-slate-400 
-        flex items-center gap-2 dark:bg-color__secondary dark:border-color__secondary__lighter font-mono"
+        flex items-center gap-2 dark:bg-secondary dark:border-secondary__lighter font-mono outline-none"
         >
           Ctrl K
           <IoMdSearch className="cp" />

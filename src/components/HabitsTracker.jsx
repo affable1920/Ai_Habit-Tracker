@@ -1,26 +1,39 @@
-import React from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
 import HabitFilterButtons from "./HabitFilterButtons";
-import tensorflow from "../Utils/Tensor_flow";
+import AuthContext from "../context/AuthContext";
+import Skeleton from "./Skeleton";
+import useHabits from "../hooks/useHabits";
 
 const HabitsTracker = () => {
+  const { loading } = useContext(AuthContext);
+  const { data } = useHabits();
+
   return (
-    <div>
-      <header>
-        <h1 className="headings__large text-center mt-2 md:mt-3 mb-3 ">
-          Dashboard
-        </h1>
-      </header>
-      <section
-        className="flex flex-col rounded-md p-4 dark:gradient__primary 
-        border-[1px] border-slate-200 shadow-xl dark:shadow-black/50 dark:border-slate-700"
-      >
-        <HabitFilterButtons />
-        <HabitsList />
-        <Pagination />
-      </section>
-    </div>
+    <>
+      <div className="h-full mx-8 my-4 rounded-md relative max-h-[80%]">
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <div>
+            <header>
+              <h1 className="headings__large text-center mt-2 md:mt-3 mb-3 ">
+                Tracker
+              </h1>
+            </header>
+            <section
+              className="flex flex-col rounded-md p-4 dark:gradient__primary 
+        border-[1px] border-slate-200 shadow-xl dark:shadow-black/50 dark:border-zinc-700"
+            >
+              <HabitFilterButtons />
+              <HabitsList />
+              {data?.habits.length != 0 && <Pagination />}
+            </section>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

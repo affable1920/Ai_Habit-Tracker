@@ -1,67 +1,38 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import Habit from "./Habit";
-import AuthContext from "../context/AuthContext";
-import Spinner from "./Spinner";
-import NoAuthAndHabits from "./NoAuth&Habits";
 import useHabits from "../hooks/useHabits";
+import Skeleton from "./Skeleton";
+import { IoMdAdd } from "react-icons/io";
+import { ModalContext } from "./Providers/ModalProvider";
 
 const HabitsList = () => {
-  const [selectedHabits, setSelectedHabits] = useState([]);
-  const { user } = useContext(AuthContext);
+  const { dispatch } = useContext(ModalContext);
   const { data, isLoading, isError, refetch } = useHabits();
-
-  const noAuth = !user && !data && !isLoading;
-  const authButNoHabits = user && data?.habits?.length === 0 && !isLoading;
-
-  const handleSelect = (habit) => {
-    const ifSelected = !!selectedHabits.find((h) => h.id === habit.id);
-    setSelectedHabits(
-      ifSelected
-        ? selectedHabits.filter((h) => h.id !== habit.id)
-        : [...selectedHabits, habit]
-    );
-  };
 
   return (
     <>
-      {selectedHabits.length !== 0 && (
-        <div className="flex items-center gap-2 justify-end">
-          <button className="btn btn__accent text-xs">
-            Mark as completed!
-          </button>
-          <button
-            onClick={() => setSelectedHabits([])}
-            className="btn btn__accent text-xs"
-          >
-            Select all Tasks
-          </button>
-          <span className="bg-slate-700 mt-5 rounded-md font-bold font-mono px-2 text-xs py-1">
-            {selectedHabits.length}
-          </span>
-        </div>
-      )}
       <section className="mt-2 table h-full relative">
-        {isLoading && <Spinner />}
-        {noAuth && <NoAuthAndHabits />}
-        {authButNoHabits && !isLoading && (
-          <div className="text-s text-red-700 font-semibold font-mono text-center">
-            No Habits .!
-            {isError && (
-              <button
-                onClick={refetch}
-                className="btn__primary px-5 py-1 rounded-md text-slate-100 ml-2"
-              >
-                Try Again !
-              </button>
-            )}
+        {isLoading && <Skeleton />}
+        {data?.habits.length === 0 && (
+          <div className="flex items-center flex-col">
+            <p className="text-sm font-bold text-red-600 tracking-wider font-mono">
+              No Habits added yet
+            </p>
+            {/* <IoMdAdd
+              className="icon__with__bg animate__scale cp"
+              onClick={() => dispatch({ type: "OPEN_MODAL", name: "addModal" })}
+            /> */}
           </div>
         )}
-        {data?.habits?.map((habit, index) => (
-          <Habit
-            onSelect={handleSelect}
-            selectedHabits={selectedHabits}
-            habit={habit}
-          />
+        {isError && (
+          <div className="flex justify-center">
+            <button className="btn btn__accent text-xs" onClick={refetch}>
+              Fetch again
+            </button>
+          </div>
+        )}
+        {data?.habits?.map((habit) => (
+          <Habit habit={habit} />
         ))}
       </section>
     </>

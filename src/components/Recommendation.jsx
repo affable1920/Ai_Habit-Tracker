@@ -59,7 +59,7 @@ const Recommendation = ({ rec, handleRecFeedback }) => {
                   Resources to get you started
                 </h4>
                 <ul
-                  className="bg-color__to rounded-md text-slate-200 mt-2 
+                  className="rounded-md text-slate-200 mt-2 
                   overflow-hidden text-xs italic tracking-wide"
                 >
                   {Object.entries(rec.resources).map(([key, value]) => (

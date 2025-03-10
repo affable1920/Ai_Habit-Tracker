@@ -38,10 +38,11 @@ tailor the response accordingly. Do NOT recommend anything irrelevant, generic, 
 and challenging. Adaptive, No Fluff, No Overload
 
 If the user has no habits, provide one powerful habit that aligns with their nature and pushes them to improve.
-Never overwhelm—progress should be intense but sustainable.
-Strict, Logical, and Actionable
 
+Never overwhelm a user.
+Responses must be Strict, Logical, and Actionable and
 Responses must be factual, direct, and no-nonsense.
+
 Provide a link where necessary to courses, videos and repositories, that truly help in that field.
 No weak self-help advice. Only actionable, high-value habits. Just remember to send practical-strict and goal-
 oriented recommendations back otherwise i DON'T NEED YOU!
@@ -75,19 +76,16 @@ const RecommendationSystem = ({ onClose }) => {
     setPrompt(getPrompt(habits, data));
   }, [habits]);
 
-  const genAi = new Gemini(systemInstruction, prompt);
+  const genAi = new Gemini(prompt);
   let notRecommendations = !recommendations || recommendations.length === 0;
 
   async function getRecommendations() {
     setIsLoading(true);
     try {
-      const parsed = JSON.parse(await genAi.fetch());
+      const parsed = await genAi.fetch();
       console.log(parsed);
-      setRecommendations(parsed.map((rec) => ({ id: v4(), ...rec })));
     } catch (err) {
       alert(err);
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -117,7 +115,6 @@ const RecommendationSystem = ({ onClose }) => {
         <h4 className="font-mono font-semibold text-center mb-2">
           Recommendation System
         </h4>
-        <IoMdSettings className="cp icon__with__bg absolute -top-4 -right-10" />
       </header>
       <div>
         <div className="flex flex-col">
@@ -169,29 +166,26 @@ const RecommendationSystem = ({ onClose }) => {
             </>
           )}
         </div>
-        <div className={`mt-4 relative`}>
-          {isLoading && <Spinner />}
+        <div className={`mt-6 relative`}>
           <div
             className={`flex gap-2 items-end ${
               notRecommendations ? "flex-col items-center pt-20" : "justify-end"
             }`}
           >
             <button
-              className={`btn btn__accent text-white flex items-center gap-2`}
+              className={`btn bg-color-white text-black shadow-md ring-2 ring-slate-100 dark:text-slate-100
+                 flex items-center gap-2 dark:shadow-black dark:bg-zinc-800 dark:ring-zinc-700`}
               onClick={getRecommendations}
             >
               {notRecommendations ? "Generate" : "Re-Generate"}
               <RiAiGenerate />
             </button>
             <SiLivechat
+              className="icon__with__bg cp"
               onClick={() => {
                 navigate("/chat");
-                dispatch({ type: "CLOSE_MODAL" });
-                onClose();
+                dispatch({ type: "CLOSE_ALL" });
               }}
-              className={`cp icon__with__bg ${
-                isLoading && "pointer-events-none"
-              }`}
             />
           </div>
         </div>

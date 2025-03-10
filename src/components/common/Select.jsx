@@ -3,12 +3,12 @@ import InputError from "./InputError";
 
 const Select = ({ name, label, register, errors, optional, options }) => {
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="flex flex-col gap-2 mb-5">
       <label className="label" htmlFor={name}>
         {label} {!optional && "*"}
       </label>
       <select
-        className="input__add cp w-1/2"
+        className="input__add"
         name={name}
         errors={errors}
         {...register(name)}

@@ -1,21 +1,40 @@
-import React from "react";
+import React, { useReducer } from "react";
 import ThemeProvider from "./ThemeProvider";
 import AuthProvider from "./AuthProvider";
 import ModalProvider from "./ModalProvider";
-import TooltipProvider from "./TooltipProvider";
 import QueryProvider from "./QueryProvider";
+import Spinner from "./../Spinner";
+
+export const LoadinStateContext = React.createContext(false);
+LoadinStateContext.displayName = LoadinStateContext;
+
+const loadingReducer = (state, action) => {
+  switch (action.type) {
+    case "START":
+      return true;
+
+    case "STOP":
+      return false;
+
+    default:
+      return state;
+  }
+};
 
 const AppProviders = ({ children }) => {
+  const [loading, dispatch] = useReducer(loadingReducer, false);
+
   return (
-    <ThemeProvider>
-      <ModalProvider>
+    <LoadinStateContext.Provider value={{ loading, dispatch }}>
+      {loading && <Spinner />}
+      <ThemeProvider>
         <AuthProvider>
-          <TooltipProvider>
+          <ModalProvider>
             <QueryProvider>{children}</QueryProvider>
-          </TooltipProvider>
+          </ModalProvider>
         </AuthProvider>
-      </ModalProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </LoadinStateContext.Provider>
   );
 };
 

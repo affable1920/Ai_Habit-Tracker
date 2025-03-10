@@ -1,57 +1,47 @@
-import React, { useContext } from "react";
-import InputError from "./InputError";
-import TooltipContext from "./../../context/TooltipContext";
+import React from "react";
 
-const InputAdd = ({
-  name,
-  label,
-  register,
-  errors,
-  type = "text",
-  optional,
-  placeholder = "",
-  large = false,
-  teritiary = false,
-}) => {
-  const { dispatch } = useContext(TooltipContext);
+const InputAdd = ({ register, errors, optional, large = false, ...rest }) => {
+  const { name, label, type = "text" } = rest;
+  const errorMsg = errors[name]?.message || "";
 
   if (large)
     return (
-      <div className="input__group">
+      <div className="input__group relative">
         <label className="label" htmlFor="description">
-          Describe your habit
+          Description
         </label>
         <textarea
           className="input__add"
           name="description"
           {...register("description")}
         />
+        {errors[name] && (
+          <div className="text-xs italic text-red-700 dark:text-red-400 tracking-wider text-center">
+            "{errorMsg[1].toUpperCase() + errorMsg.slice(2)}
+          </div>
+        )}
       </div>
     );
 
   return (
     <div className={`input__group`}>
       {label && (
-        <label
-          className={`label ${name === "reminderTimes" && "text-center"}`}
-          htmlFor="title"
-        >
+        <label className="label" htmlFor={name}>
           {label} {!optional && "*"}
         </label>
       )}
       <input
-        onFocus={() => dispatch({ type: "input", tooltip: placeholder, name })}
-        onMouseLeave={() => dispatch({ type: "clear" })}
-        placeholder={placeholder}
+        {...rest}
         type={type}
-        className={`${teritiary ? "input__teritiary" : "input__add"} ${
-          errors[name] &&
-          "border-red-800 focus:border-red-800 dark:border-red-800 dark:focus:border-red-800 focus:mb-2"
-        } ${type === "datetime-local" && "uppercase tracking-wide cp"}`}
+        className={`input__add ${errors[name] && "error__boundary"}`}
         name={name}
         {...register(name)}
       />
-      {errors[name] && <InputError errorText={errors[name]?.message} />}
+      {errors[name] && (
+        <div className="text-xs italic text-red-700 dark:text-red-400 tracking-wider text-center">
+          "{errorMsg[1].toUpperCase() + errorMsg.slice(2)}
+        </div>
+      )}
     </div>
   );
 };

@@ -4,37 +4,19 @@ import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { v4 } from "uuid";
 import auth from "../services/authService";
 import AuthContext from "../context/AuthContext";
-import QueryContext from "../context/QueryContext";
+import QueryContext from "../components/Providers/QueryProvider";
 import Gemini from "../hooks/GeminiSDK";
 import useHabits from "./useHabits";
+import getPrompt from "../Utils/handleAi";
 
-const systemInstruction = `
-You are an AI assistant that checks if a new habit is similar to any existing habits in a user's collection.
-Always return responses in a simple and structured JSON format for easy parsing. 
-Rules:
-Compare the new_habit with existing_habits.
-Ensure the response is in easy-to-parse JSON format.
-
-Same Habit:
-The habit is either exactly the same by wording or means the same thing in practice.
-Example: "JavaScript for backend" vs. "JS for backend" → Same Habit
-Example: "Morning meditation" vs. "Meditating in the morning" → Same Habit
-
-Similar Habit:
-The habit is different in words but has a closely related meaning or function.
-Example: "Cardio workout" vs. "Running for 30 minutes" → Similar Habit
-Example: "Javascript for frontend" vs. "Javascript for backend" → Neither same or a Similar
-
-"Same" habits trigger an error/alert.
-"Similar" habits give the user a choice to proceed or not.
-"Unique" habits are approved for addition.
-      `;
 const habitKeys = {
   reminder_Times: {},
   streak: 0,
-  status: "incomplete",
+  completed: false,
+  status: null,
   progress: [],
   creationTime: new Date(),
+  archived: false,
 };
 
 const useMutateHabit = () => {
@@ -45,11 +27,11 @@ const useMutateHabit = () => {
   const queryClient = useQueryClient();
 
   const { data: { habits = [], count } = {} } = useHabits();
-  const genAi = new Gemini(systemInstruction);
 
   async function addHabit(newHabit) {
     const id = v4();
     const habitDocRef = doc(auth.firestore, "users", user?.uid, "habits", id);
+
     await setDoc(habitDocRef, {
       id,
       ...newHabit,
@@ -63,18 +45,37 @@ const useMutateHabit = () => {
     await deleteDoc(habitRef);
   }
 
-  const habitExists = (title, description) => {
-    const titles = new Set(habits?.map((habit) => habit.title));
-    const descriptions = new Set(habits?.map((habit) => habit.description));
+  const genAi = new Gemini("habit_check");
 
-    return titles.has(title) && descriptions.has(description);
+  const habitExists = async (habit) => {
+    genAi.prompt = getPrompt(habits, habit);
+
+    const response = await genAi.fetch();
+    console.log(response);
+
+    if (response.use_case === "habit_check" && response.habit_check) {
+      const { exists, message } = response.habit_check;
+      return { exists, message };
+    }
   };
 
   return useMutation({
     mutationKey: key,
     mutationFn: async (habitRequest) => {
       if (habitRequest.action === "delete") deleteHabit(habitRequest.habitId);
-      if (habitRequest.action === "add") addHabit(habitRequest.newHabit);
+
+      if (habitRequest.action === "add") {
+        const { newHabit } = habitRequest;
+
+        if (habits.length === 0) addHabit(newHabit);
+        else {
+          genAi.prompt = getPrompt(habits, newHabit);
+
+          const { habit_check } = await genAi.fetch();
+          if (habit_check.exists) throw Error(habit_check?.message);
+          addHabit(newHabit);
+        }
+      }
     },
 
     onMutate: (habitRequest) => {

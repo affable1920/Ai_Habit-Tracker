@@ -13,6 +13,7 @@
 html,
 body {
   height: 100%;
+  max-width: 100%;
 }
 
 #root {
@@ -21,7 +22,7 @@ body {
 
 @layer base {
   .dark {
-    @apply bg-color__secondary text-slate-200;
+    @apply bg-secondary text-slate-200;
   }
   .cp {
     @apply cursor-pointer;
@@ -32,11 +33,16 @@ body {
 }
 
 @layer utilities {
+  /* Base Styles */
+  .container {
+    @apply max-w-sm md:max-w-xl;
+  }
+
   .label {
-    @apply text-xs tracking-wider font-medium opacity-75 ml-[2px];
+    @apply text-xs tracking-wider font-medium opacity-75 ml-[2px] italic;
   }
   .input__group {
-    @apply flex flex-col gap-1.5 mb-3;
+    @apply flex flex-col gap-3 my-5;
   }
   .input {
     @apply rounded-lg text-xs placeholder:text-xs tracking-wide
@@ -45,32 +51,31 @@ body {
 
   .input__teritiary {
     @apply bg-gray-100 py-[6px] pl-3 pr-7 rounded-md outline-none text-xs font-medium tracking-widest text-slate-800
-    focus:shadow-sm focus:ring-1 focus:ring-color__accent/50 dark:bg-color__secondary__lighter 
+    focus:shadow-sm focus:ring-1 focus:ring-bright/50 dark:bg-secondary__lighter 
     dark:shadow-md dark:focus:shadow-lg dark:focus:ring-sky-700/80 border-[1px] border-gray-300 dark:border-zinc-700;
   }
 
   .link__with__bg {
-    @apply underline p-1 hover:bg-color__accent__lighter/60 rounded-md outline-0
-    focus:bg-color__accent__lighter/60 transition-colors duration-200;
+    @apply underline p-1 hover:bg-bright__lighter/60 rounded-md outline-0
+    focus:bg-bright__lighter/60 transition-colors duration-200;
   }
 
   .input__secondary {
     @apply px-4 py-2 rounded-lg transition-colors tracking-wide text-xs bg-slate-100 focus:bg-slate-50 
     border-[1px] border-zinc-700  outline-none focus:shadow-lg
-    dark:focus:bg-color__primary dark:focus:border-slate-400 dark:shadow-black
+    dark:focus:bg-primary dark:focus:border-slate-400 dark:shadow-black
     dark:placeholder:opacity-70;
   }
 
   .input__add {
-    @apply border-[1.5px] px-3 border-slate-300 focus:border-sky-500 focus:shadow-lg
-    outline-none transition-all duration-300 rounded-lg py-1 dark:placeholder:opacity-70 bg-slate-50
-    dark:border-slate-600 dark:focus:border-slate-400 dark:mb-1
-    dark:bg-gray-950 placeholder:text-xs text-xs tracking-widest;
+    @apply border-2 px-4 border-slate-200 dark:border-accent dark:shadow-black shadow-sm
+     dark:bg-secondary__lighter outline-none transition-all duration-300 rounded-lg py-1 dark:placeholder:opacity-70
+    italic placeholder:text-xs text-xs tracking-widest focus:border-bright dark:focus:border-bright;
   }
 
   .habit {
     @apply border-[1px] p-2 border-slate-300 shadow-sm rounded-sm dark:border-zinc-700 
-    dark:shadow-black cp hover:bg-slate-100 dark:hover:bg-color__secondary__lighter transition-colors mt-1;
+    dark:shadow-black cp hover:bg-slate-100 dark:hover:bg-secondary__lighter transition-colors mt-1;
   }
 
   .habit__title {
@@ -89,46 +94,40 @@ body {
     border-[1px] border-slate-200 dark:border-slate-800;
   }
   .option__icon__container {
-    @apply text-xs font-medium tracking-wider flex flex-col items-center gap-2;
+    @apply text-xs font-medium tracking-wider flex rounded-md flex-col p-3 justify-center items-center gap-2 cursor-pointer;
   }
 
   .btn {
     @apply transition-all duration-200 rounded-lg p-2 focus:outline-none
-    outline-none font-semibold tracking-wider;
+    outline-none font-semibold tracking-wider italic text-xs;
+  }
+
+  .btn__white {
+    @apply bg-white text-black shadow-xl ring-2 ring-slate-100 dark:ring-0;
   }
 
   .btn__primary {
-    @apply bg-color__primary dark:bg-slate-400 dark:text-black 
-    focus:ring-offset-blue-600 text-slate-100 focus:text-white focus:bg-color__secondary;
-  }
-
-  .btn__generate {
-    @apply p-2 rounded-lg ring-2 text-white font-mono flex items-center gap-2;
+    @apply bg-white shadow-lg dark:bg-secondary__lighter dark:shadow-black ring-1 ring-slate-200 text-xs
+    dark:ring-accent italic tracking-widest;
   }
 
   .btn__accent {
-    @apply shadow-lg active:border-[1.5px] dark:active:border-color__accent__lighter
-    focus:bg-green-600 focus:border-color__accent__lighter duration-300 bg-color__accent__lighter text-white dark:bg-color__accent;
+    @apply shadow-md duration-300 bg-bright text-xs text-black focus:bg-bright__lighter ring-1
+     focus:ring-bright__darker focus:ring-2 italic ring-bright__darker tracking-wider font-bold;
   }
 
   .error__input {
     @apply p-1 px-2 text-red-700 italic dark:bg-inherit dark:text-red-400 tracking-wider 
     text-xs text-center leading-4;
   }
-  .tooltip {
-    @apply text-slate-100 bg-zinc-700 text-[7px] font-bold tracking-wide absolute p-[2px] 
-    -top-7 -right-8 rounded-sm;
-  }
-  .tooltip__container {
-    @apply relative;
-  }
+
   .headings__large {
-    @apply font-black tracking-wide text-2xl text-color__primary dark:text-slate-200;
+    @apply font-black tracking-wide text-2xl text-primary dark:text-slate-200;
   }
   .form__link {
     @apply text-xs tracking-wider outline-none font-medium bg-zinc-700 text-white
     p-2 px-3 rounded-lg hover:border-[1px] hover:border-zinc-700 transition-colors duration-200 flex justify-center 
-    mt-2 max-w-fit mx-auto shadow-lg;
+    mt-5 max-w-fit shadow-lg;
   }
   .error__component {
     @apply grid place-items-center text-xs tracking-wide font-semibold text-red-800 bg-blue-100 shadow-sm rounded-lg 
@@ -146,24 +145,13 @@ body {
     rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;
   }
   .overlay {
-    @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-start justify-center 
-    pt-28 z-[999];
-  }
-  .modal {
-    @apply bg-white rounded-xl p-12 shadow-lg shadow-black min-h-fit
-    max-w-[80%] max-h-[80%] transition-all duration-300 text-xs dark:bg-color__secondary__lighter ring-1 
-    ring-zinc-600;
+    @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-center justify-center z-[999];
   }
 
   /* Animations */
   .animate__arrow__spin {
     animation: arrow__spin infinite ease-out 1s;
   }
-}
-
-.spinner {
-  @apply w-10 h-10 border-4 border-zinc-700 rounded-[50%] animate-[spinner] duration-[infinite]
-  font-medium absolute left-1/2 -translate-x-1/2;
 }
 
 .alert {
@@ -182,12 +170,6 @@ body {
 
 .modal {
   animation: scale 275ms ease-out;
-}
-
-@keyframes spinner {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes alert {

@@ -1,6 +1,8 @@
 import React, { useReducer } from "react";
 import queryReducer from "../../reducers/queryReducer";
-import QueryContext from "../../context/QueryContext";
+
+export const QueryContext = React.createContext();
+QueryContext.displayName = "QueryContext";
 
 const QueryProvider = ({ children }) => {
   const queryObject = {

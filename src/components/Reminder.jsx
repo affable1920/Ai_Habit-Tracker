@@ -32,12 +32,7 @@ const Reminder = () => {
           />
         </div>
         <div className="self-center">
-          <button
-            onClick={() => console.log("Time set")}
-            className="btn btn__accent w-20"
-          >
-            Set
-          </button>
+          <button className="btn btn__accent w-20">Set</button>
         </div>
       </div>
     </form>

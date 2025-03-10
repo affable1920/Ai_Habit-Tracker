@@ -21,7 +21,7 @@ const queryReducer = (state, action) => {
     case "set_pageSize":
       return {
         ...state,
-        pageSize: action.pageSize, // 3
+        pageSize: action.pageSize,
         currentPage:
           state.currentPage === 1
             ? 1
@@ -35,6 +35,9 @@ const queryReducer = (state, action) => {
 
     case "incomplete":
       return { ...state, status: action.type };
+
+    case "archived":
+      return { showArchived: true };
 
     case "reset":
       return action.state;

@@ -24,9 +24,9 @@ const NavFeatures = ({ onModalClick }) => {
         {!user && (
           <Link to="/register" className="grid">
             <button
-              className="tracking-wider shadow-md bg-gradient-to-r from-color__accent__primary to-color__accent__dark 
+              className="tracking-wider shadow-md bg-gradient-to-r from-accent__primary to-accent__dark 
               text-slate-200 rounded-md px-4 py-1 text-xs font-semibold text-center justify-self-end 
-              active:from-color__accent__dark active:to-color__accent__primary"
+              active:from-accent__dark active:to-accent__primary"
             >
               Register
             </button>

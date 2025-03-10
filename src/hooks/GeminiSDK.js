@@ -1,39 +1,24 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 const key = import.meta.env.VITE_API_KEY;
-
-const schema = {
-  type: "array",
-  items: {
-    type: "object",
-    properties: {
-      message: { type: "string" },
-      alignmentWithCurrentGoals: { type: "string" },
-      benefits: { type: "string" },
-      status: { type: "string", enum: ["New", "Highly Beneficial"] },
-      resources: {
-        type: "object",
-        properties: {
-          videos: { type: "string" },
-          books: { type: "string" },
-          Github_repositories: { type: "string" },
-        },
-      },
-    },
-    required: ["message", "alignmentWithCurrentGoals", "benefits", "resources"],
-  },
-};
+import { systemInstructions, schema } from "./../data/geminiConfig";
 
 class Gemini {
-  constructor(instructions, prompt, autoFetch = false) {
+  constructor(useCase, prompt, autoFetch = false) {
+    this.instructions = systemInstructions;
+    this.useCase = useCase;
+
     this.prompt = prompt;
+
     this.autoFetch = autoFetch;
     this.model = new GoogleGenerativeAI(key).getGenerativeModel({
       model: "gemini-2.0-flash-001",
-      systemInstruction: instructions,
+
+      systemInstruction: this.instructions,
       generationConfig: {
         responseMimeType: "application/json",
+
         responseSchema: schema,
-        temperature: 0.25,
+        temperature: 0.2,
       },
     });
   }
@@ -41,6 +26,7 @@ class Gemini {
   componentDidMount() {
     if (this.autoFetch) this.fetch(this.prompt);
   }
+
   fetch = async () => {
     const { response } = await this.model.generateContent({
       contents: [
@@ -53,8 +39,8 @@ class Gemini {
         },
       ],
     });
-
-    return await response.text();
+    const res = JSON.parse(await response.text());
+    return res;
   };
 }
 

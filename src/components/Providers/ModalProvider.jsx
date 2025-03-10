@@ -1,11 +1,40 @@
 import React, { useReducer } from "react";
-import ModalReducer from "../../reducers/ModalReducer";
 
 export const ModalContext = React.createContext();
 ModalContext.displayName = "ModalContext";
 
 const ModalProvider = ({ children }) => {
-  const [modal, dispatch] = useReducer(ModalReducer, { openModal: null });
+  const ModalReducer = (state, action) => {
+    switch (action.type) {
+      case "OPEN_MODAL":
+        return {
+          ...state,
+          openModals: action.keepPrevious
+            ? [...state.openModals, action.name]
+            : [action.name],
+
+          props: action.props || {},
+        };
+
+      case "CLOSE_MODAL":
+        return {
+          ...state,
+          openModals: state.opeModals?.filter((m) => modal != action.name),
+        };
+
+      case "CLOSE_ALL":
+        return { openModals: [] };
+
+      default:
+        return state;
+    }
+  };
+
+  const [modal, dispatch] = useReducer(ModalReducer, {
+    openModals: [],
+    props: {},
+  });
+
   return (
     <ModalContext.Provider value={{ modal, dispatch }}>
       {children}

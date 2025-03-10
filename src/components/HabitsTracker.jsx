@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
 import HabitFilterButtons from "./HabitFilterButtons";
 import AuthContext from "../context/AuthContext";
-import Skeleton from "./Skeleton";
 import useHabits from "../hooks/useHabits";
+import Spinner from "./Spinner";
 
 const HabitsTracker = () => {
   const { loading } = useContext(AuthContext);
@@ -14,7 +14,7 @@ const HabitsTracker = () => {
     <>
       <div className="h-full mx-8 my-4 rounded-md relative max-h-[80%]">
         {loading ? (
-          <Skeleton />
+          <Spinner />
         ) : (
           <div>
             <header>

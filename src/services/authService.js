@@ -47,12 +47,17 @@ const loginWithGoogle = async () => {
   try {
     await signInWithPopup(auth, provider);
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
 
 async function logout() {
-  await signOut(auth);
+  try {
+    await signOut(auth);
+  } catch (err) {
+    throw err;
+  }
 }
 
 export default { auth, firestore, register, login, logout, loginWithGoogle };

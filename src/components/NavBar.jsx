@@ -1,21 +1,28 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import NavSearch from "./NavSearch";
 import { FaGithubSquare } from "react-icons/fa";
 import { HiMenuAlt3 } from "react-icons/hi";
-import AuthContext from "../context/AuthContext";
 import ThemeToggler from "./ThemeToggler";
 import { FaChevronDown } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { TbUserDown } from "react-icons/tb";
 import { MdSettings } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+import authService from "../services/authService";
+import AuthContext from "../context/AuthContext";
+import { BiSolidLogInCircle } from "react-icons/bi";
 
 const NavBar = () => {
   const [showLinks, setShowLinks] = useState(false);
   const [showFeatures, setShowFeatures] = useState(false);
 
+  const { pathname } = useLocation();
+
   const { user } = useContext(AuthContext);
+
+  const name = user?.displayName.split(" ")[0];
+
   const common = "cp icon__with__bg";
 
   const navLinks = [
@@ -27,20 +34,23 @@ const NavBar = () => {
   ];
 
   const profileFeatures = [
-    { icon: <CgProfile className={common} />, label: "profile" },
+    {
+      icon: <CgProfile className={common} />,
+      label: name || "profile",
+    },
     { icon: <MdSettings className={common} />, label: "settings" },
     {
-      icon: <LuLogOut className={common} />,
+      icon: <LuLogOut onClick={authService.logout} className={common} />,
       label: "logout",
     },
   ];
 
   return (
     <>
-      <header className="text-xs tracking-widest">
+      <header>
         <nav
           className="flex justify-between items-center px-8 py-4 dark:bg-primary bg-white shadow-md 
-          flex-wrap relative dark:shadow-black"
+          flex-wrap relative dark:shadow-black text-xs"
         >
           <div className="md:-order-2">
             <Link to="/">
@@ -74,24 +84,66 @@ const NavBar = () => {
             ))}
           </ul>
 
-          <div className="flex items-center gap-1 md:gap-2">
-            <NavSearch />
-            <ThemeToggler />
-          </div>
+          <div className="flex items-center gap-8 md:gap-12">
+            <div className="flex items-center gap-1 md:gap-2">
+              <NavSearch />
+              <ThemeToggler />
+            </div>
 
-          <div className=" flex items-center gap-3">
-            <HiMenuAlt3
-              className="cp icon__with__bg__large lg:hidden"
-              onClick={() => setShowLinks(!showLinks)}
-            />
+            <div className=" flex items-center gap-3 flex-wrap">
+              <HiMenuAlt3
+                className="cp icon__with__bg__large lg:hidden"
+                onClick={() => setShowLinks(!showLinks)}
+              />
 
-            <TbUserDown
-              className="cp icon__with__bg"
-              onClick={() => setShowFeatures(!showFeatures)}
-            />
+              {user && (
+                <>
+                  <TbUserDown
+                    className="cp icon__with__bg"
+                    onClick={() => setShowFeatures(!showFeatures)}
+                  />
+                  <div
+                    className={`bg-white shadow-md rounded-sm py-3 z-50 dark:bg-primary 
+                  dark:shadow-black flex flex-col gap-6 absolute top-[110%] 
+                  px-2 right-2 transition-all duration-300
+                  ${
+                    showFeatures
+                      ? "opacity-100 pointer-events-auto translate-x-0"
+                      : "opacity-0 pointer-events-none translate-x-20"
+                  }`}
+                  >
+                    {profileFeatures.map((feature) => (
+                      <Link
+                        to={"/" + feature.label}
+                        className={`flex gap-4 justify-between font-medium tracking-wider italic
+                      bg-inherit hover:bg-slate-100 p-2 mx-1 rounded-sm dark:hover:bg-accent 
+                      transition-all duration-200`}
+                      >
+                        <span>
+                          {feature?.label[0].toUpperCase() +
+                            feature?.label.slice(1)}
+                        </span>
+                        <span>{feature?.icon}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </nav>
       </header>
+      {pathname != "/login" && !user && (
+        <div className="w-full bg-bright flex items-center justify-center ">
+          <Link
+            to="/login"
+            className="italic p-2 w-fit text-white text-xs tracking-wide gap-2 font-bold flex items-center"
+          >
+            <p className="text__scale">Login to access all new features</p>
+            <BiSolidLogInCircle />
+          </Link>
+        </div>
+      )}
     </>
   );
 };

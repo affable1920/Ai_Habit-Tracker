@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
-import { step1, step2, step3 } from "./../schemas/habitSchema";
 import Spinner from "./Spinner";
 import useIntersection from "../hooks/useIntersection";
 

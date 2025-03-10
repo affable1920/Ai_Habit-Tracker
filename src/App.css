@@ -27,7 +27,7 @@
   }
 
   .spinner {
-    @apply border-[4px] border-bright__darker border-t-bright absolute left-1/2 w-10 h-10 z-[99999];
+    @apply border-[4px] border-bright__darker border-t-bright/90 absolute left-1/2 w-10 h-10 z-[99999];
   }
 
   .modal {
@@ -74,12 +74,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: loading__spinner linear 1s infinite;
+  animation: loading__spinner linear 1.6s infinite;
   z-index: 99999;
 }
 
 .spinner__ball {
   animation: spinner__ball 10s linear infinite;
+}
+
+.alert::after {
+  animation: alert 4s ease-in;
+  transform-origin: left;
+}
+
+@keyframes alert {
+  to {
+    transform: scaleX(0);
+  }
 }
 
 @keyframes skeleton-loading {
@@ -110,6 +121,7 @@
   }
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+    border-radius: 100%;
   }
 }
 

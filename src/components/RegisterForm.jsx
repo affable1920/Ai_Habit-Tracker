@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -8,11 +7,11 @@ import authService from "../services/authService";
 import Form from "./common/Form";
 import InputAdd from "./common/InputAdd";
 import { toast } from "sonner";
-import { LoadinStateContext } from "./Providers/AppProviders";
+import loadingStore from "../stores/loadingStore";
 
 const RegisterForm = () => {
   const [error, setError] = useState("");
-  const { loading, dispatchLoading } = useContext(LoadinStateContext);
+  const { setLoading } = loadingStore();
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),
@@ -28,7 +27,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    dispatchLoading(true);
+    setLoading(true);
     try {
       authService.register(data);
       toast.success("Successfully Registered.");
@@ -37,7 +36,7 @@ const RegisterForm = () => {
     } catch (err) {
       setError(`${err?.name}: ${err?.code}`);
     } finally {
-      dispatchLoading(false);
+      setLoading();
     }
   };
 

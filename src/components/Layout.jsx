@@ -4,6 +4,8 @@ import NavBar from "./NavBar";
 import Modal from "./Modal";
 import Tooltip from "./Tooltip";
 import tootlipStore from "../Tooltip/store";
+import Alert from "./Alert";
+import Spinner from "./Spinner";
 
 const Layout = () => {
   let { element, setPosition } = tootlipStore();
@@ -35,7 +37,9 @@ const Layout = () => {
     <>
       <Modal />
       <NavBar />
+      <Spinner />
       <main className="relative h-full pt-8">
+        <Alert />
         <Tooltip />
         <Outlet />
       </main>

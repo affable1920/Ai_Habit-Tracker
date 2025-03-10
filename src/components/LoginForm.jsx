@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Joi from "joi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -8,11 +8,11 @@ import Form from "./common/Form";
 import InputAdd from "./common/InputAdd";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
-import { LoadinStateContext } from "./Providers/AppProviders";
+import loadingStore from "../stores/loadingStore";
 
 const LoginForm = () => {
   const [error, setError] = useState("");
-  const { loading, dispatchLoading } = useContext(LoadinStateContext);
+  const { setLoading } = loadingStore();
 
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const LoginForm = () => {
   } = useForm({ resolver: joiResolver(schema) });
 
   const onSubmit = async (data) => {
-    dispatchLoading(true);
+    setLoading(true);
     try {
       await authService.login(data);
       navigate("/");
@@ -37,12 +37,12 @@ const LoginForm = () => {
     } catch (err) {
       setError(err?.message);
     } finally {
-      dispatchLoading(false);
+      setLoading(false);
     }
   };
 
   const googleSignIn = async () => {
-    dispatchLoading(true);
+    setLoading(true);
 
     try {
       authService.loginWithGoogle();
@@ -52,7 +52,7 @@ const LoginForm = () => {
     } catch (error) {
       setError(err?.message);
     } finally {
-      dispatchLoading(false);
+      setLoading(false);
     }
   };
 

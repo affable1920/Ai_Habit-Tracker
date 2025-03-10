@@ -154,30 +154,9 @@ body {
   }
 }
 
-.alert {
-  @apply flex items-center justify-center gap-2 bg-slate-100 shadow-lg relative p-1 rounded-sm px-4
-  after:absolute after:w-full after:h-[109%] after:top-0 after:left-0 after:z-[-5] after:rounded-sm;
-}
-
-.alert::after {
-  animation: alert 4000ms ease-in;
-  transform-origin: 0%;
-}
-
-.alert__container {
-  @apply fixed top-9 left-1/2 lg:top-14 -translate-x-1/2;
-}
-
 .modal {
   animation: scale 275ms ease-out;
 }
-
-@keyframes alert {
-  to {
-    transform: scaleX(0);
-  }
-}
-
 @keyframes scale {
   0% {
     transform: scale(0);
@@ -187,8 +166,32 @@ body {
   }
 }
 
+.icon__spin {
+  animation: arrow__spin 1s infinite linear;
+}
+
 @keyframes arrow__spin {
   to {
     transform: rotate(1turn);
+  }
+}
+
+.text__scale {
+  animation: scale__text infinite 2s linear;
+}
+
+@keyframes scale__text {
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+  25% {
+    transform: scale(0.85);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  75% {
+    transform: scale(0.95);
   }
 }

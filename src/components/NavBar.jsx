@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import NavSearch from "./NavSearch";
+import authService from "../services/authService";
+import AuthContext from "../context/AuthContext";
+import ThemeToggler from "./ThemeToggler";
 import { FaGithubSquare } from "react-icons/fa";
 import { HiMenuAlt3 } from "react-icons/hi";
-import ThemeToggler from "./ThemeToggler";
 import { FaChevronDown } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { TbUserDown } from "react-icons/tb";
 import { MdSettings } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import authService from "../services/authService";
-import AuthContext from "../context/AuthContext";
 import { BiSolidLogInCircle } from "react-icons/bi";
 
 const NavBar = () => {
@@ -18,11 +18,9 @@ const NavBar = () => {
   const [showFeatures, setShowFeatures] = useState(false);
 
   const { pathname } = useLocation();
-
   const { user } = useContext(AuthContext);
 
   const name = user?.displayName.split(" ")[0];
-
   const common = "cp icon__with__bg";
 
   const navLinks = [
@@ -61,7 +59,7 @@ const NavBar = () => {
           <ul
             className={`order-4 w-full absolute top-full bg-white left-0 shadow-md z-10 px-5 lg:p-0 flex
            flex-col py-4 transition-all duration-300 font-medium lg:translate-y-0 lg:opacity-100 lg:relative lg:-order-1 lg:flex-row lg:shadow-none lg:w-auto 
-         dark:bg-inherit lg:pointer-events-auto lg:text-[10px] gap-4 lg:gap-8 lg:mr-4
+         dark:bg-inherit lg:pointer-events-auto lg:text-[10px] gap-4 lg:gap-16 lg:mr-4 tracking-wider
             ${
               showLinks
                 ? "opacity-100 pointer-events-auto translate-x-0"
@@ -114,7 +112,7 @@ const NavBar = () => {
                   >
                     {profileFeatures.map((feature) => (
                       <Link
-                        to={"/" + feature.label}
+                        to={"/profile"}
                         className={`flex gap-4 justify-between font-medium tracking-wider italic
                       bg-inherit hover:bg-slate-100 p-2 mx-1 rounded-sm dark:hover:bg-accent 
                       transition-all duration-200`}

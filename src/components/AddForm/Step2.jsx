@@ -1,8 +1,14 @@
 import React from "react";
 import Select from "../common/Select";
 import InputAdd from "../common/InputAdd";
+import { useFormContext } from "react-hook-form";
 
-const Step2 = ({ register, errors }) => {
+const Step2 = () => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <>
       <Select

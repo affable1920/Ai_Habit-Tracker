@@ -8,18 +8,17 @@ export const step1 = Joi.object({
 export const step2 = Joi.object({
   category: Joi.string().optional().allow(""),
   priority: Joi.string().optional().allow(""),
-
   frequency: Joi.string().optional().allow(""),
   target: Joi.number().min(1).optional().allow(null, ""),
 });
 
 export const step3 = Joi.object({
   reminder: Joi.boolean().truthy("yes").falsy("no").allow(null, "").optional(),
-
   reminderTimes: Joi.when("reminder", {
     is: true,
     then: Joi.date().min("now").allow(""),
   }),
 });
 
-export default { step1, step2, step3 };
+const habitsSchema = step1.concat(step2).concat(step3);
+export default habitsSchema;

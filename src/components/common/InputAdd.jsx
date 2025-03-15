@@ -8,7 +8,7 @@ const InputAdd = ({ register, errors, optional, large = false, ...rest }) => {
     return (
       <div className="input__group relative">
         <label className="label" htmlFor="description">
-          Description
+          {label} {!optional && "*"}
         </label>
         <textarea
           className="input__add"

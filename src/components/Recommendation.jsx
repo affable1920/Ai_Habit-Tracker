@@ -10,6 +10,8 @@ const Recommendation = ({ rec, handleRecFeedback }) => {
   const [showResources, setShowResources] = useState(false);
   const { dispatch } = useContext(ModalContext);
 
+  console.log(rec);
+
   const common = "cp icon__with__bg";
   const navigate = useNavigate();
   return (

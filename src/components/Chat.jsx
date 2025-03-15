@@ -17,13 +17,9 @@ import { BiScreenshot } from "react-icons/bi";
 import { MdSend } from "react-icons/md";
 
 const Chat = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const form = useForm();
   const fileRef = useRef(null);
+
   const systemInstruction = {
     parts: [
       {
@@ -35,15 +31,9 @@ const Chat = () => {
   };
 
   const common = "cp icon__with__bg";
+
   const [showExtra, setShowExtra] = useState(false);
   const [files, setFiles] = useState(null);
-
-  const [inputs, setInputs] = useState([]);
-  const [aiResponse, setAiResponse] = useState([]);
-
-  const onSubmit = (e) => {
-    console.log(e);
-  };
 
   const handleCameraClick = async (e) => {
     await navigator.mediaDevices.getUserMedia({ video: true });
@@ -57,7 +47,6 @@ const Chat = () => {
       for (let file of files) {
         let index = file.type.indexOf("/") + 1;
         let type = getFileType(file.type);
-        console.log(type);
 
         const url = URL.createObjectURL(file);
         uploadedFiles.push({
@@ -69,12 +58,14 @@ const Chat = () => {
     }
   };
 
-  const handlePrompt = () => {};
+  const onSubmit = (e) => {
+    console.log(e);
+  };
 
   return (
     <section className="h-full">
       <section className="h-full flex justify-center flex-col mx-12">
-        <form onSubmit={handleSubmit(onSubmit)} className="relative">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div
             className={`shadow-md p-2 rounded-md absolute flex -top-[200%] w-full gap-2 justify-center flex-wrap 
               ${
@@ -115,16 +106,14 @@ const Chat = () => {
           </div>
           <div className="relative flex items-center">
             <input
+              {...form.register("prompt")}
               type="text"
               className="rounded-md 
             shadow-md dark:shadow-black dark:bg-secondary__lighter border-2 border-slate-200 dark:border-accent outline-none italic text-xs p-4 px-12 w-full"
               placeholder="Message GPT_"
             />
             <button className="flex items-center justify-center" type="submit">
-              <MdSend
-                className="icon__with__bg absolute right-3 cp"
-                onClick={handlePrompt}
-              />
+              <MdSend className="icon__with__bg absolute right-3 cp" />
             </button>
             <IoMdAddCircle
               className="cp icon__with__bg absolute bottom-[50%] translate-y-[50%] left-2"

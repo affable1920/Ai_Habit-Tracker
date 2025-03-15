@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import Spinner from "./Spinner";
 import useIntersection from "../hooks/useIntersection";
+import habitsSchema from "../schemas/habitSchema";
+import { joiResolver } from "@hookform/resolvers/joi";
+import axios from "axios";
 
 const Step1 = React.lazy(() => import("./AddForm/Step1"));
 const Step2 = React.lazy(() => import("./AddForm/Step2"));
@@ -13,20 +16,22 @@ const AddHabitComponent = () => {
   const steps = [Step1, Step2, Step3];
   const StepComponent = steps[step - 1];
 
-  const form = useForm();
-  const {
-    formState: { errors },
-  } = form;
+  const form = useForm({ resolver: joiResolver(habitsSchema) });
+  const { formState } = form;
 
-  const handleNext = () => {
-    setStep((step) => (step === steps.length ? step : step + 1));
-  };
-
-  const handleBack = () => {
-    setStep((step) => (step === 1 ? step : step - 1));
+  const handleNext = (formData) => {
+    if (step < steps.length) setStep(step + 1);
+    else axios.post("http://localhost:8000/habits", formData);
   };
 
   const { elementRef, visible } = useIntersection({ threshold: 0.4 });
+
+  const firstStep = step === 1;
+  const lastStep = step === steps.length;
+
+  const handleBack = () => {
+    setStep((step) => (step === firstStep ? step : step - 1));
+  };
 
   return (
     <section>
@@ -39,24 +44,31 @@ const AddHabitComponent = () => {
               : "opacity-100 pointer-events-auto scale-100"
           }`}
         >
-          <form>
-            <React.Suspense fallback={<Spinner />}>
-              <StepComponent register={form.register} errors={errors} />
-            </React.Suspense>
-            <div className={`flex justify-end mt-4`}>
-              <button type="submit" className="btn btn__accent">
-                Submit
-              </button>
-            </div>
-          </form>
-          <div className={`mt-8 flex`}>
-            <button onClick={handleBack} className="btn btn__accent">
-              {"<"}
-            </button>
-            <button onClick={handleNext} className="btn btn__accent">
-              {">"}
-            </button>
-          </div>
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(handleNext)}>
+              <React.Suspense fallback={<Spinner />}>
+                <StepComponent />
+              </React.Suspense>
+              <div
+                className={`flex mt-4 ${
+                  firstStep ? "justify-end" : "justify-between"
+                }`}
+              >
+                {!firstStep && (
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="btn btn__accent"
+                  >
+                    {"<"}
+                  </button>
+                )}
+                <button className="btn btn__accent">
+                  {lastStep ? "Submit" : "Next"}
+                </button>
+              </div>
+            </form>
+          </FormProvider>
         </div>
       </section>
     </section>

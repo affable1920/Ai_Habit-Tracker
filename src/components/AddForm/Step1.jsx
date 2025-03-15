@@ -1,19 +1,24 @@
 import React from "react";
 import InputAdd from "../common/InputAdd";
+import { useFormContext } from "react-hook-form";
 
-const Step1 = ({ register, errors }) => {
+const Step1 = () => {
+  const { register, formState } = useFormContext();
+
   return (
     <>
       <InputAdd
         name="title"
         label="Habit Title"
         register={register}
-        errors={errors}
+        errors={formState.errors}
+        large={true}
       />
       <InputAdd
         name="description"
         register={register}
-        errors={errors}
+        errors={formState.errors}
+        label="Description"
         large={true}
       />
     </>

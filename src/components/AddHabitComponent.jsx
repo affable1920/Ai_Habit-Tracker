@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
 import Spinner from "./Spinner";
 import useIntersection from "../hooks/useIntersection";
 import habitsSchema from "../schemas/habitSchema";
-import { joiResolver } from "@hookform/resolvers/joi";
-import axios from "axios";
+import useHabits from "../hooks/useHabits";
 
 const Step1 = React.lazy(() => import("./AddForm/Step1"));
 const Step2 = React.lazy(() => import("./AddForm/Step2"));
@@ -14,16 +14,16 @@ const AddHabitComponent = () => {
   const [step, setStep] = useState(1);
 
   const steps = [Step1, Step2, Step3];
+
   const StepComponent = steps[step - 1];
-
   const form = useForm({ resolver: joiResolver(habitsSchema) });
-  const { formState } = form;
 
-  const handleNext = (formData) => {
+  const { addHabit } = useHabits();
+
+  const handleNext = async (formData) => {
     if (step < steps.length) setStep(step + 1);
-    else axios.post("http://localhost:8000/habits", formData);
+    else addHabit(formData);
   };
-
   const { elementRef, visible } = useIntersection({ threshold: 0.4 });
 
   const firstStep = step === 1;

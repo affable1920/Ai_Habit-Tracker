@@ -1,33 +1,30 @@
-import React, { useContext, useState } from "react";
+import React from "react";
+import queryStore from "../stores/queryStore";
 import { FaArrowsTurnToDots } from "react-icons/fa6";
-import useHabits from "../hooks/useHabits";
-import { QueryContext } from "./Providers/QueryProvider";
+import { IoIosCloudDone } from "react-icons/io";
 
 const StatusFilter = () => {
-  const [status, setStatus] = useState(null);
-  const { data } = useHabits();
+  const { query, setStatus } = queryStore();
 
-  const { dispatch: queryDispatch } = useContext(QueryContext);
-
-  const handleClick = (type) => {
-    if (data?.habits.length === 0) return;
-
+  const handleSetStatus = () => {
     setStatus(
-      status === null
+      query.status === null
         ? "complete"
-        : status === "complete"
+        : query.status === "complete"
         ? "incomplete"
         : "complete"
     );
-    queryDispatch({ type });
   };
 
   return (
     <>
-      <FaArrowsTurnToDots
-        className="icon"
-        onClick={() => handleClick("incomplete")}
-      />
+      <button onClick={handleSetStatus}>
+        {query.status === "complete" ? (
+          <FaArrowsTurnToDots className="icon" />
+        ) : (
+          <IoIosCloudDone className="icon" />
+        )}
+      </button>
     </>
   );
 };

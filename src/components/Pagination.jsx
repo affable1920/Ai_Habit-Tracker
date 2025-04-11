@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { IoCaretBackSharp, IoCaretForwardSharp } from "react-icons/io5";
 import useHabits from "../hooks/useHabits";
-import { QueryContext } from "./Providers/QueryProvider";
+import queryStore from "../stores/queryStore";
 
 const Pagination = () => {
-  const { query: { pageSize, currentPage } = {}, dispatch } =
-    useContext(QueryContext);
-
   const { data } = useHabits();
+
+  const { query, setPageSize, setPage } = queryStore();
+  const { currentPage, pageSize } = query;
 
   const prevDisabled = currentPage === 1;
   const nextDisabled =
@@ -24,24 +24,17 @@ const Pagination = () => {
   return (
     <div className="flex justify-end mt-6 justify-self-end self-end">
       <div
-        className="flex items-center rounded-md px-2 gap-2 bg-slate-50 py-1 border-[1px] 
-      border-slate-300 dark:border-slate-700 dark:bg-inherit"
+        className="flex items-center rounded-md px-2 gap-2 bg-zinc-50 py-1 border-[1.5px] border-slate-200 
+        dark:bg-secondary__lighter dark:border-accent"
       >
         <div className="text-xs font-semibold tracking-wide flex items-center font-mono">
           <label htmlFor="pageSize">Showing:</label>
           <select
-            onChange={(e) =>
-              dispatch({
-                type: "set_pageSize",
-                pageSize: parseInt(e.target.value),
-                maxPages: data?.maxPages,
-                count: data?.count,
-              })
-            }
+            onChange={(e) => setPageSize(parseInt(e.target.value))}
             name="pageSize"
-            value={pageSize}
-            className="cp rounded-md ml-1 outline-none p-[2px] text-center border-[1px] 
-            border-slate-300 dark:bg-slate-800 dark:border-slate-700 mr-1"
+            value={query.pageSize}
+            className="cp rounded-md ml-1 outline-none p-[2px] text-center border-[1.4px] 
+            border-slate-200 dark:bg-secondary__lighter dark:border-accent mr-1"
           >
             {optionMap.map(({ value }) => (
               <option key={value} value={value} disabled={value > data?.count}>
@@ -50,36 +43,22 @@ const Pagination = () => {
             ))}
           </select>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <IoCaretBackSharp
             onClick={() =>
-              dispatch({
-                type: "current_page_decrement",
-              })
+              setPage(prevDisabled ? currentPage : currentPage - 1)
             }
-            className={`${
-              prevDisabled
-                ? "text-slate-300 dark:text-slate-700 pointer-events-none"
-                : "cp text-slate-700 dark:text-slate-300"
-            }`}
           />
           <span
-            className="text-xs font-mono font-bold inline-grid px-2 py-[2px] bg-slate-300 dark:bg-slate-800 
+            className="text-xs font-mono font-bold inline-grid px-1 py-[2px] bg-slate-300 dark:bg-accent 
             place-items-center rounded-md"
           >
             {currentPage}
           </span>
           <IoCaretForwardSharp
             onClick={() =>
-              dispatch({
-                type: "current_page_increment",
-              })
+              setPage(nextDisabled ? currentPage : currentPage + 1)
             }
-            className={`${
-              nextDisabled
-                ? "text-slate-300 dark:text-slate-700 pointer-events-none"
-                : "cp text-slate-700 dark:text-slate-300"
-            }`}
           />
         </div>
       </div>

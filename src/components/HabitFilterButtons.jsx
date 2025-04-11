@@ -8,20 +8,14 @@ import useHabits from "../hooks/useHabits";
 import { MdArchive } from "react-icons/md";
 import AuthContext from "../context/AuthContext";
 import tootlipStore from "../Tooltip/store";
-import { QueryContext } from "./Providers/QueryProvider";
+import queryStore from "../stores/queryStore";
 
 const HabitFilterButtons = () => {
-  const queryObject = {
-    pageSize: 10,
-    currentPage: 1,
-  };
-
-  const { dispatch: queryDispatch } = useContext(QueryContext);
-
   const { data } = useHabits();
   const { user } = useContext(AuthContext);
 
   const { show, hide } = tootlipStore();
+  const { reset } = queryStore();
 
   return (
     <div className="flex items-center justify-between justify-self-start">
@@ -49,7 +43,7 @@ const HabitFilterButtons = () => {
         <div className="flex items-center gap-1">
           <BiReset
             className="reset icon"
-            onClick={() => queryDispatch({ type: "reset", state: queryObject })}
+            onClick={reset}
             onMouseEnter={() =>
               show({ msg: "Reset queries", element: ".reset" })
             }

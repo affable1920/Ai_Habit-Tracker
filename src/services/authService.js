@@ -31,7 +31,23 @@ async function register(data) {
 
     await setDoc(docRef, userToRegister);
   } catch (err) {
-    throw err;
+    throw handleAuthError(err.code);
+  }
+}
+
+function handleAuthError(code) {
+  switch (code) {
+    case "auth/email-already-in-use":
+      return new Error("Email is already in use !");
+
+    case "auth/invalid-email":
+      return new Error("Invalid Email !");
+
+    case "auth/weak-password":
+      return new Error("Password is too weak !");
+
+    default:
+      return new Error("Registration failed!");
   }
 }
 

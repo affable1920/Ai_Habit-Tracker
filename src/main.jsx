@@ -15,7 +15,6 @@ injectSpeedInsights();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <AppProviders>
         <Toaster position="top-right" richColors />
         <App />

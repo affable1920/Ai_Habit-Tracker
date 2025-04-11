@@ -16,6 +16,7 @@ const Logout = () => {
       authService.logout();
 
       toast.success("Successfully logged out.");
+      window.location.reload();
       navigate("/login");
     } catch (e) {
       toast.error(e?.message);

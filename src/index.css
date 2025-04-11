@@ -32,6 +32,10 @@ body {
   }
 }
 
+a {
+  outline: none;
+}
+
 @layer utilities {
   /* Base Styles */
   .container {
@@ -103,12 +107,12 @@ body {
   }
 
   .btn__white {
-    @apply bg-white text-black shadow-xl ring-2 ring-slate-100 dark:ring-0;
+    @apply bg-white text-black shadow-xl ring-2 ring-slate-100 dark:focus:ring-bright;
   }
 
   .btn__primary {
-    @apply bg-white shadow-lg dark:bg-secondary__lighter dark:shadow-black ring-1 ring-slate-200 text-xs
-    dark:ring-accent italic tracking-widest;
+    @apply bg-white shadow-lg dark:bg-secondary__lighter focus:border-2 focus:border-bright dark:shadow-black ring-1
+     ring-slate-200 text-xs dark:ring-accent italic tracking-widest;
   }
 
   .btn__accent {
@@ -146,6 +150,10 @@ body {
   }
   .overlay {
     @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-center justify-center z-[999];
+  }
+
+  .link {
+    @apply outline-none focus:underline focus:font-semibold;
   }
 
   /* Animations */

@@ -21,7 +21,7 @@ const ThemeToggler = () => {
       {isDark ? (
         <FaRegLightbulb className="icon active:hover:text-orange-500" />
       ) : (
-        <MdDarkMode className="" />
+        <MdDarkMode className="icon" />
       )}
     </button>
   );

@@ -3,7 +3,6 @@ import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import AuthContext from "../context/AuthContext";
 import { ModalContext } from "./Providers/ModalProvider";
-import { Toaster } from "sonner";
 import "../App.css";
 
 const App = () => {
@@ -12,7 +11,7 @@ const App = () => {
 
   const shortcut = useCallback((e) => {
     const shortcut = e.ctrlKey
-      ? "control" + e.key.toLowerCase()
+      ? "control" + e?.key?.toLowerCase()
       : e.key.toLowerCase();
 
     if (shortcut === "escape" && modal?.openModals?.length != 0)
@@ -56,12 +55,7 @@ const App = () => {
     }
   }, [user, modal?.openModals]);
 
-  return (
-    <>
-      <Toaster position="top-right" />
-      <RouterProvider router={router} />;
-    </>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

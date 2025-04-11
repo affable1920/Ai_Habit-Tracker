@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { IoMdClose, IoMdSend } from "react-icons/io";
 import { AiTwotoneAudio } from "react-icons/ai";
@@ -15,25 +15,19 @@ import { AiFillAudio } from "react-icons/ai";
 import { getFileType } from "./../Utils/fileUploadUtils";
 import { BiScreenshot } from "react-icons/bi";
 import { MdSend } from "react-icons/md";
+import axios from "axios";
 
 const Chat = () => {
   const form = useForm();
   const fileRef = useRef(null);
 
-  const systemInstruction = {
-    parts: [
-      {
-        text: `You've been integrated in a habit tracker/builder app. Your job is that when a user initiates 
-        a chat conversation with you, you try to motivate the user and make him/her push his abilities to their
-        limits. You make the user feel and understand that NO is not an option.`,
-      },
-    ],
-  };
-
   const common = "cp icon__with__bg";
 
   const [showExtra, setShowExtra] = useState(false);
   const [files, setFiles] = useState(null);
+
+  const [aiResponses, setAiResponses] = useState([]);
+  const [userText, setUserText] = useState([]);
 
   const handleCameraClick = async (e) => {
     await navigator.mediaDevices.getUserMedia({ video: true });
@@ -58,15 +52,67 @@ const Chat = () => {
     }
   };
 
-  const onSubmit = (e) => {
-    console.log(e);
+  const onSubmit = async (e) => {
+    setUserText([...userText, e.prompt]);
+    try {
+      const { data: chat } = await axios.post(
+        "http://localhost:8000/chat",
+        e.prompt
+      );
+      setAiResponses([...aiResponses, chat]);
+      form.reset();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <section className="h-full">
-      <section className="h-full flex justify-center flex-col mx-12">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div
+    <section
+      className={`my-4 flex flex-col justify-between h-full items-center mx-8 lg:mx-24`}
+    >
+      {aiResponses.length != 0 ? (
+        <div
+          className="bg-zinc-50 h-full overflow-hidden p-3 rounded-md 
+        dark:bg-secondary__lighter mb-2 italic text-[14px] shadow-md dark:shadow-black border-[1.5px] 
+      border-zinc-100 dark:border-accent"
+        >
+          {aiResponses.map((response) => (
+            <div className="mb-4">{response}</div>
+          ))}
+        </div>
+      ) : (
+        <div></div>
+      )}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="sticky bottom-5 w-full"
+      >
+        <div className="flex items-center relative">
+          <input
+            {...form.register("prompt")}
+            type="text"
+            className="rounded-md 
+            shadow-md dark:shadow-black dark:bg-secondary__lighter border-2 border-slate-200 dark:border-accent 
+            outline-none italic text-xs p-4 px-12 w-full"
+            placeholder="Message GPT_"
+          />
+          <button className="flex items-center justify-center" type="submit">
+            <MdSend className="icon__with__bg absolute right-3 cp" />
+          </button>
+          <IoMdAddCircle
+            className="cp icon__with__bg absolute bottom-[50%] translate-y-[50%] left-2"
+            onClick={() => setShowExtra(!showExtra)}
+          />
+        </div>
+      </form>
+    </section>
+  );
+};
+
+export default Chat;
+
+{
+  /* <div
             className={`shadow-md p-2 rounded-md absolute flex -top-[200%] w-full gap-2 justify-center flex-wrap 
               ${
                 showExtra
@@ -103,27 +149,5 @@ const Chat = () => {
               />
               Files
             </div>
-          </div>
-          <div className="relative flex items-center">
-            <input
-              {...form.register("prompt")}
-              type="text"
-              className="rounded-md 
-            shadow-md dark:shadow-black dark:bg-secondary__lighter border-2 border-slate-200 dark:border-accent outline-none italic text-xs p-4 px-12 w-full"
-              placeholder="Message GPT_"
-            />
-            <button className="flex items-center justify-center" type="submit">
-              <MdSend className="icon__with__bg absolute right-3 cp" />
-            </button>
-            <IoMdAddCircle
-              className="cp icon__with__bg absolute bottom-[50%] translate-y-[50%] left-2"
-              onClick={() => setShowExtra(!showExtra)}
-            />
-          </div>
-        </form>
-      </section>
-    </section>
-  );
-};
-
-export default Chat;
+          </div> */
+}

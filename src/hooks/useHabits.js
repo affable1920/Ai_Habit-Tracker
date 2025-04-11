@@ -1,74 +1,57 @@
-import { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAt,
-  where,
-} from "firebase/firestore";
-import auth from "../services/authService";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import { QueryContext } from "./../components/Providers/QueryProvider";
+import loadingStore from "../stores/loadingStore";
+import { toast } from "sonner";
+import axios from "axios";
 
 const useHabits = () => {
+  const url = "http://localhost:8000/habits";
+
   const { user } = useContext(AuthContext);
-  const { query: queryObject } = useContext(QueryContext);
+  const [habits, setHabits] = useState([]);
 
-  const { searchQuery, pageSize, currentPage, status } = queryObject;
-  return useQuery({
-    queryKey: [user?.uid, "habits", queryObject],
-    queryFn: async () => {
-      const fallbackObject = { habits: [], maxPages: 0, count: 0 };
-      const habitsCollection = collection(
-        auth.firestore,
-        "users",
-        user?.uid,
-        "habits"
-      );
+  const { setLoading } = loadingStore();
+  const [error, setError] = useState("");
 
-      const all = await getDocs(
-        query(habitsCollection, orderBy("creationTime", "desc"))
-      );
+  const getData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(url, {
+        params: { userid: user?.uid, limit: 10 },
+      });
+      setHabits(data);
+    } catch (err) {
+      setError(err.response?.data);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
 
-      const count = all.docs.length;
-      if (count === 0 || !all.docs) return fallbackObject;
+  const addHabit = useCallback(async (habit) => {
+    console.log(habit);
+    const { data: addedHabit } = await axios.post(url, JSON.stringify(habit), {
+      params: { userid: user?.uid },
+    });
+    setHabits((prev) =>
+      prev.map((h) => (h.title === habit.title ? addedHabit : h))
+    );
+    toast.success("Habit added successfully !");
+  }, []);
 
-      const start = all.docs[(currentPage - 1) * pageSize];
+  useEffect(() => {
+    if (!user) return;
+    getData();
 
-      const queryArray = [
-        orderBy("creationTime", "desc"),
-        startAt(start),
-        limit(pageSize),
-      ];
+    return () => {
+      setHabits([]);
+      setError("");
+    };
+  }, [user]);
 
-      if (searchQuery) {
-        queryArray.splice(0, 1);
-        queryArray.unshift(
-          orderBy("title", "asc"),
-          where("title", ">=", searchQuery.toLowerCase()),
-          where("title", "<=", searchQuery.toLowerCase() + "\uf8ff")
-        );
-      }
-      if (status) {
-        queryArray.unshift(where("status", "==", status));
-      }
-      const habitsQuery = query(habitsCollection, ...queryArray);
-
-      const habitDocs = await getDocs(habitsQuery);
-      const maxPages = Math.ceil(count / pageSize);
-
-      return {
-        habits: habitDocs.docs.map((doc) => doc.data()),
-        maxPages,
-        count,
-      };
-    },
-    staleTime: 6 * 60 * 60 * 1000, // 6hr
-    enabled: Boolean(user?.uid),
-  });
+  return useMemo(
+    () => ({ habits, maxPages: 0, count: 0, error, addHabit }),
+    [habits, error]
+  );
 };
 
 export default useHabits;

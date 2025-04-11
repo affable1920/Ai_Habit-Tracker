@@ -1,21 +1,15 @@
-import React, { useContext } from "react";
+import React from "react";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
 import HabitFilterButtons from "./HabitFilterButtons";
-import AuthContext from "../context/AuthContext";
 import useHabits from "../hooks/useHabits";
-import Spinner from "./Spinner";
+import AddHabitComponent from "./AddHabitComponent";
 
 const HabitsTracker = () => {
-  const { loading } = useContext(AuthContext);
-  const { data } = useHabits();
-
   return (
     <>
-      <div className="h-full mx-8 my-4 rounded-md relative max-h-[80%]">
-        {loading ? (
-          <Spinner />
-        ) : (
+      <section className="md:flex justify-around">
+        <div className="h-full mx-8 my-4 rounded-md relative max-h-[80%]">
           <div>
             <header>
               <h1 className="headings__large text-center mt-2 md:mt-3 mb-3 ">
@@ -24,15 +18,16 @@ const HabitsTracker = () => {
             </header>
             <section
               className="flex flex-col rounded-md p-4 dark:gradient__primary 
-        border-[1px] border-slate-200 shadow-xl dark:shadow-black/50 dark:border-zinc-700"
+              border-[1px] border-slate-200 shadow-xl dark:shadow-black/50 dark:border-zinc-700"
             >
               <HabitFilterButtons />
               <HabitsList />
-              {data?.habits.length != 0 && <Pagination />}
+              <Pagination />{" "}
             </section>
           </div>
-        )}
-      </div>
+        </div>
+      </section>
+      <AddHabitComponent />
     </>
   );
 };

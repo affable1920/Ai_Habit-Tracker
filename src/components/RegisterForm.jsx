@@ -10,13 +10,12 @@ import { toast } from "sonner";
 import loadingStore from "../stores/loadingStore";
 
 const RegisterForm = () => {
-  const [error, setError] = useState("");
   const { setLoading } = loadingStore();
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),
     password: Joi.string().required().label("Password"),
-    username: Joi.string().alphanum().min(3).required().label("Username"),
+    username: Joi.string().min(3).required().label("Username"),
   });
 
   const {
@@ -29,12 +28,12 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      authService.register(data);
-      toast.success("Successfully Registered.");
+      await authService.register(data);
 
+      toast.success("Successfully Registered !");
       navigate("/");
     } catch (err) {
-      setError(`${err?.name}: ${err?.code}`);
+      toast.error(err.message);
     } finally {
       setLoading();
     }
@@ -63,12 +62,6 @@ const RegisterForm = () => {
             register={register}
             errors={errors}
           />
-          {error && (
-            <div className="mt-2 text-red-600 text-sm tracking-wide text-center">
-              {error}
-            </div>
-          )}
-
           <button className="btn btn__primary w-full mt-2">Register</button>
           <button
             className="mt-3 btn btn__white w-full cp"

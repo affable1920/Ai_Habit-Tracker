@@ -10,11 +10,7 @@ const InputAdd = ({ register, errors, optional, large = false, ...rest }) => {
         <label className="label" htmlFor="description">
           {label} {!optional && "*"}
         </label>
-        <textarea
-          className="input__add"
-          name="description"
-          {...register("description")}
-        />
+        <textarea className="input__add" name={name} {...register(name)} />
         {errors[name] && (
           <div className="text-xs italic text-red-700 dark:text-red-400 tracking-wider text-center">
             "{errorMsg[1].toUpperCase() + errorMsg.slice(2)}

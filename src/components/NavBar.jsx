@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import NavSearch from "./NavSearch";
 import authService from "../services/authService";
@@ -20,7 +20,9 @@ const NavBar = () => {
   const { pathname } = useLocation();
   const { user } = useContext(AuthContext);
 
-  const name = user?.displayName.split(" ")[0];
+  const showLogin = pathname != "/login" && pathname != "/register" && !user;
+
+  const name = user?.displayName?.split(" ")[0];
   const common = "cp icon__with__bg";
 
   const navLinks = [
@@ -57,10 +59,7 @@ const NavBar = () => {
           </div>
 
           <ul
-            className={`order-4 w-full absolute top-full bg-white left-0 shadow-md z-10 px-5 lg:p-0 flex
-           flex-col py-4 transition-all duration-300 font-medium lg:translate-y-0 lg:opacity-100 lg:relative lg:-order-1 lg:flex-row lg:shadow-none lg:w-auto 
-         dark:bg-inherit lg:pointer-events-auto lg:text-[10px] gap-4 lg:gap-16 lg:mr-4 tracking-wider
-            ${
+            className={`nav__links ${
               showLinks
                 ? "opacity-100 pointer-events-auto translate-x-0"
                 : "opacity-0 pointer-events-none -translate-y-full"
@@ -90,7 +89,7 @@ const NavBar = () => {
 
             <div className=" flex items-center gap-3 flex-wrap">
               <HiMenuAlt3
-                className="cp icon__with__bg__large lg:hidden"
+                className="cp icon__with__bg lg:hidden"
                 onClick={() => setShowLinks(!showLinks)}
               />
 
@@ -101,22 +100,14 @@ const NavBar = () => {
                     onClick={() => setShowFeatures(!showFeatures)}
                   />
                   <div
-                    className={`bg-white shadow-md rounded-sm py-3 z-50 dark:bg-primary 
-                  dark:shadow-black flex flex-col gap-6 absolute top-[110%] 
-                  px-2 right-2 transition-all duration-300
-                  ${
-                    showFeatures
-                      ? "opacity-100 pointer-events-auto translate-x-0"
-                      : "opacity-0 pointer-events-none translate-x-20"
-                  }`}
+                    className={`nav__features ${
+                      showFeatures
+                        ? "opacity-100 pointer-events-auto translate-x-0"
+                        : "translate-x-20 pointer-events-none opacity-0 fixed"
+                    }`}
                   >
                     {profileFeatures.map((feature) => (
-                      <Link
-                        to={"/profile"}
-                        className={`flex gap-4 justify-between font-medium tracking-wider italic
-                      bg-inherit hover:bg-slate-100 p-2 mx-1 rounded-sm dark:hover:bg-accent 
-                      transition-all duration-200`}
-                      >
+                      <Link to={`/${feature.label}`} className={`nav__feature`}>
                         <span>
                           {feature?.label[0].toUpperCase() +
                             feature?.label.slice(1)}
@@ -131,7 +122,7 @@ const NavBar = () => {
           </div>
         </nav>
       </header>
-      {pathname != "/login" && !user && (
+      {showLogin && (
         <div className="w-full bg-bright flex items-center justify-center ">
           <Link
             to="/login"

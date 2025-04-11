@@ -9,8 +9,8 @@ import ErrorPage from "./ErrorPage";
 import Archived from "./Archived";
 import HabitsTracker from "./HabitsTracker";
 import PrivateRoutes from "./PrivateRoutes";
-import Dashboard from "./Dashboard";
 import Profile from "./Profile";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -18,18 +18,22 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "", element: <Dashboard /> },
-      { path: "tracker", element: <HabitsTracker /> },
+      { path: "", element: <HabitsTracker /> },
       { path: "profile", element: <Profile /> },
-      { path: "login", element: <LoginForm /> },
-      { path: "register", element: <RegisterForm /> },
       { path: "logout", element: <Logout /> },
-      { path: "chat", element: <Chat /> },
       {
         element: <PrivateRoutes />,
         children: [
           { path: "add/:id?", element: <AddHabitComponent /> },
           { path: "archived", element: <Archived /> },
+          { path: "chat", element: <Chat /> },
+        ],
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "login", element: <LoginForm /> },
+          { path: "register", element: <RegisterForm /> },
         ],
       },
     ],

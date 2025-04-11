@@ -36,13 +36,13 @@ const Layout = () => {
   return (
     <>
       <Modal />
-      <NavBar />
       <Spinner />
-      <main className="relative h-full pt-8">
-        <Alert />
-        <Tooltip />
+      <Alert />
+      <Tooltip />
+      <div className="flex flex-col h-screen">
+        <NavBar />
         <Outlet />
-      </main>
+      </div>
     </>
   );
 };

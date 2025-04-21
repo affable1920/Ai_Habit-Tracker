@@ -1,12 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import React, { useContext } from "react";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { v4 } from "uuid";
-import getPrompt from "../Utils/handleAi";
-import useHabits from "../hooks/useHabits";
-import Gemini from "../hooks/GeminiSDK";
 import Recommendation from "./Recommendation";
-import Spinner from "./Spinner";
 import { firestore } from "../services/authService";
 import AuthContext from "../context/AuthContext";
 import { RiAiGenerate } from "react-icons/ri";
@@ -15,11 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import { SiLivechat } from "react-icons/si";
 import { ModalContext } from "./Providers/ModalProvider";
 import axios from "axios";
-import { LoadinStateContext } from "./Providers/AppProviders";
 import loadingStore from "../stores/loadingStore";
 
 const RecommendationSystem = ({ onClose }) => {
-  const { data: { habits = [] } = {} } = useHabits();
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();

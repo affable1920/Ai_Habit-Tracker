@@ -34,7 +34,7 @@ const HabitButtons = ({ onDropdownClick, habit }) => {
           dispatch({
             type: "OPEN_MODAL",
             name: "deleteModal",
-            props: { id: habit.id },
+            props: { habitId: habit.id },
           })
         }
         className="icon__with__bg"

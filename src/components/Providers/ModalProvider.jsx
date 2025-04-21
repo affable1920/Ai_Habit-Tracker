@@ -8,7 +8,6 @@ const ModalProvider = ({ children }) => {
     switch (action.type) {
       case "OPEN_MODAL":
         return {
-          ...state,
           openModals: action.keepPrevious
             ? [...state.openModals, action.name]
             : [action.name],
@@ -19,11 +18,11 @@ const ModalProvider = ({ children }) => {
       case "CLOSE_MODAL":
         return {
           ...state,
-          openModals: state.opeModals?.filter((m) => modal != action.name),
+          openModals: state.openModals?.filter((m) => m != action.name),
         };
 
       case "CLOSE_ALL":
-        return { openModals: [] };
+        return { openModals: [], props: action.props || {} };
 
       default:
         return state;

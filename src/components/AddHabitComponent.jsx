@@ -1,36 +1,48 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Spinner from "./Spinner";
 import useIntersection from "../hooks/useIntersection";
 import habitsSchema from "../schemas/habitSchema";
-import useHabits from "../hooks/useHabits";
+import AuthContext from "../context/AuthContext";
+import useHabitStore from "./habitStore";
+import { toast } from "sonner";
 
 const Step1 = React.lazy(() => import("./AddForm/Step1"));
 const Step2 = React.lazy(() => import("./AddForm/Step2"));
-const Step3 = React.lazy(() => import("./AddForm/Step3"));
 
 const AddHabitComponent = () => {
   const [step, setStep] = useState(1);
 
-  const steps = [Step1, Step2, Step3];
-
+  const steps = [Step1, Step2];
   const StepComponent = steps[step - 1];
+
   const form = useForm({ resolver: joiResolver(habitsSchema) });
 
-  const { addHabit } = useHabits();
-
-  const handleNext = async (formData) => {
-    if (step < steps.length) setStep(step + 1);
-    else addHabit(formData);
-  };
   const { elementRef, visible } = useIntersection({ threshold: 0.4 });
 
   const firstStep = step === 1;
   const lastStep = step === steps.length;
 
-  const handleBack = () => {
+  const { user } = useContext(AuthContext);
+  const { addHabit } = useHabitStore();
+
+  const handleBack = () =>
     setStep((step) => (step === firstStep ? step : step - 1));
+
+  const handleNext = async (formData) => {
+    if (step < steps.length) setStep(step + 1);
+    else {
+      try {
+        const msg = await addHabit(formData, user?.uid);
+        toast.success(msg);
+
+        form.reset();
+        setStep(1);
+      } catch (err) {
+        toast.error(err);
+      }
+    }
   };
 
   return (

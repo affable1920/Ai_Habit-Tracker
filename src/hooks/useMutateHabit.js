@@ -4,7 +4,6 @@ import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { v4 } from "uuid";
 import auth from "../services/authService";
 import AuthContext from "../context/AuthContext";
-import QueryContext from "../components/Providers/QueryProvider";
 
 const habitKeys = {
   reminder_Times: {},
@@ -17,7 +16,6 @@ const habitKeys = {
 
 const useMutateHabit = () => {
   const { user } = useContext(AuthContext);
-  const query = useContext(QueryContext);
 
   const key = [user?.uid, "habits"];
   const queryClient = useQueryClient();

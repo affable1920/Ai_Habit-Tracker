@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Habit from "./Habit";
-import useHabits from "../hooks/useHabits";
 import { IoMdAdd } from "react-icons/io";
+import useHabitStore from "./habitStore";
+import AuthContext from "../context/AuthContext";
+import queryStore from "./../stores/queryStore";
 
 const HabitsList = () => {
-  const { habits = [], error } = useHabits();
+  const habits = useHabitStore((store) => store.habits);
+  const fetchHabits = useHabitStore((store) => store.fetchHabits);
+  const { user } = useContext(AuthContext);
+  const { query } = queryStore();
 
-  if (error)
-    return (
-      <div className="flex items-center flex-col mt-2">
-        <p className=" text-sm font-bold text-red-600 tracking-wider font-mono">
-          {error}
-        </p>
-      </div>
-    );
+  useEffect(() => {
+    if (user) fetchHabits(user?.uid, query);
+  }, [user?.uid, query]);
 
   return (
     <>
@@ -26,9 +26,8 @@ const HabitsList = () => {
             <IoMdAdd className="icon__with__bg animate__scale cp" />
           </div>
         )}
-        {habits?.map((habit) => (
-          <Habit habit={habit} />
-        ))}
+        {Array.isArray(habits) &&
+          habits.map((habit) => <Habit habit={habit} />)}
       </section>
     </>
   );

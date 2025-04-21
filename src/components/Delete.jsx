@@ -1,10 +1,14 @@
 import React, { useContext } from "react";
 import { ModalContext } from "./Providers/ModalProvider";
-import useMutateHabit from "../hooks/useMutateHabit";
+import useHabitStore from "./habitStore";
+import AuthContext from "../context/AuthContext";
+import { toast } from "sonner";
 
 const Delete = () => {
   const { modal, dispatch } = useContext(ModalContext);
-  const { mutate } = useMutateHabit();
+  const deleteHabit = useHabitStore((s) => s.deleteHabit);
+
+  const { user } = useContext(AuthContext);
 
   return (
     <div
@@ -15,20 +19,17 @@ const Delete = () => {
       <p>Confirm habit deletion ?</p>
       <div className="flex justify-around mt-4">
         <button
+          onClick={() => dispatch({ type: "CLOSE_MODAL", name: "deleteModal" })}
           className="btn btn__accent"
-          onClick={() => dispatch({ type: "CLOSE_MODAL" })}
         >
           Cancel
         </button>
         <button
-          className="btn btn__accent"
           onClick={() => {
-            mutate({
-              action: "delete",
-              habitId: modal.props.id,
-            });
-            dispatch({ type: "CLOSE_MODAL" });
+            deleteHabit(user?.uid, modal.props?.habitId);
+            dispatch({ type: "CLOSE_MODAL", name: "deleteModal" });
           }}
+          className="btn btn__accent"
         >
           Yes
         </button>

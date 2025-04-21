@@ -149,7 +149,7 @@ a {
     rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;
   }
   .overlay {
-    @apply fixed w-full h-full bg-black/50 left-0 inset-0 flex items-center justify-center z-[999];
+    @apply fixed w-full h-full bg-black/5 left-0 inset-0 flex items-center justify-center z-[999];
   }
 
   .link {

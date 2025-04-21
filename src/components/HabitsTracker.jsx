@@ -2,13 +2,13 @@ import React from "react";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
 import HabitFilterButtons from "./HabitFilterButtons";
-import useHabits from "../hooks/useHabits";
 import AddHabitComponent from "./AddHabitComponent";
 
 const HabitsTracker = () => {
   return (
     <>
       <section className="md:flex justify-around">
+        <AddHabitComponent />
         <div className="h-full mx-8 my-4 rounded-md relative max-h-[80%]">
           <div>
             <header>
@@ -22,12 +22,11 @@ const HabitsTracker = () => {
             >
               <HabitFilterButtons />
               <HabitsList />
-              <Pagination />{" "}
+              <Pagination />
             </section>
           </div>
         </div>
       </section>
-      <AddHabitComponent />
     </>
   );
 };

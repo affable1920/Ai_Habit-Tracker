@@ -20,8 +20,9 @@ const AuthProvider = ({ children }) => {
     return () => unSubscribe();
   }, [user]);
 
-  const value = useMemo(() => ({ user }), [user]);
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

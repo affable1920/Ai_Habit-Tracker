@@ -2,7 +2,6 @@ import React, { useReducer } from "react";
 import ThemeProvider from "./ThemeProvider";
 import AuthProvider from "./AuthProvider";
 import ModalProvider from "./ModalProvider";
-import QueryProvider from "./QueryProvider";
 import Spinner from "./../Spinner";
 
 export const LoadinStateContext = React.createContext(false);
@@ -29,9 +28,7 @@ const AppProviders = ({ children }) => {
       {loading && <Spinner />}
       <ThemeProvider>
         <AuthProvider>
-          <ModalProvider>
-            <QueryProvider>{children}</QueryProvider>
-          </ModalProvider>
+          <ModalProvider>{children}</ModalProvider>
         </AuthProvider>
       </ThemeProvider>
     </LoadinStateContext.Provider>

@@ -31,7 +31,7 @@
   }
 
   .modal {
-    @apply bg-white p-8 shadow-lg dark:bg-secondary__lighter dark:shadow-black rounded-md text-xs border-2 
+    @apply bg-white p-8 dark:bg-secondary__lighter dark:shadow-black rounded-md text-xs border-2 
     border-slate-100 dark:border-accent z-[99998] max-w-[70%];
   }
 

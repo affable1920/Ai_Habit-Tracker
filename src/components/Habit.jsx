@@ -11,13 +11,16 @@ const Habit = ({ habit }) => {
   const streakType = getStreakTitle(habit.streak);
   const { modal, dispatch } = useContext(ModalContext);
 
-  const onEditStatusClick = () => {
+  const onEdit = () => {
     if (habit.completed) return;
 
     dispatch({
       type: "OPEN_MODAL",
       name: "editHabit",
-      props: { id: habit.id, fieldsToUpdate: { completed: true } },
+      props: {
+        habitId: habit.id,
+        fieldsToUpdate: { completed: true, status: "complete" },
+      },
     });
   };
 
@@ -32,7 +35,7 @@ const Habit = ({ habit }) => {
         >
           <button
             disabled={habit.completed}
-            onClick={onEditStatusClick}
+            onClick={onEdit}
             className="flex items-center gap-2"
           >
             {habit.completed ? "complete" : "incomplete"}
@@ -49,9 +52,7 @@ const Habit = ({ habit }) => {
       <header className="flex items-center justify-between gap-2 ">
         <div className="flex items-center gap-[8px]">
           <PiDotsNineThin className="icon hover:cursor-grab" />
-          <h6 className="habit__title">
-            {habit.title.charAt(0).toUpperCase() + habit.title.slice(1)}
-          </h6>
+          <h6 className="habit__title">{habit.title}</h6>
         </div>
         <HabitButtons
           onDropdownClick={() => setLoadMore(!loadMore)}

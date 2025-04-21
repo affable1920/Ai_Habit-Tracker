@@ -3,11 +3,9 @@ import { useContext } from "react";
 import AuthContext from "./../context/AuthContext";
 import { updateDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { firestore } from "../services/authService";
-import { QueryContext } from "../components/Providers/QueryProvider";
 
 const useUpdateHabit = () => {
   const { user } = useContext(AuthContext);
-  const { query } = useContext(QueryContext);
 
   const queryClient = useQueryClient();
   const key = [user?.uid, "habits"];

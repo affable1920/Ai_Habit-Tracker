@@ -11,10 +11,10 @@ const App = () => {
 
   const shortcut = useCallback((e) => {
     const shortcut = e.ctrlKey
-      ? "control" + e?.key?.toLowerCase()
+      ? "control" + e.key.toLowerCase()
       : e.key.toLowerCase();
 
-    if (shortcut === "escape" && modal?.openModals?.length != 0)
+    if (shortcut === "escape")
       dispatch({
         type: "CLOSE_ALL",
       });
@@ -33,7 +33,11 @@ const App = () => {
   const escapeModal = useCallback((e) => {
     if (modal?.open && modal.name === "recommendationSystem") return;
 
-    if (e.target === e.currentTarget) dispatch({ type: "CLOSE_MODAL" });
+    if (e.target === e.currentTarget)
+      dispatch({
+        type: "CLOSE_MODAL",
+        name: modal.openModals[modal.openModals.length - 1],
+      });
   });
 
   useEffect(() => {

@@ -9,6 +9,7 @@ dotenv = "*"
 firebase-admin = "*"
 langchain = {extras = ["groq"], version = "*"}
 pyjwt = "*"
+black = "*"
 
 [dev-packages]
 

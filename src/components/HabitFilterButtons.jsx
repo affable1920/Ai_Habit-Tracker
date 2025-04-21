@@ -4,14 +4,13 @@ import SearchBar from "./SearchBar";
 import StatusFilter from "./StatusFilter";
 import { BiReset } from "react-icons/bi";
 import { RiAddBoxFill } from "react-icons/ri";
-import useHabits from "../hooks/useHabits";
 import { MdArchive } from "react-icons/md";
 import AuthContext from "../context/AuthContext";
 import tootlipStore from "../Tooltip/store";
 import queryStore from "../stores/queryStore";
 
 const HabitFilterButtons = () => {
-  const { data } = useHabits();
+  const data = [];
   const { user } = useContext(AuthContext);
 
   const { show, hide } = tootlipStore();
@@ -26,6 +25,15 @@ const HabitFilterButtons = () => {
           </Link>
         )}
         <SearchBar />
+        <div>
+          <Link
+            to="/teamtab"
+            className="text-xs italic bg-slate-100 p-2 py-[6px] rounded-lg shadow-md border-[1px] 
+            dark:border-accent hover:border-accent dark:bg-accent__darker"
+          >
+            Team Tab
+          </Link>
+        </div>
       </div>
       <div className="flex items-center gap-4">
         <div className="relative">

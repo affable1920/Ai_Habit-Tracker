@@ -7,19 +7,13 @@ const StatusFilter = () => {
   const { query, setStatus } = queryStore();
 
   const handleSetStatus = () => {
-    setStatus(
-      query.status === null
-        ? "complete"
-        : query.status === "complete"
-        ? "incomplete"
-        : "complete"
-    );
+    setStatus(query.status ? false : true);
   };
 
   return (
     <>
       <button onClick={handleSetStatus}>
-        {query.status === "complete" ? (
+        {query.status ? (
           <FaArrowsTurnToDots className="icon" />
         ) : (
           <IoIosCloudDone className="icon" />

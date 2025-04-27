@@ -2,10 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import AuthContext from "./../context/AuthContext";
 import { updateDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
-import { firestore } from "../services/authService";
 
 const useUpdateHabit = () => {
   const { user } = useContext(AuthContext);
+
+  const firestore = "firestore";
 
   const queryClient = useQueryClient();
   const key = [user?.uid, "habits"];

@@ -26,16 +26,13 @@ const LoginForm = () => {
   } = useForm({ resolver: joiResolver(schema) });
 
   const onSubmit = async (data) => {
-    setLoading(true);
     try {
       await authService.login(data);
 
-      navigate("/");
-      toast.success("Successfully logged in.");
-    } catch (err) {
-      toast.error(err?.message);
-    } finally {
-      setLoading(false);
+      window.location = "/";
+      toast.success("Succesfully logged in !");
+    } catch (ex) {
+      toast.error(ex);
     }
   };
 
@@ -43,7 +40,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      await authService.loginWithGoogle();
+      await authService.login();
 
       navigate("/");
       toast.success("Successfully logged in.");

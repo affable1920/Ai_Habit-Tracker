@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { v4 } from "uuid";
-import { toast } from "sonner";
-import http from "../services/httpService";
+import axios from "axios";
 
 const url = "http://localhost:8000";
 
@@ -11,7 +10,7 @@ const useHabitStore = create((set, get) => ({
   fetchHabits: async (userId, query) => {
     const {
       data: { response },
-    } = await http.get(`${url}/${userId}/habits`, {
+    } = await axios.get(`${url}/${userId}/habits`, {
       params: { ...query },
     });
 
@@ -27,7 +26,7 @@ const useHabitStore = create((set, get) => ({
     try {
       const {
         data: { response },
-      } = await http.post(`${url}/${userId}/habits`, habit, {
+      } = await axios.post(`${url}/${userId}/habits`, habit, {
         params: { ...query },
       });
 
@@ -59,7 +58,7 @@ const useHabitStore = create((set, get) => ({
     try {
       const {
         data: { response },
-      } = await http.put(`${url}/${userId}/habits/${habitId}`, fields);
+      } = await axios.put(`${url}/${userId}/habits/${habitId}`, fields);
 
       return response.msg;
     } catch (err) {
@@ -78,7 +77,7 @@ const useHabitStore = create((set, get) => ({
     }));
 
     try {
-      await http.delete(`${url}/${userId}/habits/${habitId}`);
+      await axios.delete(`${url}/${userId}/habits/${habitId}`);
       return "Habit successfullt deleted";
     } catch (err) {
       set((store) => ({ ...store, habits: orgHabits }));

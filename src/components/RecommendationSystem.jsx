@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Recommendation from "./Recommendation";
-import { firestore } from "../services/authService";
 import AuthContext from "../context/AuthContext";
 import { RiAiGenerate } from "react-icons/ri";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
@@ -12,8 +11,9 @@ import { ModalContext } from "./Providers/ModalProvider";
 import axios from "axios";
 import loadingStore from "../stores/loadingStore";
 
-const RecommendationSystem = ({ onClose }) => {
+const RecommendationSystem = () => {
   const { user } = useContext(AuthContext);
+  const firestore = "fs";
 
   const navigate = useNavigate();
   const recRef = collection(firestore, "users", user?.uid, "recommendations");

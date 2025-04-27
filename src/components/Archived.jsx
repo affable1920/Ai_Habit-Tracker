@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "../services/authService";
 
 const Archived = () => {
   const { user } = useContext(AuthContext);
   const key = ["users", user?.uid, "habits", "archived"];
+
+  const firestore = "fs";
 
   const { data } = useQuery({
     queryKey: key,

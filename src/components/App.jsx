@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import AuthContext from "../context/AuthContext";
@@ -8,6 +8,8 @@ import "../App.css";
 const App = () => {
   const { user } = useContext(AuthContext);
   const { modal, dispatch } = useContext(ModalContext);
+
+  const [socket, setSocket] = useState(null);
 
   const shortcut = useCallback((e) => {
     const shortcut = e.ctrlKey
@@ -58,6 +60,23 @@ const App = () => {
       return () => overlay.removeEventListener("click", escapeModal);
     }
   }, [user, modal?.openModals]);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8000/ws");
+
+    ws.onopen = () => {
+      console.log("WebSocket connection Established");
+      ws.send("Hello from client");
+    };
+
+    ws.onmessage = (ev) => {
+      console.log(ev);
+    };
+
+    setSocket(ws);
+
+    return () => ws.close();
+  }, []);
 
   return <RouterProvider router={router} />;
 };

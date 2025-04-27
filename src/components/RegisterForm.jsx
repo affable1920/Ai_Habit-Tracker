@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import Joi from "joi";
-import authService from "../services/authService";
 import Form from "./common/Form";
 import InputAdd from "./common/InputAdd";
-import { toast } from "sonner";
 import loadingStore from "../stores/loadingStore";
+import authService from "../services/authService";
 
 const RegisterForm = () => {
   const { setLoading } = loadingStore();
@@ -22,20 +22,23 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ resolver: joiResolver(schema) });
+
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       await authService.register(data);
+      reset();
 
-      toast.success("Successfully Registered !");
-      navigate("/");
-    } catch (err) {
-      toast.error(err.message);
+      window.location = "/";
+      toast.success("Account created successfully !");
+    } catch (ex) {
+      toast.error(ex);
     } finally {
-      setLoading();
+      setLoading(false);
     }
   };
 

@@ -22,7 +22,7 @@ const NavBar = () => {
 
   const showLogin = pathname != "/login" && pathname != "/register" && !user;
 
-  const name = user?.displayName?.split(" ")[0];
+  const name = user?.username;
   const common = "cp icon__with__bg";
 
   const navLinks = [

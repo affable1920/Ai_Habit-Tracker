@@ -1,28 +1,17 @@
 import { useEffect } from "react";
+import { toast } from "sonner";
 import authService from "../services/authService";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import loadingStore from "../stores/loadingStore";
 
 const Logout = () => {
-  const navigate = useNavigate();
-  const { setLoading, loading } = loadingStore();
-
-  console.log(loading);
+  const nav = useNavigate();
+  console.log(nav);
 
   useEffect(() => {
-    setLoading(true);
-    try {
-      authService.logout();
+    authService.logout();
+    window.location = "/";
 
-      toast.success("Successfully logged out.");
-      window.location.reload();
-      navigate("/login");
-    } catch (e) {
-      toast.error(e?.message);
-    } finally {
-      setLoading(false);
-    }
+    toast.success("Logged out !");
   }, []);
 
   return null;

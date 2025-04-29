@@ -22,14 +22,13 @@ def get_habits(
     user_habits = p.habits_dir / f"user{user_id}_habits.json"
     habits = CRUD.read(user_habits, query)
 
-    print(habits)
-
     return JSONResponse(habits)
 
 
 @router.post("/create")
 def add_habit(
-    habit: model.FE_Data, token: Annotated[str, Depends(decode_access_token)]
+    habit: model.FE_Data,
+    token: Annotated[str, Depends(decode_access_token)],
 ):
     user_id = token["id"]
 

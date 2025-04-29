@@ -36,7 +36,8 @@ const RegisterForm = () => {
       window.location = "/";
       toast.success("Account created successfully !");
     } catch (ex) {
-      toast.error(ex);
+      const { msg } = ex[0] || "Error creating account !";
+      toast.error(msg.toUpperCase());
     } finally {
       setLoading(false);
     }

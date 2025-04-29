@@ -1,3 +1,4 @@
+import datetime
 import json
 from pathlib import Path
 from fastapi import HTTPException
@@ -5,6 +6,7 @@ from pydantic import ValidationError
 
 import variables.dirs as d
 import models.Habit as model
+from datetime import datetime
 
 
 class Habit_Service:
@@ -18,7 +20,7 @@ class Habit_Service:
         d.habits_dir.mkdir(parents=True, exist_ok=True)
 
     def read_all(self, filename):
-        if not filename.exists():
+        if not filename.exists() or not filename.read_text():
             with open(filename, "w") as f:
                 json.dump([], f)
 
@@ -48,11 +50,13 @@ class Habit_Service:
 
         if query["search_query"]:
             sq = query["search_query"].lower()
-            habits = [h["title".lower()].startswith(sq) for h in habits]
+            habits = [h for h in habits if h["title"].lower().startswith(sq)]
 
         if query["status"]:
-            print(query["status"])
-            # habits = [h['completed'] == query['status'] for h in habits]
+            habits = [h for h in habits if h["completed"] == True]
+
+        if query["status"] == False:
+            habits = [h for h in habits if h["completed"] == False]
 
         habits = habits[start:end]
         return habits
@@ -79,3 +83,44 @@ class Habit_Service:
 
         except ValidationError as e:
             raise HTTPException(500, f"An internal server error occurred ! {str(e)}")
+
+    def get_habit(self, filename, habit_id: str):
+        habits = self.read_all(filename)
+        for habit in habits:
+            if habit["id"] == habit_id:
+                return habit
+
+        else:
+            raise HTTPException(404, "Habit Not Found !")
+
+    def update_Habit(self, filename, habit_id, fields):
+        habits = self.read_all(filename)
+        to_upd = self.get_habit(filename, habit_id)
+
+        to_upd.update(**fields)
+
+        if fields.get("completed", False):
+            to_upd["streak"] += 1
+            to_upd["completion_log"] = datetime.now().date().ctime()
+            to_upd["last_completed"] = datetime.now().isoformat()
+
+        habits = list(map(lambda x: to_upd if x["id"] == habit_id else x, habits))
+
+        try:
+            with open(filename, "w") as f:
+                json.dump(habits, f)
+                return to_upd
+
+        except json.JSONDecodeError:
+            raise HTTPException(500, "An internal server error occurred !")
+
+    def delete_habit(self, filename, habit_id):
+        habits = self.read_all(filename)
+        habits = list(filter(lambda h: h["id"] != habit_id, habits))
+
+        try:
+            with open(filename, "w") as f:
+                json.dump(habits, f)
+
+        except json.JSONDecodeError:
+            raise HTTPException(500, "An internal server error occurred !")

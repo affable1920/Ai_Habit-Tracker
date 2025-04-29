@@ -13,7 +13,7 @@ CRUD = Habit_Service()
 
 
 @router.get("/")
-def get_habits(
+def get(
     token: Annotated[str, Depends(decode_access_token)],
     query: Annotated[model.Query, Query()],
 ):
@@ -25,8 +25,8 @@ def get_habits(
     return JSONResponse(habits)
 
 
-@router.post("/create")
-def add_habit(
+@router.post("/")
+def add(
     habit: model.FE_Data,
     token: Annotated[str, Depends(decode_access_token)],
 ):
@@ -36,3 +36,22 @@ def add_habit(
     server_habit = CRUD.add_habit(user_habits, habit)
 
     return JSONResponse(server_habit, 201)
+
+
+@router.put("/{habit_id}")
+def update(token: Annotated[str, Depends(decode_access_token)], habit_id: str):
+    user_id = token["id"]
+    user_habits = p.habits_dir / f"user{user_id}_habits.json"
+
+    return CRUD.update_Habit(
+        user_habits, habit_id, {"completed": True, "status": "complete"}
+    )
+
+
+@router.delete("/{habit_id}")
+def delete(token: Annotated[str, Depends(decode_access_token)], habit_id: str):
+    user_id = token["id"]
+    user_habits = p.habits_dir / f"user{user_id}_habits.json"
+
+    CRUD.delete_habit(user_habits, habit_id)
+    return JSONResponse("Habit deleted !")

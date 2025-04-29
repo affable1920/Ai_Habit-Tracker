@@ -1,14 +1,23 @@
 import React, { useContext } from "react";
 import { ModalContext } from "./Providers/ModalProvider";
 import useHabitStore from "./habitStore";
-import AuthContext from "../context/AuthContext";
 import { toast } from "sonner";
 
 const Delete = () => {
   const { modal, dispatch } = useContext(ModalContext);
   const deleteHabit = useHabitStore((s) => s.deleteHabit);
 
-  const { user } = useContext(AuthContext);
+  const onDelete = async () => {
+    const { success, msg } = await deleteHabit(modal.props?.habitId);
+
+    if (!success) {
+      toast.error(msg);
+      return;
+    }
+
+    toast.success(msg);
+    dispatch({ type: "CLOSE_MODAL", name: "deleteModal" });
+  };
 
   return (
     <div
@@ -24,13 +33,7 @@ const Delete = () => {
         >
           Cancel
         </button>
-        <button
-          onClick={() => {
-            deleteHabit(user?.uid, modal.props?.habitId);
-            dispatch({ type: "CLOSE_MODAL", name: "deleteModal" });
-          }}
-          className="btn btn__accent"
-        >
+        <button onClick={onDelete} className="btn btn__accent">
           Yes
         </button>
       </div>

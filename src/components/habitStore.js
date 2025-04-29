@@ -22,7 +22,7 @@ const useHabitStore = create((set, get) => ({
     set((store) => ({ habits: [tempHabit, ...store.habits] }));
 
     try {
-      const { data } = await http.post(endPoint + "/create", habit);
+      const { data } = await http.post(endPoint, habit);
 
       set((store) => ({
         habits: store.habits.map((h) =>
@@ -31,34 +31,45 @@ const useHabitStore = create((set, get) => ({
       }));
 
       return { success: true, msg: "Habit added successfully !" };
-    } catch (err) {
+    } catch (ex) {
       set((store) => ({
         habits: store.habits.filter((h) => h.tempId != tempId),
       }));
 
-      return { success: false, msg: err };
+      return { success: false, msg: ex };
     }
   },
 
   editHabit: async (habitId, fields) => {
-    const orgHabits = [...get().habits];
+    const orgHabit = get().habits.find((h) => h.id === habitId);
 
     set((store) => ({
+      ...store,
       habits: store.habits.map((habit) =>
         habit.id === habitId ? { ...habit, ...fields } : habit
       ),
     }));
 
     try {
-      const {
-        data: { response },
-      } = await http.put(`${endPoint}/${habitId}`, fields);
+      const response = await http.put(`${endPoint}/${habitId}`, fields);
+      set((store) => ({
+        ...store,
+        habits: store.habits.map((h) =>
+          h.id === habitId ? { ...response.data } : h
+        ),
+      }));
 
-      return response.msg;
-    } catch (err) {
-      set((store) => ({ habits: orgHabits, ...store }));
+      return { success: true, msg: "Habit successfully updated !" };
+    } catch (ex) {
+      set((store) => ({
+        ...store,
+        habits: store.habits.map((habit) =>
+          habit.id === habitId ? { ...orgHabit } : habit
+        ),
+      }));
 
-      console.log(err);
+      if (typeof ex != "string") ex = "Error updating habit !";
+      return { success: false, msg: ex };
     }
   },
 
@@ -67,15 +78,19 @@ const useHabitStore = create((set, get) => ({
 
     set((store) => ({
       ...store,
+
       habits: store.habits.filter((h) => h.id != habitId),
     }));
 
     try {
       await http.delete(`${endPoint}/${habitId}`);
-      return "Habit successfullt deleted";
-    } catch (err) {
+
+      return { success: true, msg: "Habit successfully deleted" };
+    } catch (ex) {
       set((store) => ({ ...store, habits: orgHabits }));
-      console.log(err);
+
+      if (typeof ex != "string") ex = "Unable to delete habit !";
+      return { success: false, msg: ex };
     }
   },
 }));

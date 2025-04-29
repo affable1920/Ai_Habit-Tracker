@@ -15,5 +15,6 @@ app.add_middleware(
     expose_headers=["x-auth-token", "SESSION_EXP"],
 )
 
+
 app.include_router(auth, prefix="/auth", tags=["Authentication"])
 app.include_router(habits, prefix="/habits", tags=["Habit_CRUD"])

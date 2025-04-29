@@ -4,12 +4,12 @@ import authService from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
-  const nav = useNavigate();
-  console.log(nav);
+  const navigate = useNavigate();
 
   useEffect(() => {
     authService.logout();
-    window.location = "/";
+    // navigate("/login", { replace: true });
+    window.location = "/login";
 
     toast.success("Logged out !");
   }, []);

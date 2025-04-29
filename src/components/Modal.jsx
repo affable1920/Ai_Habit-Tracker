@@ -1,41 +1,37 @@
 import React, { useContext } from "react";
 import { createPortal } from "react-dom";
 import { RxCross2 } from "react-icons/rx";
+import { LuAudioLines } from "react-icons/lu";
 import { ModalContext } from "./Providers/ModalProvider";
 import RecommendationSystem from "./RecommendationSystem";
 import Delete from "./Delete";
-import Reminder from "./Reminder";
-import LoginModal from "./LoginModal";
-import SearchBar from "./SearchBar";
-import AddHabitComponent from "./AddHabitComponent";
 import Overlay from "./Overlay";
-import { LuAudioLines } from "react-icons/lu";
+import Reminder from "./Reminder";
+import SearchBar from "./SearchBar";
+import LoginModal from "./LoginModal";
 import useHabitStore from "./habitStore";
-import AuthContext from "../context/AuthContext";
+import AddHabitComponent from "./AddHabitComponent";
 import { toast } from "sonner";
 
 const Modal = () => {
   const { modal, dispatch } = useContext(ModalContext);
-  const { user } = useContext(AuthContext);
 
-  const { editHabit } = useHabitStore();
+  const editHabit = useHabitStore((s) => s.editHabit);
   if (!modal.openModals || modal?.openModals?.length === 0) return null;
 
   const onEdit = async () => {
-    try {
-      const msg = await editHabit(
-        user?.uid,
-        modal.props.habitId,
-        modal.props.fieldsToUpdate
-      );
+    const { success, msg } = await editHabit(
+      modal.props.habitId,
+      modal.props.fieldsToUpdate
+    );
 
-      toast.success(msg);
-      dispatch({ type: "CLOSE_MODAL", name: "editHabit" });
-    } catch (err) {
-      toast.error("Error editing habit", {
-        description: err,
-      });
+    if (!success) {
+      toast.error(msg);
+      return;
     }
+
+    toast.success(msg);
+    dispatch({ type: "CLOSE_MODAL", name: "editHabit" });
   };
 
   const modalMap = {

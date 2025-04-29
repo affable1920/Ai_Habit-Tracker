@@ -7,7 +7,7 @@ from datetime import datetime
 class Query(BaseModel):
     limit: int = Field(10, gt=0)
     page: int = Field(1, gt=0)
-    search_query: str = Field('')
+    search_query: str = Field("")
     status: bool = Field(None)
 
 
@@ -21,11 +21,10 @@ class FE_Data(BaseModel):
 
 class Defaults(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
-    created_at: str = Field(
-        default_factory=lambda: datetime.now().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now().isoformat())
 
     streak: int = 0
-    status: str = 'incomplete'
+    status: str = "incomplete"
 
     completed: bool = False
     archived: bool = False

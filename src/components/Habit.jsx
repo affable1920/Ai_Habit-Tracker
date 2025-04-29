@@ -19,7 +19,10 @@ const Habit = ({ habit }) => {
       name: "editHabit",
       props: {
         habitId: habit.id,
-        fieldsToUpdate: { completed: true, status: "complete" },
+        fieldsToUpdate: {
+          completed: true,
+          status: "complete",
+        },
       },
     });
   };
@@ -69,11 +72,7 @@ const Habit = ({ habit }) => {
         </p>
         <span className="tracking-wide text-xs font-mono">
           Streak:
-          <span
-            className={`${streakMap[streakType]} rounded-lg p-1 ml-2 py-[2px] text-white`}
-          >
-            {habit.streak}
-          </span>
+          <span className={`${streakMap[streakType]}`}>{habit.streak}</span>
         </span>
       </div>
     </article>

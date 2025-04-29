@@ -5,7 +5,11 @@ from routes.habits import router as habits
 
 app = FastAPI()
 
-origins = ["http://localhost:5173", "http://localhost:5174"]
+origins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "aihabittracker.vercel.app",
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

@@ -1,52 +1,46 @@
 import { create } from "zustand";
 import { v4 } from "uuid";
-import axios from "axios";
+import http from "../services/httpService";
 
-const url = "http://localhost:8000";
+const endPoint = "/habits";
 
 const useHabitStore = create((set, get) => ({
   habits: [],
 
-  fetchHabits: async (userId, query) => {
-    const {
-      data: { response },
-    } = await axios.get(`${url}/${userId}/habits`, {
+  fetchHabits: async (query) => {
+    const response = await http.get(endPoint, {
       params: { ...query },
     });
 
-    set(() => ({ habits: response?.habits || [] }));
+    set(() => ({ habits: response.data || [] }));
   },
 
-  addHabit: async (habit, userId, query) => {
+  addHabit: async (habit) => {
     const tempId = v4();
     const tempHabit = { tempId, ...habit };
 
     set((store) => ({ habits: [tempHabit, ...store.habits] }));
 
     try {
-      const {
-        data: { response },
-      } = await axios.post(`${url}/${userId}/habits`, habit, {
-        params: { ...query },
-      });
+      const { data } = await http.post(endPoint + "/create", habit);
 
       set((store) => ({
         habits: store.habits.map((h) =>
-          h.tempId === tempId ? { ...response?.server_habit } : h
+          h.tempId === tempId ? { ...data } : h
         ),
       }));
 
-      return response.msg;
+      return { success: true, msg: "Habit added successfully !" };
     } catch (err) {
       set((store) => ({
         habits: store.habits.filter((h) => h.tempId != tempId),
       }));
 
-      console.log(err);
+      return { success: false, msg: err };
     }
   },
 
-  editHabit: async (userId, habitId, fields) => {
+  editHabit: async (habitId, fields) => {
     const orgHabits = [...get().habits];
 
     set((store) => ({
@@ -58,7 +52,7 @@ const useHabitStore = create((set, get) => ({
     try {
       const {
         data: { response },
-      } = await axios.put(`${url}/${userId}/habits/${habitId}`, fields);
+      } = await http.put(`${endPoint}/${habitId}`, fields);
 
       return response.msg;
     } catch (err) {
@@ -68,7 +62,7 @@ const useHabitStore = create((set, get) => ({
     }
   },
 
-  deleteHabit: async (userId, habitId) => {
+  deleteHabit: async (habitId) => {
     const orgHabits = [...get().habits];
 
     set((store) => ({
@@ -77,7 +71,7 @@ const useHabitStore = create((set, get) => ({
     }));
 
     try {
-      await axios.delete(`${url}/${userId}/habits/${habitId}`);
+      await http.delete(`${endPoint}/${habitId}`);
       return "Habit successfullt deleted";
     } catch (err) {
       set((store) => ({ ...store, habits: orgHabits }));

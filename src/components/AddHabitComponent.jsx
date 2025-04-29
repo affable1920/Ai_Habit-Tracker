@@ -31,17 +31,24 @@ const AddHabitComponent = () => {
     setStep((step) => (step === firstStep ? step : step - 1));
 
   const handleNext = async (formData) => {
-    if (step < steps.length) setStep(step + 1);
-    else {
-      try {
-        const msg = await addHabit(formData, user?.uid);
-        toast.success(msg);
+    if (step < steps.length) {
+      setStep(step + 1);
+      return;
+    } else {
+      let { success, msg } = await addHabit(formData);
 
-        form.reset();
-        setStep(1);
-      } catch (err) {
-        toast.error(err);
+      if (typeof msg != "string")
+        msg = "Habit added successfully !" ? success : "Error adding Habit !";
+
+      if (!success) {
+        toast.error(msg);
+        return;
       }
+
+      toast.success(msg);
+      setStep(1);
+
+      form.reset();
     }
   };
 

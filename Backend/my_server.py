@@ -1,7 +1,7 @@
 from ast import parse
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import parse_qs, urlparse
-from habit_manager import HabitManager
+from Backend.services.habit_service import HabitManager
 import socketserver
 import json
 

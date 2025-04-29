@@ -1,20 +1,22 @@
 import { jwtDecode } from "jwt-decode";
-import http from "../services/httpService";
+import http, { setJwt } from "../services/httpService";
 
-const URL = "http://localhost:8000/auth";
+const endPoint = "/auth";
 const tokenKey = "token";
 
+setJwt(localStorage.getItem(tokenKey));
+
 const register = async (user) => {
-  const response = await http.post(URL + "/register", user);
+  const response = await http.post(endPoint + "/register", user);
   localStorage.setItem(tokenKey, response.headers["x-auth-token"]);
 };
 
-const logInWithJwt = (jwt) => localStorage.setItem(tokenKey, jwt);
-
 const login = async (userCred) => {
-  const { data: jwt } = await http.post(URL + "/login", userCred);
+  const { data: jwt } = await http.post(endPoint + "/login", userCred);
   localStorage.setItem(tokenKey, jwt);
 };
+
+const logout = () => localStorage.removeItem(tokenKey);
 
 const getCurrentUser = () => {
   try {
@@ -25,12 +27,9 @@ const getCurrentUser = () => {
   }
 };
 
-const logout = () => localStorage.removeItem(tokenKey);
-
 export default {
   register,
   login,
   logout,
   getCurrentUser,
-  logInWithJwt,
 };

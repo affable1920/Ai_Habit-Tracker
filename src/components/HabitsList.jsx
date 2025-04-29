@@ -1,19 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Habit from "./Habit";
 import { IoMdAdd } from "react-icons/io";
 import useHabitStore from "./habitStore";
-import AuthContext from "../context/AuthContext";
 import queryStore from "./../stores/queryStore";
 
 const HabitsList = () => {
   const habits = useHabitStore((store) => store.habits);
   const fetchHabits = useHabitStore((store) => store.fetchHabits);
-  const { user } = useContext(AuthContext);
+
   const { query } = queryStore();
 
   useEffect(() => {
-    if (user) fetchHabits(user?.uid, query);
-  }, [user?.uid, query]);
+    fetchHabits(query);
+  }, [query]);
 
   return (
     <>

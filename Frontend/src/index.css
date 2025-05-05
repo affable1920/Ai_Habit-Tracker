@@ -149,7 +149,7 @@ a {
     rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;
   }
   .overlay {
-    @apply fixed w-full h-full bg-black/5 left-0 inset-0 flex items-center justify-center z-[999];
+    @apply fixed w-full h-full bg-black/55 left-0 inset-0 flex items-center justify-center z-[999];
   }
 
   .link {
@@ -163,14 +163,15 @@ a {
 }
 
 .modal {
-  animation: scale 275ms ease-out;
+  animation: scale 300ms ease-out;
 }
+
 @keyframes scale {
   0% {
-    transform: scale(0);
+    transform: translateY(400px);
   }
   100% {
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 

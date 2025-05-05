@@ -1,17 +1,19 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { toast } from "sonner";
-import authService from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const Logout = () => {
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    authService.logout();
-    // navigate("/login", { replace: true });
-    window.location = "/login";
+    try {
+      logout();
 
-    toast.success("Logged out !");
+      navigate("/login");
+      toast.success("Logged out !");
+    } catch (ex) {}
   }, []);
 
   return null;

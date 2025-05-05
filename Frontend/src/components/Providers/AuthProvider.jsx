@@ -1,16 +1,57 @@
 import React, { useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
-import authService from "../../services/authService";
+import { jwtDecode } from "jwt-decode";
+import http from "../../services/httpService";
+
+const endPoint = "/auth";
+const tokenKey = "token";
+
+const getUser = (jwt) => jwtDecode(jwt);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    setUser(authService.getCurrentUser());
+    const jwt = localStorage.getItem(tokenKey);
+
+    if (jwt) setUser(getUser(jwt));
+    else setUser(null);
   }, []);
 
+  const register = async (user) => {
+    const response = await http.post(endPoint + "/register", user);
+
+    const jwt = response.headers["x-auth-token"];
+    localStorage.setItem(tokenKey, jwt);
+
+    setUser(getUser(jwt));
+  };
+
+  const login = async (userCred) => {
+    const { data: jwt } = await http.post(endPoint + "/login", userCred);
+    localStorage.setItem(tokenKey, jwt);
+
+    setUser(getUser(jwt));
+  };
+
+  const logout = () => {
+    localStorage.removeItem(tokenKey);
+    setUser(null);
+  };
+
+  const getProfile = async () => {
+    try {
+      const response = await http.get(endPoint + "/profile");
+      return response.data;
+    } catch (ex) {
+      return null;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, logout, register, getProfile }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

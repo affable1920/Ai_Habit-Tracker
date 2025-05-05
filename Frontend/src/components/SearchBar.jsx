@@ -2,16 +2,30 @@ import React, { useContext } from "react";
 import { IoIosClose } from "react-icons/io";
 import AuthContext from "../context/AuthContext";
 import queryStore from "../stores/queryStore";
+import useHabitStore from "./habitStore";
 
 const SearchBar = () => {
   const { user } = useContext(AuthContext);
   const { query, setSearchQuery } = queryStore();
 
+  const habits = useHabitStore((s) => s.habits);
+
+  const debounce = (func, delay) => {
+    let timer;
+
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  let setSearch_Query = debounce(setSearchQuery, 100);
+
   return (
     <div className="inline-flex items-center relative justify-between">
       <input
-        onChange={(e) => setSearchQuery(e.target.value)}
-        // disabled={!user || data?.habits?.length === 0}
+        onChange={(e) => setSearch_Query(e.target.value)}
+        disabled={!user || (!query.search_query && habits.length) === 0}
         placeholder={user ? "Search for a habit!" : "Login you MORON!"}
         className="search__bar"
         value={query.search_query}

@@ -9,8 +9,6 @@ const App = () => {
   const { user } = useContext(AuthContext);
   const { modal, dispatch } = useContext(ModalContext);
 
-  const [socket, setSocket] = useState(null);
-
   const shortcut = useCallback((e) => {
     const shortcut = e.ctrlKey
       ? "control" + e.key.toLowerCase()
@@ -33,7 +31,7 @@ const App = () => {
   }, []);
 
   const escapeModal = useCallback((e) => {
-    if (modal?.open && modal.name === "recommendationSystem") return;
+    if (modal.openModals.includes("recommendationSystem")) return;
 
     if (e.target === e.currentTarget)
       dispatch({
@@ -61,12 +59,13 @@ const App = () => {
     }
   }, [user, modal?.openModals]);
 
+  const [socket, setSocket] = useState(null);
+
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8000/ws");
 
     ws.onopen = () => {
-      console.log("WebSocket connection Established");
-      ws.send("Hello from client");
+      console.log("WebSocket connection Established !");
     };
 
     ws.onmessage = (ev) => {
@@ -74,7 +73,6 @@ const App = () => {
     };
 
     setSocket(ws);
-
     return () => ws.close();
   }, []);
 

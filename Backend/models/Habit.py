@@ -14,9 +14,10 @@ class Query(BaseModel):
 class FE_Data(BaseModel):
     title: str
     description: Optional[str] = None
-    category: Optional[str] = None
     priority: Optional[str] = None
     frequency: Optional[str] = None
+    interval: Optional[int | str] = None
+    interval_times: Optional[str] = None
 
 
 class Defaults(BaseModel):
@@ -33,6 +34,12 @@ class Defaults(BaseModel):
     progress: list = []
     reminder_times: list = []
     completion_log: list = []
+
+
+class EnableUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    completed: Optional[bool] = None
 
 
 class Habit(FE_Data, Defaults):

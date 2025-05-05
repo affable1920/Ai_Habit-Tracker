@@ -1,8 +1,8 @@
 import { jwtDecode } from "jwt-decode";
 import http, { setJwt } from "../services/httpService";
 
-const endPoint = "/auth";
-const tokenKey = "token";
+export const endPoint = "/auth";
+export const tokenKey = "token";
 
 setJwt(localStorage.getItem(tokenKey));
 
@@ -27,9 +27,12 @@ const getCurrentUser = () => {
   }
 };
 
+const getProfile = () => {};
+
 export default {
   register,
   login,
   logout,
   getCurrentUser,
+  getProfile,
 };

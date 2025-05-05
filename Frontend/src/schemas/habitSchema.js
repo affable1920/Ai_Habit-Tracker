@@ -8,9 +8,9 @@ export const step1 = Joi.object({
 export const step2 = Joi.object({
   category: Joi.string().optional().allow(""),
   priority: Joi.string().optional().allow(""),
-  frequency: Joi.string().optional().allow(""),
+  frequency: Joi.string().optional().allow("", null),
   target: Joi.number().min(1).optional().allow(null, ""),
 });
 
-const habitsSchema = step1.concat(step2);
-export default habitsSchema;
+const habitSchema = step1.concat(step2);
+export default habitSchema;

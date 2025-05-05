@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -7,10 +7,11 @@ import Joi from "joi";
 import Form from "./common/Form";
 import InputAdd from "./common/InputAdd";
 import loadingStore from "../stores/loadingStore";
-import authService from "../services/authService";
+import AuthContext from "../context/AuthContext";
 
 const RegisterForm = () => {
   const { setLoading } = loadingStore();
+  const { register: userRegister } = useContext(AuthContext);
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),
@@ -30,10 +31,10 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await authService.register(data);
+      await userRegister(data);
       reset();
 
-      window.location = "/";
+      navigate("/");
       toast.success("Account created successfully !");
     } catch (ex) {
       const { msg } = ex[0] || "Error creating account !";

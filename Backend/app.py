@@ -1,15 +1,27 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+
 from routes.auth import router as auth
 from routes.habits import router as habits
 
+from scripts.path_scripts import init_dirs
+from services.Habit_Services.batch_ops import BatchOps
+
+
 app = FastAPI()
+scheduler = AsyncIOScheduler()
+
 
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
-    "aihabittracker.vercel.app",
 ]
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -22,3 +34,54 @@ app.add_middleware(
 
 app.include_router(auth, prefix="/auth", tags=["Authentication"])
 app.include_router(habits, prefix="/habits", tags=["Habit_CRUD"])
+
+active_ws_conns = []
+
+
+async def broadcase_msgs(msg: str):
+    for conn in active_ws_conns:
+        try:
+            await conn.send_text(msg)
+
+        except (WebSocketDisconnect, Exception) as e:
+            print(e)
+
+
+@app.websocket("/ws")
+async def ws(websocket: WebSocket):
+    await websocket.accept()
+    active_ws_conns.append(websocket)
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+            for c in active_ws_conns:
+                await c.send_text(data)
+
+    except WebSocketDisconnect:
+        active_ws_conns.remove(websocket)
+
+    except Exception as e:
+        active_ws_conns.remove(websocket)
+        print(e)
+
+
+@app.on_event("startup")
+async def startup():
+    init_dirs()
+    ops = BatchOps()
+
+    scheduler.add_job(
+        ops.update_streak,
+        CronTrigger(hour=0, minute=6, second=59),
+        id="update_streak",
+        replace_existing=True,
+    )
+
+    ops.correct_habits()
+
+    scheduler.add_job(
+        ops.correct_habits, CronTrigger(hour=0, minute=0), id="correct_habits"
+    )
+
+    scheduler.start()

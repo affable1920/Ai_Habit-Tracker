@@ -16,10 +16,10 @@ const RecommendationSystem = () => {
   const firestore = "fs";
 
   const navigate = useNavigate();
-  const recRef = collection(firestore, "users", user?.uid, "recommendations");
+  // const recRef = collection(firestore, "users", user?.uid, "recommendations");
   const onThumbsUp = async (rec) => {
     try {
-      await setDoc(doc(recRef, rec.id), { ...rec, type: "liked" });
+      // await setDoc(doc(recRef, rec.id), { ...rec, type: "liked" });
     } catch (err) {
       alert(err);
     }
@@ -27,7 +27,7 @@ const RecommendationSystem = () => {
 
   const onThumbsDown = async (rec) => {
     try {
-      await setDoc(doc(recRef, rec.id), { ...rec, type: "disliked" });
+      // await setDoc(doc(recRef, rec.id), { ...rec, type: "disliked" });
     } catch (err) {
       alert(err);
     }

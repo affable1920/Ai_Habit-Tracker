@@ -43,7 +43,7 @@
 
   .form__control {
     @apply flex flex-col shadow-md p-8 rounded-md border-slate-200 border-2 
-    dark:bg-secondary__lighter dark:border-accent dark:shadow-black;
+    dark:bg-secondary__lighter dark:border-accent dark:shadow-black pb-12;
   }
 
   .search__bar {
@@ -70,8 +70,8 @@
 
   .nav__links {
     @apply order-4 w-full absolute top-full bg-white left-0 shadow-md z-10 px-5 lg:p-0 flex
-    flex-col py-4 transition-all duration-300 font-medium lg:translate-y-0 lg:opacity-100 lg:relative lg:-order-1 lg:flex-row lg:shadow-none lg:w-auto 
-  dark:bg-inherit lg:pointer-events-auto lg:text-[10px] gap-8 lg:gap-16 lg:mr-4 tracking-wider;
+    flex-col py-4 transition-all duration-300 font-medium  lg:relative lg:-order-1 lg:flex-row lg:shadow-none lg:w-auto 
+  dark:bg-inherit lg:pointer-events-auto lg:text-[10px] gap-10 lg:gap-16 lg:mr-4 tracking-wider;
   }
 }
 

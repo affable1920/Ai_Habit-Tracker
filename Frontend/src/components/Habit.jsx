@@ -1,61 +1,124 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import HabitButtons from "./HabitButtons";
 import { PiDotsNineThin } from "react-icons/pi";
 import getStreakTitle, { streakMap } from "../Utils/getHabitStreak";
-import { GoChevronRight } from "react-icons/go";
 import { ModalContext } from "./Providers/ModalProvider";
+import { GoChevronRight } from "react-icons/go";
+import { MdModeEdit } from "react-icons/md";
+import { TiTick } from "react-icons/ti";
+import useHabitStore from "./habitStore";
+import { toast } from "sonner";
+
+const deCapitalize = (str) => {
+  if (!str) return "";
+
+  if (typeof str != "string") return str;
+  return str.toLowerCase();
+};
 
 const Habit = ({ habit }) => {
-  const [loadMore, setLoadMore] = useState(false);
+  const [title, setTitle] = useState(habit.title || "");
+  const [description, setDescription] = useState(habit.description || "");
 
-  const streakType = getStreakTitle(habit.streak);
+  const [initialInfo] = useState({
+    title: deCapitalize(habit.title),
+    description: deCapitalize(habit.description),
+    completed: deCapitalize(habit.completed),
+  });
+
+  const [loadMore, setLoadMore] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
+
+  const streakType = getStreakTitle(habit?.streak);
   const { modal, dispatch } = useContext(ModalContext);
 
-  const onEdit = () => {
-    if (habit.completed) return;
+  const loadRef = useRef(null);
+  const editHabit = useHabitStore((s) => s.editHabit);
 
-    dispatch({
-      type: "OPEN_MODAL",
-      name: "editHabit",
-      props: {
-        habitId: habit.id,
-        fieldsToUpdate: {
-          completed: true,
-          status: "complete",
+  const onEdit = async (fields) => {
+    const allowEdit = fields.completed && !habit.completed;
+    if (allowEdit) {
+      dispatch({
+        type: "OPEN_MODAL",
+        name: "editHabit",
+        props: {
+          habitId: habit.id,
+          fieldsToUpdate: fields,
         },
-      },
-    });
+      });
+      return;
+    }
+
+    let { success, msg } = await editHabit(habit.id, fields);
+    if (typeof msg != "string")
+      msg = success ? "Habit successfully updated !" : "Error updating habit !";
+
+    if (!success) {
+      toast.error(msg);
+      return;
+    }
+
+    toast.success(msg);
+    if (isEditable) setIsEditable(false);
+  };
+
+  let tags = ["button", "a", "span", "i", "svg", "path", "input"];
+  const onLoad = (e) => {
+    if (
+      e.currentTarget === loadRef.current &&
+      !tags.includes(e.target.tagName.toLowerCase())
+    )
+      setLoadMore(!loadMore);
   };
 
   return (
-    <article className="habit" key={habit.id}>
+    <article ref={loadRef} onClick={onLoad} className="habit" key={habit.id}>
       <div>
-        <article
-          className={`text-[9px] font-medium tracking-widest text-black p-2 rounded-md shadow-sm justify-self-end 
+        <button
+          disabled={habit.completed}
+          onClick={() =>
+            onEdit({
+              completed: true,
+              status: "complete",
+            })
+          }
+          className={`flex items-center gap-2 font-bold disabled:opacity-70 text-[9px] tracking-widest text-black p-2 rounded-md shadow-sm justify-self-end 
             mb-3 relative ${
               habit.completed ? "bg-green-400" : "bg-yellow-400"
             }`}
         >
-          <button
-            disabled={habit.completed}
-            onClick={onEdit}
-            className="flex items-center gap-2"
-          >
-            {habit.completed ? "complete" : "incomplete"}
-            <GoChevronRight
-              className={`font-bold ${
-                modal?.modalName === "editHabit" &&
-                modal.props.id === habit.id &&
-                "animate__arrow__spin"
-              } `}
-            />
-          </button>
-        </article>
+          {habit.status}
+          <GoChevronRight />
+        </button>
       </div>
-      <header className="flex items-center justify-between gap-2 ">
+      <header className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-[8px]">
-          <PiDotsNineThin className="icon hover:cursor-grab" />
-          <h6 className="habit__title">{habit.title}</h6>
+          {isEditable ? (
+            <div className="flex items-center relative">
+              <input
+                className="input__add"
+                value={title}
+                name="title"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              {isEditable && !!title && (
+                <button
+                  disabled={!title || title.toLowerCase() === initialInfo.title}
+                >
+                  <TiTick
+                    onClick={() => onEdit({ title })}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 disabled:opacity-40 disabled:cursor-not-allowed"
+                  />
+                </button>
+              )}
+            </div>
+          ) : (
+            <h6 className="habit__title">{habit.title}</h6>
+          )}
+          <MdModeEdit
+            onClick={() => setIsEditable(!isEditable)}
+            className="cp opacity-50 text-xs"
+          />
         </div>
         <HabitButtons
           onDropdownClick={() => setLoadMore(!loadMore)}
@@ -67,12 +130,26 @@ const Habit = ({ habit }) => {
           loadMore ? "" : "hidden"
         }`}
       >
-        <p className="text-xs ml-5 md:ml-6 font-mono tracking-tight leading-4">
-          {habit?.description}
-        </p>
-        <span className="tracking-wide text-xs font-mono">
-          Streak:
-          <span className={`${streakMap[streakType]}`}>{habit.streak}</span>
+        {isEditable ? (
+          <div className="flex items-center relative">
+            <input
+              className="input__add"
+              value={description}
+              name="description"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            {isEditable && !!description && (
+              <TiTick
+                onClick={() => onEdit({ description })}
+                className="absolute right-1 top-1/2 -translate-y-1/2"
+              />
+            )}
+          </div>
+        ) : (
+          <p className="text-xs font-mono leading-4">{habit?.description}</p>
+        )}
+        <span className="tracking-wide text-xs italic text-gray-200 font-medium">
+          Streak: <span>{habit?.streak}</span>
         </span>
       </div>
     </article>

@@ -2,32 +2,23 @@ import React, { useContext } from "react";
 import { ModalContext } from "./Providers/ModalProvider";
 import { IoMdArrowDropdown } from "react-icons/io";
 import HabitOptions from "./HabitOptions";
-import { MdArchive, MdDelete } from "react-icons/md";
-import useUpdateHabit from "../hooks/useUpdateHabit";
-import { toast } from "sonner";
-import useMutateHabit from "../hooks/useMutateHabit";
+import { MdDelete } from "react-icons/md";
+import { RiCollapseHorizontalFill } from "react-icons/ri";
 
 const HabitButtons = ({ onDropdownClick, habit }) => {
   const { dispatch } = useContext(ModalContext);
 
-  const { mutate } = useUpdateHabit();
-  const { mutate: mutateDelete } = useMutateHabit();
-
-  const handleArchive = async () => {
-    try {
-      mutate({ habitId: habit.id, fieldsToUpdate: { archived: true } });
-
-      mutateDelete({ type: "delete", habitId: habit.id });
-    } catch (err) {
-      toast.error("Could not move to archived. Try later.");
-    }
+  const onExtra = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      name: "habitDetails",
+      props: { habit },
+    });
   };
 
   return (
     <div className="flex items-center gap-2 relative">
-      {habit.completed && (
-        <MdArchive className="icon__with__bg" onClick={handleArchive} />
-      )}
+      <RiCollapseHorizontalFill className="icon__with__bg" onClick={onExtra} />
       <IoMdArrowDropdown className="icon__with__bg" onClick={onDropdownClick} />
       <MdDelete
         onClick={() =>

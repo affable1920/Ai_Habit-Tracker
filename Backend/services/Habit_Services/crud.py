@@ -1,24 +1,19 @@
-import datetime
 import json
+import datetime
 from pathlib import Path
 from fastapi import HTTPException
 from pydantic import ValidationError
 
-import variables.dirs as d
-import models.Habit as model
+import logging
 from datetime import datetime
 
+import models.Habit as model
 
-class Habit_Service:
-    def __init__(self):
-        Habit_Service.init_dirs()
+logger = logging.getLogger("service_habit")
+logging.basicConfig(level=logging.INFO)
 
-    @classmethod
-    def init_dirs(cls):
-        d.data_dir.mkdir(parents=True, exist_ok=True)
-        d.logs_dir.mkdir(parents=True, exist_ok=True)
-        d.habits_dir.mkdir(parents=True, exist_ok=True)
 
+class CRUD:
     def read_all(self, filename):
         if not filename.exists() or not filename.read_text():
             with open(filename, "w") as f:
@@ -28,7 +23,8 @@ class Habit_Service:
 
         try:
             with open(filename, "r") as f:
-                return json.load(f)
+                habits = [h for h in json.load(f) if isinstance(h, dict)]
+                return habits
 
         except json.JSONDecodeError:
             raise HTTPException(500, "An internal server error occurred !")
@@ -100,10 +96,15 @@ class Habit_Service:
         to_upd.update(**fields)
 
         if fields.get("completed", False):
-            to_upd["streak"] += 1
-            to_upd["completion_log"] = datetime.now().date().ctime()
+            to_upd["completion_log"] = (
+                [*to_upd["completion_log"], datetime.now().date().ctime()]
+                if to_upd["completion_log"]
+                else [datetime.now().ctime()]
+            )
             to_upd["last_completed"] = datetime.now().isoformat()
+            to_upd["status"] = "completed"
 
+            # Send task for batch update of streak in a queue .
         habits = list(map(lambda x: to_upd if x["id"] == habit_id else x, habits))
 
         try:

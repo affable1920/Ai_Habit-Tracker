@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Joi from "joi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -9,10 +9,13 @@ import InputAdd from "./common/InputAdd";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import loadingStore from "../stores/loadingStore";
+import AuthContext from "../context/AuthContext";
 
 const LoginForm = () => {
   const { setLoading } = loadingStore();
   const navigate = useNavigate();
+
+  const { login } = useContext(AuthContext);
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),
@@ -26,13 +29,16 @@ const LoginForm = () => {
   } = useForm({ resolver: joiResolver(schema) });
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
-      await authService.login(data);
+      await login(data);
 
-      window.location = "/";
+      navigate("/");
       toast.success("Succesfully logged in !");
     } catch (ex) {
       toast.error(ex);
+    } finally {
+      setLoading(false);
     }
   };
 

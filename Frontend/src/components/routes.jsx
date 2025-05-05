@@ -1,16 +1,18 @@
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import RegisterForm from "./RegisterForm";
 import AddHabitComponent from "./AddHabitComponent";
 import Logout from "./Logout";
-import Chat from "./Chat";
 import Layout from "./Layout";
 import LoginForm from "./LoginForm";
 import ErrorPage from "./ErrorPage";
-import Archived from "./Archived";
 import HabitsTracker from "./HabitsTracker";
 import PrivateRoutes from "./PrivateRoutes";
-import Profile from "./Profile";
 import ProtectedRoute from "./ProtectedRoute";
+
+const Chat = React.lazy(() => import("./Chat"));
+const Profile = React.lazy(() => import("./Profile"));
+const Archived = React.lazy(() => import("./Archived"));
 
 const router = createBrowserRouter([
   {

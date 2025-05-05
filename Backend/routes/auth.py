@@ -1,5 +1,6 @@
+from typing import Annotated
 from fastapi.responses import JSONResponse
-from fastapi import HTTPException, APIRouter
+from fastapi import Depends, HTTPException, APIRouter
 
 import json
 from uuid import uuid4
@@ -62,3 +63,14 @@ async def login(user: user.LoginUser):
 
     user_data = {k: v for k, v in user_obj.items() if k != "password"}
     return auth_service.create_access_token(user_data)
+
+
+@router.get("/profile")
+async def get_profile(token: Annotated[str, Depends(auth_service.decode_access_token)]):
+    users = auth_service.get_users()
+    user_id = token["id"]
+
+    if not user_id in users:
+        raise HTTPException(404, "You are not a part of our community so FUCK OFF !")
+
+    return users[user_id]

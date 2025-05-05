@@ -1,15 +1,17 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
+from fastapi.requests import Request
 
-from services.habit_service import Habit_Service
+from services.Habit_Services.crud import CRUD
 from services.auth_service import decode_access_token
 
 import variables.paths as p
 import models.Habit as model
 
 router = APIRouter()
-CRUD = Habit_Service()
+CRUD = CRUD()
 
 
 @router.get("/")
@@ -39,12 +41,16 @@ def add(
 
 
 @router.put("/{habit_id}")
-def update(token: Annotated[str, Depends(decode_access_token)], habit_id: str):
+def update(
+    token: Annotated[str, Depends(decode_access_token)],
+    habit_id: str,
+    fields: model.EnableUpdate,
+):
     user_id = token["id"]
     user_habits = p.habits_dir / f"user{user_id}_habits.json"
 
     return CRUD.update_Habit(
-        user_habits, habit_id, {"completed": True, "status": "complete"}
+        user_habits, habit_id, fields.model_dump(exclude_unset=True, exclude_none=True)
     )
 
 

@@ -84,6 +84,7 @@ const useHabitStore = create((set, get) => ({
 
     try {
       await http.delete(`${endPoint}/${habitId}`);
+      await get().fetchHabits();
 
       return { success: true, msg: "Habit successfully deleted" };
     } catch (ex) {

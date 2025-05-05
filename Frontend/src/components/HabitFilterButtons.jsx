@@ -8,13 +8,14 @@ import { MdArchive } from "react-icons/md";
 import AuthContext from "../context/AuthContext";
 import tootlipStore from "../Tooltip/store";
 import queryStore from "../stores/queryStore";
+import useHabitStore from "./habitStore";
 
 const HabitFilterButtons = () => {
-  const data = [];
   const { user } = useContext(AuthContext);
+  const habits = useHabitStore((s) => s.habits);
 
   const { show, hide } = tootlipStore();
-  const { reset } = queryStore();
+  const reset = queryStore((s) => s.reset);
 
   return (
     <div className="flex items-center justify-between justify-self-start">
@@ -61,7 +62,7 @@ const HabitFilterButtons = () => {
             className="cp font-semibold border-slate-300 p-[4px] bg-secondary__lighter text-white
           rounded-md ml-2 mr-1 text-xs font-mono bg-accent__primary block dark:bg-slate-300 dark:text-black"
           >
-            {data?.habits?.length}
+            {habits?.length}
           </span>
         </div>
       </div>

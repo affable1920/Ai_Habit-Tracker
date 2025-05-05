@@ -3,7 +3,7 @@ import InputError from "./InputError";
 
 const Select = ({ name, label, register, errors, optional, options }) => {
   return (
-    <div className="flex flex-col gap-2 mb-5">
+    <div className="flex flex-col gap-2">
       <label className="label" htmlFor={name}>
         {label} {!optional && "*"}
       </label>
@@ -13,7 +13,7 @@ const Select = ({ name, label, register, errors, optional, options }) => {
         errors={errors}
         {...register(name)}
       >
-        <option value="" defaultChecked></option>
+        <option value={""} defaultChecked></option>
         {options.map((option) => (
           <option className="text-xs" key={option} value={option}>
             {option}

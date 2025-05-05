@@ -8,13 +8,14 @@ const NavSearch = () => {
   const { user } = useContext(AuthContext);
 
   const generateModal = () => {
-    if (!user) dispatch({ type: "OPEN_MODAL", modalToShow: "loginModal" });
+    if (!user) dispatch({ type: "OPEN_MODAL", name: "loginModal" });
     else
       dispatch({
         type: "OPEN_MODAL",
-        modalToShow: "searchBox",
+        name: "searchBox",
       });
   };
+
   return (
     <div className="flex justify-center items-center relative text-xs">
       <input

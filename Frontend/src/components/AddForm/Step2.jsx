@@ -12,14 +12,6 @@ const Step2 = () => {
   return (
     <>
       <Select
-        name="category"
-        label="Category"
-        register={register}
-        errors={errors}
-        options={["Fitness", "Productivity", "Health", "Consistency"]}
-        optional
-      />
-      <Select
         name="priority"
         label="Priority"
         register={register}
@@ -35,7 +27,7 @@ const Step2 = () => {
         options={["Daily", "Weekly", "Monthly", "Custom"]}
         optional
       />
-      {/* <InputAdd
+      <InputAdd
         name="target"
         label="Target"
         register={register}
@@ -43,7 +35,7 @@ const Step2 = () => {
         placeholder="Days to track this habit !"
         type="number"
         optional
-      /> */}
+      />
     </>
   );
 };

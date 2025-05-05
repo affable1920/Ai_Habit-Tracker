@@ -6,15 +6,27 @@ import { ModalContext } from "./Providers/ModalProvider";
 import RecommendationSystem from "./RecommendationSystem";
 import Delete from "./Delete";
 import Overlay from "./Overlay";
-import Reminder from "./Reminder";
-import SearchBar from "./SearchBar";
 import LoginModal from "./LoginModal";
 import useHabitStore from "./habitStore";
 import AddHabitComponent from "./AddHabitComponent";
 import { toast } from "sonner";
+import Reminder from "./Reminder";
+import MainSearch from "./MainSearch";
+import Habitdetails from "./Habitdetails";
 
 const Modal = () => {
   const { modal, dispatch } = useContext(ModalContext);
+
+  const closeModal = () => {
+    dispatch({
+      type: "CLOSE_MODAL",
+      name: modal.openModals[modal.openModals.length - 1],
+      props:
+        modal.openModals[modal.openModals.length - 1] === "reminderModal"
+          ? { modalName: "reminderModal", action: "CLOSE" }
+          : {},
+    });
+  };
 
   const editHabit = useHabitStore((s) => s.editHabit);
   if (!modal.openModals || modal?.openModals?.length === 0) return null;
@@ -35,7 +47,8 @@ const Modal = () => {
   };
 
   const modalMap = {
-    searchBar: <SearchBar />,
+    habitDetails: <Habitdetails />,
+    searchBox: <MainSearch />,
     recommendationSystem: <RecommendationSystem />,
 
     deleteModal: <Delete />,
@@ -48,8 +61,8 @@ const Modal = () => {
       </button>
     ),
 
-    reminderModal: <Reminder />,
     loginModal: <LoginModal />,
+    reminderModal: <Reminder />,
 
     addModal: <AddHabitComponent />,
     errorModal: (
@@ -77,12 +90,7 @@ const Modal = () => {
         <div className="relative modal" style={{ zIndex: index + 1000 }}>
           <RxCross2
             className="absolute cp icon__with__bg justify-self-end right-[6px] top-[6px]"
-            onClick={() =>
-              dispatch({
-                type: "CLOSE_ALL",
-                name: modal.openModals[modal.openModals.length - 1],
-              })
-            }
+            onClick={closeModal}
           />
           {modalMap[mod]}
         </div>

@@ -12,13 +12,14 @@ const ModalProvider = ({ children }) => {
             ? [...state.openModals, action.name]
             : [action.name],
 
-          props: action.props || {},
+          props: { ...action.props } || {},
         };
 
       case "CLOSE_MODAL":
         return {
           ...state,
           openModals: state.openModals?.filter((m) => m != action.name),
+          props: { ...action.props } || {},
         };
 
       case "CLOSE_ALL":

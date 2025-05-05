@@ -1,41 +1,63 @@
-import React from "react";
+import React, { useContext } from "react";
 import InputAdd from "./common/InputAdd";
 import { useForm } from "react-hook-form";
+import Select from "./common/Select";
+import Joi from "joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { ModalContext } from "./Providers/ModalProvider";
+import useExtraStore from "./../stores/extraStore";
 
 const Reminder = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { modal, dispatch } = useContext(ModalContext);
 
-  const onSubmit = (data) => console.log(data);
+  const extra = useExtraStore((s) => s.extra);
+  const setValues = useExtraStore((s) => s.setValues);
+
+  const schema = Joi.object({
+    interval: Joi.number().optional().min(1).default(0),
+    interval_time: Joi.string().optional(),
+  });
+
+  const form = useForm({ resolver: joiResolver(schema) });
+  const {
+    formState: { errors },
+  } = form;
+
+  const onSubmit = (data) => {
+    setValues(data);
+    dispatch({
+      type: "CLOSE_MODAL",
+      name: "reminderModal",
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-2">
-        <div className=" flex flex-col items-center px-2">
+    <>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <h4 className="italic text-md tracking-wider text-center bg-accent p-2 rounded-md shadow-lg">
+          Repeat every ?
+        </h4>
+        <div className="flex flex-col gap-2">
           <InputAdd
-            name={"reminderTimes"}
-            label="Just Say When"
-            register={register}
+            name={"interval"}
+            label="Interval"
+            register={form.register}
             errors={errors}
-            optional
-            type="datetime-local"
+            type="number"
           />
-          <InputAdd
-            name="recurring"
-            label="Recurring ?"
-            register={register}
+          <Select
+            name="interval_time"
+            label="Interval_Time"
+            register={form.register}
             errors={errors}
-            optional
-            type="checkbox"
+            options={["Days", "Weeks", "Months"]}
           />
         </div>
-        <div className="self-center">
-          <button className="btn btn__accent w-20">Set</button>
+        <div className="self-center mt-5">
+          <button className="btn btn__accent w-full">Set</button>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 

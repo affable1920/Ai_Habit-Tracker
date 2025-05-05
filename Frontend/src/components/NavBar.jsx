@@ -36,7 +36,7 @@ const NavBar = () => {
   const profileFeatures = [
     {
       icon: <CgProfile className={common} />,
-      label: name || "profile",
+      label: "profile",
     },
     { icon: <MdSettings className={common} />, label: "settings" },
     {
@@ -63,14 +63,14 @@ const NavBar = () => {
               showLinks
                 ? "opacity-100 pointer-events-auto translate-x-0"
                 : "opacity-0 pointer-events-none -translate-y-full"
-            } `}
+            } lg:opacity-100 lg:pointer-events-auto lg:translate-y-0`}
           >
             {navLinks.map((link, index) => (
               <li className="rounded-sm" key={link.page}>
                 <Link
                   to={link.path}
                   className="flex items-center justify-between md:gap-3 p-2 rounded-sm lg:rounded-md dark:text-zinc-300 
-                hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-800 transition-colors duration-200"
+                hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 transition-colors duration-200"
                 >
                   {link.page}
                   {(index === 2 || index === 3) && (
@@ -102,12 +102,16 @@ const NavBar = () => {
                   <div
                     className={`nav__features ${
                       showFeatures
-                        ? "opacity-100 pointer-events-auto translate-x-0"
-                        : "translate-x-20 pointer-events-none opacity-0 fixed"
+                        ? "opacity-100 pointer-events-auto translate-y-0"
+                        : "-translate-y-20 pointer-events-none opacity-0 fixed"
                     }`}
                   >
                     {profileFeatures.map((feature) => (
-                      <Link to={`/${feature.label}`} className={`nav__feature`}>
+                      <Link
+                        onClick={() => showFeatures && setShowFeatures(false)}
+                        to={`/${feature.label}`}
+                        className={`nav__feature`}
+                      >
                         <span>
                           {feature?.label[0].toUpperCase() +
                             feature?.label.slice(1)}

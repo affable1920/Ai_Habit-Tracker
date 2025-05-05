@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
-import ThemeToggler from "./ThemeToggler";
 import { FaUser } from "react-icons/fa";
-import { LuLogOut } from "react-icons/lu";
 import { GiSolarSystem } from "react-icons/gi";
 
 const NavFeatures = ({ onModalClick }) => {
@@ -17,7 +15,7 @@ const NavFeatures = ({ onModalClick }) => {
       >
         <GiSolarSystem className="cp icon__with__bg" onClick={onModalClick} />
         {user && (
-          <Link to="/">
+          <Link to="/profile">
             <FaUser className="icon__with__bg" />
           </Link>
         )}

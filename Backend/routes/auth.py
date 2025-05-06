@@ -47,6 +47,7 @@ async def register(new_user: user.CreateUser):
 @router.post("/login")
 async def login(user: user.LoginUser):
     users = auth_service.get_users()
+    print(users)
 
     emails = set(map(lambda x: x["email"], users.values())) if users else set()
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 
-const url = "https://project-one-dqrw.onrender.com";
+const url = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export const axiosInstance = axios.create({
   baseURL: url,

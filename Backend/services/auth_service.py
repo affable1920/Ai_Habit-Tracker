@@ -19,7 +19,7 @@ auth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_users():
-    if not USERS_FILE.exists() or not USERS_FILE.read_text():
+    if not USERS_FILE.exists() or USERS_FILE.stat().st_size == 0:
         with open(USERS_FILE, "w") as f:
             json.dump({}, f)
 

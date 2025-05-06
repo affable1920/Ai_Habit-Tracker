@@ -8,22 +8,45 @@ import uvicorn
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from routes.auth import router as auth
 from routes.habits import router as habits
+from routes.auth import router as auth
 
 from scripts.path_scripts import init_dirs
 from services.Habit_Services.batch_ops import BatchOps
 import logging
 
 
-app = FastAPI()
+logging.basicConfig(
+    level=logging.DEBUG,
+    handlers=[logging.StreamHandler()],
+)
+
+
+logger = logging.getLogger(__name__)
 scheduler = AsyncIOScheduler()
 
-logger = logging.getLogger("app")
-logging.basicConfig(
-    level=logging.INFO,
-    handlers=[logging.StreamHandler(), logging.FileHandler("app_logs")],
-)
+
+@asynccontextmanager
+async def root(app: FastAPI):
+    print("App is starting up !")
+    init_dirs()
+    batch_ops = BatchOps()
+
+    scheduler.add_job(
+        batch_ops.update_streak,
+        CronTrigger(hours=0, minutes=0, seconds=0),
+        id="streak_update",
+        replace_existing=True,
+    )
+
+    scheduler.start()
+
+    yield
+    print("App is shutting down !")
+
+
+app = FastAPI(lifespan=root)
+
 
 origins = [
     "http://localhost:5173",
@@ -79,32 +102,6 @@ async def ws(websocket: WebSocket):
 @app.get("/healthz")
 def health_check():
     return {"message": "The app is working fine ."}
-
-
-@asynccontextmanager
-async def startup():
-    pass
-
-
-@app.on_event("startup")
-async def startup():
-    init_dirs()
-    ops = BatchOps()
-
-    scheduler.add_job(
-        ops.update_streak,
-        CronTrigger(hour=0, minute=0, second=0),
-        id="update_streak",
-        replace_existing=True,
-    )
-
-    ops.correct_habits()
-
-    scheduler.add_job(
-        ops.correct_habits, CronTrigger(hour=0, minute=0), id="correct_habits"
-    )
-
-    scheduler.start()
 
 
 if __name__ == "__main__":

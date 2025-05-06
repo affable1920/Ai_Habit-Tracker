@@ -7,7 +7,7 @@ from fastapi.requests import Request
 from services.Habit_Services.crud import CRUD
 from services.auth_service import decode_access_token
 
-import variables.paths as p
+import variables.dirs as dir
 import models.Habit as model
 
 router = APIRouter()
@@ -21,7 +21,7 @@ def get(
 ):
     user_id = token["id"]
 
-    user_habits = p.habits_dir / f"user{user_id}_habits.json"
+    user_habits = dir.habits_dir / f"user{user_id}_habits.json"
     habits = CRUD.read(user_habits, query)
 
     return JSONResponse(habits)
@@ -34,7 +34,7 @@ def add(
 ):
     user_id = token["id"]
 
-    user_habits = p.habits_dir / f"user{user_id}_habits.json"
+    user_habits = dir.habits_dir / f"user{user_id}_habits.json"
     server_habit = CRUD.add_habit(user_habits, habit)
 
     return JSONResponse(server_habit, 201)
@@ -47,7 +47,7 @@ def update(
     fields: model.EnableUpdate,
 ):
     user_id = token["id"]
-    user_habits = p.habits_dir / f"user{user_id}_habits.json"
+    user_habits = dir.habits_dir / f"user{user_id}_habits.json"
 
     return CRUD.update_Habit(
         user_habits, habit_id, fields.model_dump(exclude_unset=True, exclude_none=True)
@@ -57,7 +57,7 @@ def update(
 @router.delete("/{habit_id}")
 def delete(token: Annotated[str, Depends(decode_access_token)], habit_id: str):
     user_id = token["id"]
-    user_habits = p.habits_dir / f"user{user_id}_habits.json"
+    user_habits = dir.habits_dir / f"user{user_id}_habits.json"
 
     CRUD.delete_habit(user_habits, habit_id)
     return JSONResponse("Habit deleted !")

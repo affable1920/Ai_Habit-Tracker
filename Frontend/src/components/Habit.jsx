@@ -1,13 +1,11 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef } from "react";
 import HabitButtons from "./HabitButtons";
-import { PiDotsNineThin } from "react-icons/pi";
-import getStreakTitle, { streakMap } from "../Utils/getHabitStreak";
 import { ModalContext } from "./Providers/ModalProvider";
 import { GoChevronRight } from "react-icons/go";
 import { MdModeEdit } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
-import useHabitStore from "./habitStore";
 import { toast } from "sonner";
+import useHabitStore from "./habitStore";
 
 const deCapitalize = (str) => {
   if (!str) return "";
@@ -29,7 +27,6 @@ const Habit = ({ habit }) => {
   const [loadMore, setLoadMore] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
-  const streakType = getStreakTitle(habit?.streak);
   const { modal, dispatch } = useContext(ModalContext);
 
   const loadRef = useRef(null);

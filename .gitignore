@@ -1,5 +1,5 @@
+
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,12 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Build/Dependency Folders
 node_modules
 dist
 dist-ssr
 *.local
+build/
+out/
 
-# Editor directories and files
+# Editor/IDE Files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,8 +25,37 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.swp
+Thumbs.db
 
+# Python-Specific
+*.pyc
+__pycache__/
+venv/
+.venv/
+Pipfile.lock
+# poetry.lock  # Uncomment if you don't need it in the repo
+
+# Testing and Coverage
+.pytest_cache/
+coverage/
+.coverage
+*.cover
+test-results/
+
+# Frontend Caches
+.npm/
+.yarn/
+.pnpm-store/
+*.tsbuildinfo
+
+# Data Storage
+data/
+
+# Environment and Sensitive Files
 .env
-.csv
+*.bak
+*.local
 
-data/*.json
+# Render-Specific
+.render/

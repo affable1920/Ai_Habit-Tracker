@@ -1,15 +1,29 @@
 import axios from "axios";
+import { toast } from "sonner";
+
+const url = "https://project-one-dqrw.onrender.com";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: url,
 });
 
 axiosInstance.interceptors.response.use(null, (ex) => {
+  console.log(ex);
+
   const expectedErr =
     ex.response && ex.response.status >= 400 && ex.response.status <= 500;
 
-  if (!expectedErr) {
-    return Promise.reject("An unexpected error occurred !");
+  if (!expectedErr) return Promise.reject("An unexpected error occurred !");
+
+  const { response } = ex;
+  if (
+    response.headers["session_exp"] &&
+    response.headers["session_exp"] == "true"
+  ) {
+    setJwt(null);
+    toast.info("Session expired !", {
+      description: "You have been logged out. Please log in again !",
+    });
   }
 
   return Promise.reject(ex.response.data.detail);

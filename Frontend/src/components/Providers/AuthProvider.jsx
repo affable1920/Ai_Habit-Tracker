@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import http from "../../services/httpService";
+import http, { setJwt } from "../../services/httpService";
 
 const endPoint = "/auth";
 const tokenKey = "token";
@@ -20,23 +20,27 @@ const AuthProvider = ({ children }) => {
 
   const register = async (user) => {
     const response = await http.post(endPoint + "/register", user);
-
     const jwt = response.headers["x-auth-token"];
-    localStorage.setItem(tokenKey, jwt);
 
+    setJwt(jwt);
     setUser(getUser(jwt));
+
+    localStorage.setItem(tokenKey, jwt);
   };
 
   const login = async (userCred) => {
     const { data: jwt } = await http.post(endPoint + "/login", userCred);
     localStorage.setItem(tokenKey, jwt);
 
+    setJwt(jwt);
     setUser(getUser(jwt));
   };
 
   const logout = () => {
-    localStorage.removeItem(tokenKey);
+    setJwt(null);
+
     setUser(null);
+    localStorage.removeItem(tokenKey);
   };
 
   const getProfile = async () => {

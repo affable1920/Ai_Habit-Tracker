@@ -1,6 +1,7 @@
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from contextlib import asynccontextmanager
 
 
 import uvicorn
@@ -12,15 +13,22 @@ from routes.habits import router as habits
 
 from scripts.path_scripts import init_dirs
 from services.Habit_Services.batch_ops import BatchOps
+import logging
 
 
 app = FastAPI()
 scheduler = AsyncIOScheduler()
 
+logger = logging.getLogger("app")
+logging.basicConfig(
+    level=logging.INFO,
+    handlers=[logging.StreamHandler(), logging.FileHandler("app_logs")],
+)
 
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
+    "ai-habit-tracker-one.vercel.app",
 ]
 
 
@@ -71,6 +79,11 @@ async def ws(websocket: WebSocket):
 @app.get("/healthz")
 def health_check():
     return {"message": "The app is working fine ."}
+
+
+@asynccontextmanager
+async def startup():
+    pass
 
 
 @app.on_event("startup")

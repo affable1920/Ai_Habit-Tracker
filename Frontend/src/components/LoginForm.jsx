@@ -18,7 +18,10 @@ const LoginForm = () => {
   const { login } = useContext(AuthContext);
 
   const schema = Joi.object({
-    email: Joi.string().required().label("Email"),
+    email: Joi.string()
+      .email({ tlds: ["gmail.com", "domain.com", "*"] })
+      .required()
+      .label("Email"),
     password: Joi.string().required().label("Password"),
   });
 
@@ -36,7 +39,8 @@ const LoginForm = () => {
       navigate("/");
       toast.success("Succesfully logged in !");
     } catch (ex) {
-      toast.error(ex);
+      if (typeof ex != "string") ex = "Unable to login !";
+      toast.error(ex, { description: "Please try again ." });
     } finally {
       setLoading(false);
     }

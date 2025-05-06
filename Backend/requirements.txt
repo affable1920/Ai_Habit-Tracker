@@ -9,7 +9,6 @@ uvicorn==0.34.2
 email-validator
 annotated-types==0.7.0
 certifi==2025.4.26
-charset==3.4.2
 dnspython==2.7.0
 docopt==0.6.2
 email_validator==2.2.0

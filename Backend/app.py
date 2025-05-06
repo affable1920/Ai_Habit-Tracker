@@ -1,7 +1,9 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import os
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 
+import uvicorn
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
@@ -55,8 +57,8 @@ async def ws(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            for c in active_ws_conns:
-                await c.send_text(data)
+            for conn in active_ws_conns:
+                await conn.send_text(data)
 
     except WebSocketDisconnect:
         active_ws_conns.remove(websocket)
@@ -66,6 +68,11 @@ async def ws(websocket: WebSocket):
         print(e)
 
 
+@app.get("/healthz")
+def health_check():
+    return {"message": "The app is working fine ."}
+
+
 @app.on_event("startup")
 async def startup():
     init_dirs()
@@ -73,7 +80,7 @@ async def startup():
 
     scheduler.add_job(
         ops.update_streak,
-        CronTrigger(hour=0, minute=6, second=59),
+        CronTrigger(hour=0, minute=0, second=0),
         id="update_streak",
         replace_existing=True,
     )
@@ -85,3 +92,8 @@ async def startup():
     )
 
     scheduler.start()
+
+
+if __name__ == "__main__":
+    PORT = int(os.getenv("PORT", 8000))
+    uvicorn.run(app="app:app", host="0.0.0.0", port=PORT)

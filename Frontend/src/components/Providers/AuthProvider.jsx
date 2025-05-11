@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import http, { setJwt } from "../../services/httpService";
+import eventEmitter from "../../Utils/utils";
+import useHabitStore from "../habitStore";
 
 const endPoint = "/auth";
 const tokenKey = "token";
@@ -10,6 +12,7 @@ const getUser = (jwt) => jwtDecode(jwt);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const fetchHabits = useHabitStore((s) => s.fetchHabits);
 
   useEffect(() => {
     const jwt = localStorage.getItem(tokenKey);
@@ -17,6 +20,17 @@ const AuthProvider = ({ children }) => {
     if (jwt) setUser(getUser(jwt));
     else setUser(null);
   }, []);
+
+  useEffect(() => {
+    const session_exp = "session_exp";
+    eventEmitter.on(session_exp, () => {
+      console.log("Session expired, logging out...");
+      logout();
+    });
+
+    return () =>
+      eventEmitter.events[session_exp].filter((ev) => ev != session_exp);
+  }, [eventEmitter.events]);
 
   const register = async (user) => {
     const response = await http.post(endPoint + "/register", user);
@@ -36,12 +50,14 @@ const AuthProvider = ({ children }) => {
     setUser(getUser(jwt));
   };
 
-  const logout = () => {
+  function logout() {
     setJwt(null);
 
     setUser(null);
     localStorage.removeItem(tokenKey);
-  };
+
+    fetchHabits();
+  }
 
   const getProfile = async () => {
     try {

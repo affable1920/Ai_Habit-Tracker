@@ -68,8 +68,8 @@ const AddHabitComponent = () => {
         return;
       }
 
-      form.reset();
-      setStep(1);
+      // form.reset();
+      // setStep(1);
       toast.success(msg);
     }
   };

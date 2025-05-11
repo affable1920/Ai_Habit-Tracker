@@ -12,6 +12,14 @@ const Step2 = () => {
   return (
     <>
       <Select
+        name="category"
+        label="Category"
+        register={register}
+        errors={errors}
+        options={["Productivity", "Fitness", "Work", "Study"]}
+        optional
+      />
+      <Select
         name="priority"
         label="Priority"
         register={register}

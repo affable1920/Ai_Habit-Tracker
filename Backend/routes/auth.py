@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 
 
 from models import user
-from variables.paths import USERS_FILE
+from variables.paths import users_file
 import services.auth_service as auth_service
 
 router = APIRouter()
@@ -32,7 +32,7 @@ async def register(new_user: user.CreateUser):
     users[user["id"]] = user
 
     try:
-        with open(USERS_FILE, "w") as f:
+        with open(users_file, "w") as f:
             json.dump(users, f)
 
             user_data = {k: v for k, v in user.items() if k != "password"}
@@ -47,14 +47,10 @@ async def register(new_user: user.CreateUser):
 @router.post("/login")
 async def login(user: user.LoginUser):
     users = auth_service.get_users()
-    print(users)
-
     emails = set(map(lambda x: x["email"], users.values())) if users else set()
 
     if not user.email in emails:
-        raise HTTPException(
-            400, "User not found. Wrong Email_iD. Please register first !"
-        )
+        raise HTTPException(400, "User not found. Please register first !")
 
     user_obj = next((x for x in users.values() if x["email"] == user.email), None)
 

@@ -9,23 +9,9 @@ const HabitOptions = ({ habit }) => {
   const navigate = useNavigate();
   const options = [
     {
-      label: "edit",
-      component: (
-        <CiEdit
-          onClick={() =>
-            navigate(`/add/${habit.id}`, {
-              state: { type: "update", habit },
-            })
-          }
-          className="text-xs h-3 w-3"
-        />
-      ),
-    },
-    {
       label: "timer",
       component: <RiTimerFlashFill />,
     },
-    { label: "archive", component: <IoMdArchive className="h-3 w-3" /> },
   ];
 
   const [showOptions, setShowOptions] = useState(false);

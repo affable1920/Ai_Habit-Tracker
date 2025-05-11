@@ -1,29 +1,21 @@
-from pathlib import Path
-import variables.dirs as d
+import variables.paths as paths
 
 
-def get_root():
-    current_dir = Path(__file__).parent
-
-    while current_dir.name != "asana" and current_dir != current_dir.parent:
-        root = current_dir.parent
-
-    if root == current_dir.parent:
-        raise RuntimeError("The root directory could not be found .")
-
-    return root
+def all_initialised():
+    return all(
+        (dir.exists() for dir in paths.get_dirs())
+        and (file.exists() for file in paths.get_files())
+    )
 
 
-def get_dirs():
-    return [d.data_dir, d.backup_dir, d.habits_dir, d.logs_dir]
+def init_dirs_and_paths():
+    if all_initialised():
+        return
 
-
-def init_dirs():
-    root = get_root()
-    dirs_to_init = get_dirs()
-
-    dirs_to_init = [root / dir for dir in dirs_to_init]
-
-    for dir in dirs_to_init:
+    for dir in paths.get_dirs():
         if not dir.exists():
             dir.mkdir(parents=True, exist_ok=True)
+
+    for file in paths.get_files():
+        file.parent.mkdir(exist_ok=True, parents=True)
+        file.touch(exist_ok=True)

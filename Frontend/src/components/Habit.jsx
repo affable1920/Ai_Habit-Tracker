@@ -34,6 +34,7 @@ const Habit = ({ habit }) => {
 
   const onEdit = async (fields) => {
     const allowEdit = fields.completed && !habit.completed;
+
     if (allowEdit) {
       dispatch({
         type: "OPEN_MODAL",
@@ -76,7 +77,6 @@ const Habit = ({ habit }) => {
           onClick={() =>
             onEdit({
               completed: true,
-              status: "complete",
             })
           }
           className={`flex items-center gap-2 font-bold disabled:opacity-70 text-[9px] tracking-widest text-black p-2 rounded-md shadow-sm justify-self-end 

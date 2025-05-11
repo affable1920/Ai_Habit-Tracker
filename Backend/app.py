@@ -1,19 +1,18 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from contextlib import asynccontextmanager
-
 
 import uvicorn
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from routes.habits import router as habits
-from routes.auth import router as auth
+from routes import auth
+from routes import habits
 
-from scripts.path_scripts import init_dirs
-from services.Habit_Services.batch_ops import BatchOps
 import logging
+from scripts.path_scripts import init_dirs_and_paths
+from services.Habit_Services.batch_ops import BatchOps
 
 
 logging.basicConfig(
@@ -29,12 +28,13 @@ scheduler = AsyncIOScheduler()
 @asynccontextmanager
 async def root(app: FastAPI):
     print("App is starting up !")
-    init_dirs()
+    init_dirs_and_paths()
+
     batch_ops = BatchOps()
 
     scheduler.add_job(
         batch_ops.update_streak,
-        CronTrigger(hours=0, minutes=0, seconds=0),
+        CronTrigger(hour=0, minute=0),
         id="streak_update",
         replace_existing=True,
     )
@@ -65,8 +65,8 @@ app.add_middleware(
 )
 
 
-app.include_router(auth, prefix="/auth", tags=["Authentication"])
-app.include_router(habits, prefix="/habits", tags=["Habit_CRUD"])
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app.include_router(habits.router, prefix="/habits", tags=["Habit_CRUD"])
 
 active_ws_conns = []
 

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import jwt
 import json
 
-from variables.paths import USERS_FILE
+from variables.paths import users_file
 import os
 from dotenv import load_dotenv
 
@@ -19,14 +19,14 @@ auth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_users():
-    if not USERS_FILE.exists() or USERS_FILE.stat().st_size == 0:
-        with open(USERS_FILE, "w") as f:
+    if not users_file.exists() or users_file.stat().st_size == 0:
+        with open(users_file, "w") as f:
             json.dump({}, f)
 
         return {}
 
     try:
-        with open(USERS_FILE, "r") as f:
+        with open(users_file, "r") as f:
             return json.load(f)
 
     except json.JSONDecodeError:
@@ -35,7 +35,7 @@ def get_users():
 
 def create_access_token(user_data):
     iat = datetime.now().timestamp()
-    exp = (datetime.now() + timedelta(hours=10)).timestamp()
+    exp = (datetime.now() + timedelta(hours=24)).timestamp()
 
     payload = {**user_data, "iat": iat, "exp": exp}
     return jwt.encode(payload, S_KEY, ALG)
@@ -50,5 +50,6 @@ def decode_access_token(token: Annotated[str, Depends(auth_scheme)]):
             403, "Session expired. Please log in again !", {"SESSION_EXP": "true"}
         )
 
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
+        print(e)
         raise HTTPException(403, "Unauthorized. Invalid token recieved !")

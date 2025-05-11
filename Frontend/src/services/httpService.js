@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "sonner";
+import eventEmitter from "../Utils/utils";
 
 const url = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -8,8 +8,6 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(null, (ex) => {
-  console.log(ex);
-
   const expectedErr =
     ex.response && ex.response.status >= 400 && ex.response.status <= 500;
 
@@ -20,10 +18,7 @@ axiosInstance.interceptors.response.use(null, (ex) => {
     response.headers["session_exp"] &&
     response.headers["session_exp"] == "true"
   ) {
-    setJwt(null);
-    toast.info("Session expired !", {
-      description: "You have been logged out. Please log in again !",
-    });
+    eventEmitter.emit("session_exp");
   }
 
   return Promise.reject(ex.response.data.detail);

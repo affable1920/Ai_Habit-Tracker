@@ -33,14 +33,6 @@ async def root(app: FastAPI):
     print("App is starting up !")
     init_dirs_and_paths()
 
-    print(Path(__file__))
-    print(__name__)
-
-    yield
-    return
-
-    print(os.path.dirname(__file__))
-
     batch_ops = BatchOps()
 
     scheduler.add_job(

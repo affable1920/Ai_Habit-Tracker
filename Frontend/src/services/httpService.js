@@ -7,6 +7,8 @@ export const axiosInstance = axios.create({
   baseURL: url,
 });
 
+console.log("API_URL in use ", url);
+
 axiosInstance.interceptors.response.use(null, (ex) => {
   const expectedErr =
     ex.response && ex.response.status >= 400 && ex.response.status <= 500;

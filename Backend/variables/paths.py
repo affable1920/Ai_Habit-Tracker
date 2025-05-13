@@ -4,7 +4,9 @@ from pathlib import Path
 def get_root():
     root = Path(__file__).parent
 
-    while root.name != "asana" and root != root.parent:
+    prj_names = ["asana", "Backend"]
+
+    while root.name not in prj_names and root != root.parent:
         root = root.parent
 
     if root == root.parent:

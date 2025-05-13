@@ -1,5 +1,6 @@
 import os
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
@@ -38,7 +39,6 @@ async def root(app: FastAPI):
         id="streak_update",
         replace_existing=True,
     )
-
     scheduler.start()
 
     yield

@@ -50,7 +50,10 @@ test-results/
 *.tsbuildinfo
 
 # Data Storage
-data/
+Data/
+Backups/
+Files/
+Logs/
 
 # Environment and Sensitive Files
 .env

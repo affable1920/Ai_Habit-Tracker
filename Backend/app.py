@@ -1,8 +1,5 @@
 import os
 from contextlib import asynccontextmanager
-from pathlib import Path
-import sys
-from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
@@ -53,7 +50,7 @@ app = FastAPI(lifespan=root)
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
-    "default-jade.vercel.app",
+    "https://default-jade.vercel.app",
 ]
 
 

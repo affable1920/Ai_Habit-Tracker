@@ -1,25 +1,12 @@
 from pathlib import Path
 
 
-def get_root():
-    root = Path(__file__).parent
-
-    prj_names = ["asana", "Backend"]
-
-    while root.name not in prj_names and root != root.parent:
-        root = root.parent
-
-    if root == root.parent:
-        raise RuntimeError("The root directory could not be found .")
-
-    return root
+ROOT = Path().cwd()
 
 
 def R(*parts):
     return ROOT.joinpath(*parts)
 
-
-ROOT = get_root()
 
 data_dir = R("Data")
 habits_dir = R("Data", "Habits")

@@ -1,5 +1,7 @@
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
+import sys
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -30,6 +32,14 @@ scheduler = AsyncIOScheduler()
 async def root(app: FastAPI):
     print("App is starting up !")
     init_dirs_and_paths()
+
+    print(Path(__file__))
+    print(__name__)
+
+    yield
+    return
+
+    print(os.path.dirname(__file__))
 
     batch_ops = BatchOps()
 

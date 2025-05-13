@@ -53,7 +53,7 @@ app = FastAPI(lifespan=root)
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
-    "ai-habit-tracker-one.vercel.app",
+    "default-jade.vercel.app",
 ]
 
 

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ModalContext } from "./Providers/ModalProvider";
-import useHabitStore from "./habitStore";
+import useHabitStore from "../stores/habitStore";
 import { toast } from "sonner";
 
 const Delete = () => {

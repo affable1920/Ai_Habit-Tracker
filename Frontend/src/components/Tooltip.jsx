@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import tootlipStore from "../Tooltip/store";
+import tootlipStore from "../stores/tooltipStore";
 
 const Tooltip = () => {
   const { message, visible, position } = tootlipStore();

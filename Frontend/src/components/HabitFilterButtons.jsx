@@ -6,9 +6,9 @@ import { BiReset } from "react-icons/bi";
 import { RiAddBoxFill } from "react-icons/ri";
 import { MdArchive } from "react-icons/md";
 import AuthContext from "../context/AuthContext";
-import tootlipStore from "../Tooltip/store";
+import tootlipStore from "../stores/tooltipStore";
 import queryStore from "../stores/queryStore";
-import useHabitStore from "./habitStore";
+import useHabitStore from "../stores/habitStore";
 
 const HabitFilterButtons = () => {
   const { user } = useContext(AuthContext);

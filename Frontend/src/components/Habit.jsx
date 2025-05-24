@@ -1,11 +1,11 @@
-import React, { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import HabitButtons from "./HabitButtons";
 import { ModalContext } from "./Providers/ModalProvider";
 import { GoChevronRight } from "react-icons/go";
 import { MdModeEdit } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { toast } from "sonner";
-import useHabitStore from "./habitStore";
+import useHabitStore from "../stores/habitStore";
 
 const deCapitalize = (str) => {
   if (!str) return "";

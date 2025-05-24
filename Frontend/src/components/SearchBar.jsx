@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { IoIosClose } from "react-icons/io";
 import AuthContext from "../context/AuthContext";
 import queryStore from "../stores/queryStore";
-import useHabitStore from "./habitStore";
+import useHabitStore from "../stores/habitStore";
 
 const SearchBar = () => {
   const { user } = useContext(AuthContext);

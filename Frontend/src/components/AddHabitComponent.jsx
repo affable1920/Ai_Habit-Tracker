@@ -5,7 +5,7 @@ import useIntersection from "../hooks/useIntersection";
 import habitSchema from "../schemas/habitSchema";
 import { toast } from "sonner";
 import Spinner from "./Spinner";
-import useHabitStore from "./habitStore";
+import useHabitStore from "../stores/habitStore";
 import useExtraStore from "../stores/extraStore";
 import { ModalContext } from "./Providers/ModalProvider";
 import { GrPowerReset } from "react-icons/gr";

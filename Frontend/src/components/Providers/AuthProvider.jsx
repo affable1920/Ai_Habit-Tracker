@@ -3,7 +3,7 @@ import AuthContext from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import http, { setJwt } from "../../services/httpService";
 import eventEmitter from "../../Utils/utils";
-import useHabitStore from "../habitStore";
+import useHabitStore from "../../stores/habitStore";
 
 const endPoint = "/auth";
 const tokenKey = "token";

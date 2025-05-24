@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import Modal from "./Modal";
 import Tooltip from "./Tooltip";
-import tootlipStore from "../Tooltip/store";
-import Alert from "./Alert";
+import tootlipStore from "../stores/tooltipStore";
 import Spinner from "./Spinner";
 
 const Layout = () => {
@@ -46,7 +45,6 @@ const Layout = () => {
     <>
       <Modal />
       <Spinner />
-      <Alert />
       <Tooltip />
       <AppLayout />
     </>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { createPortal } from "react-dom";
 import { RxCross2 } from "react-icons/rx";
 import { LuAudioLines } from "react-icons/lu";
@@ -7,7 +7,7 @@ import RecommendationSystem from "./RecommendationSystem";
 import Delete from "./Delete";
 import Overlay from "./Overlay";
 import LoginModal from "./LoginModal";
-import useHabitStore from "./habitStore";
+import useHabitStore from "../stores/habitStore";
 import AddHabitComponent from "./AddHabitComponent";
 import { toast } from "sonner";
 import Reminder from "./Reminder";

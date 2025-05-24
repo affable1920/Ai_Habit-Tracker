@@ -1,6 +1,6 @@
 import Habit from "./Habit";
-import React, { useEffect } from "react";
-import useHabitStore from "./habitStore";
+import { useEffect } from "react";
+import useHabitStore from "../stores/habitStore";
 import queryStore from "./../stores/queryStore";
 
 const HabitsList = () => {

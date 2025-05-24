@@ -1,23 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { set, useForm } from "react-hook-form";
-import { GoFileDirectoryFill } from "react-icons/go";
-import { IoMdClose, IoMdSend } from "react-icons/io";
-import { AiTwotoneAudio } from "react-icons/ai";
-import { SiAudiomack } from "react-icons/si";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { IoMdAddCircle } from "react-icons/io";
-import { MdNavigateBefore } from "react-icons/md";
-import { v4 } from "uuid";
-import { FaFolder } from "react-icons/fa6";
-import { FaCamera } from "react-icons/fa6";
-import { FaRegImage } from "react-icons/fa6";
-import { AiFillAudio } from "react-icons/ai";
-import { getFileType } from "./../Utils/fileUploadUtils";
-import { BiScreenshot } from "react-icons/bi";
 import { MdSend } from "react-icons/md";
 import axios from "axios";
 
 const Chat = () => {
+  return null;
+
   const form = useForm();
   const fileRef = useRef(null);
 

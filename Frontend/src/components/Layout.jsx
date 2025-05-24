@@ -33,16 +33,22 @@ const Layout = () => {
     }
   }, [element]);
 
+  const AppLayout = () => {
+    return (
+      <main className="flex flex-col h-full">
+        <NavBar />
+        <Outlet />
+      </main>
+    );
+  };
+
   return (
     <>
       <Modal />
       <Spinner />
       <Alert />
       <Tooltip />
-      <div className="flex flex-col h-screen">
-        <NavBar />
-        <Outlet />
-      </div>
+      <AppLayout />
     </>
   );
 };

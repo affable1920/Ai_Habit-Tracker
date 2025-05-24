@@ -22,7 +22,7 @@ body {
 
 @layer base {
   .dark {
-    @apply bg-secondary text-slate-200;
+    @apply bg-secondary text-slate-300;
   }
   .cp {
     @apply cursor-pointer;
@@ -55,13 +55,13 @@ a {
 
   .input__teritiary {
     @apply bg-gray-100 py-[6px] pl-3 pr-7 rounded-md outline-none text-xs font-medium tracking-widest text-slate-800
-    focus:shadow-sm focus:ring-1 focus:ring-bright/50 dark:bg-secondary__lighter 
+    focus:shadow-sm focus:ring-1 focus:ring-accent/50 dark:bg-secondary__lighter 
     dark:shadow-md dark:focus:shadow-lg dark:focus:ring-sky-700/80 border-[1px] border-gray-300 dark:border-zinc-700;
   }
 
   .link__with__bg {
-    @apply underline p-1 hover:bg-bright__lighter/60 rounded-md outline-0
-    focus:bg-bright__lighter/60 transition-colors duration-200;
+    @apply underline p-1 hover:bg-accent__lighter/60 rounded-md outline-0
+    focus:bg-accent__lighter/60 transition-colors duration-200;
   }
 
   .input__secondary {
@@ -74,7 +74,7 @@ a {
   .input__add {
     @apply border-2 px-4 border-slate-200 dark:border-accent dark:shadow-black shadow-sm
      dark:bg-secondary__lighter outline-none transition-all duration-300 rounded-lg py-1 dark:placeholder:opacity-70
-    italic placeholder:text-xs text-xs tracking-widest focus:border-bright dark:focus:border-bright;
+    italic placeholder:text-xs text-xs tracking-widest focus:border-accent dark:focus:border-accent;
   }
 
   .habit {
@@ -107,17 +107,17 @@ a {
   }
 
   .btn__white {
-    @apply bg-white text-black shadow-xl ring-2 ring-slate-100 dark:focus:ring-bright;
+    @apply bg-white text-black shadow-xl ring-2 ring-slate-100 dark:focus:ring-accent;
   }
 
   .btn__primary {
-    @apply bg-white shadow-lg dark:bg-secondary__lighter focus:border-2 focus:border-bright dark:shadow-black ring-1
+    @apply bg-white shadow-lg dark:bg-secondary__lighter focus:border-2 focus:border-accent dark:shadow-black ring-1
      ring-slate-200 text-xs dark:ring-accent italic tracking-widest;
   }
 
   .btn__accent {
-    @apply shadow-md duration-300 bg-bright text-xs text-black focus:bg-bright__lighter ring-1
-     focus:ring-bright__darker focus:ring-2 italic ring-bright__darker tracking-wider font-bold;
+    @apply shadow-md duration-300 bg-accent text-xs text-black focus:bg-accent__lighter ring-1
+     focus:ring-accent__darker focus:ring-2 italic ring-accent__darker tracking-wider font-bold;
   }
 
   .error__input {

@@ -7,10 +7,9 @@ const ThemeToggler = () => {
   const { isDark, setIsDark } = useContext(ThemeContext);
 
   useEffect(() => {
-    if (isDark) document.documentElement.classList.add("dark");
-    else {
-      document.documentElement.classList.remove("dark");
-    }
+    const root = document.documentElement;
+    if (isDark) root.classList.add("dark");
+    else root.classList.remove("dark");
   }, [isDark]);
 
   return (

@@ -9,6 +9,7 @@ import ErrorPage from "./ErrorPage";
 import HabitsTracker from "./HabitsTracker";
 import PrivateRoutes from "./PrivateRoutes";
 import ProtectedRoute from "./ProtectedRoute";
+import LandingPage from "./LandingPage";
 
 const Chat = React.lazy(() => import("./Chat"));
 const Profile = React.lazy(() => import("./Profile"));
@@ -20,7 +21,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "", element: <HabitsTracker /> },
+      { path: "", element: <LandingPage /> },
+      { path: "tracker", element: <HabitsTracker /> },
       { path: "profile", element: <Profile /> },
       { path: "logout", element: <Logout /> },
       {

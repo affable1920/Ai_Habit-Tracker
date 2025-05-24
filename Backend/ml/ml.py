@@ -2,6 +2,7 @@ import csv
 from datetime import date, datetime, timedelta
 import pandas as pd
 from variables.paths import logs_dir
+import array
 
 
 class Messy:
@@ -14,21 +15,29 @@ class Messy:
             if file.stem != "players" or not file.is_file():
                 return
 
-            df = pd.read_csv(file).dropna()
+            df = pd.read_csv(file)
 
-            try:
-                # years = (df["yearid"] >= 2011) & (df["yearid"] <= 2016)
-                # df = df.iloc[years.values, [4, 5, 10, 13]]
+            # category stats
 
-                # df = df.assign(Fullname=(df.namefirst + " " + df.namelast))
+            bats = df["bats"].value_counts()
+            throws = df["throws"].value_counts()
 
-                # df = df.iloc[(df.Fullname == "Roy Halladay").values]
+            head = df.head(4)
 
-                df = df.groupby(["yearid", "teamid"])["salary"].describe()
-                print(df)
+            countries = df["birthcountry"].nunique()
+            countries_count = df["birthcountry"].value_counts()
 
-            except Exception as e:
-                print(e)
+            teams = df["teamid"].unique().astype(list)
+            teams_count = df["teamid"].value_counts()
+
+            # stats
+
+            salary_desc = df["salary"].describe()
+
+            weight_desc = df["weight"].describe()
+            height_desc = df["height"].describe()
+
+            print(head)
 
 
 messy = Messy()

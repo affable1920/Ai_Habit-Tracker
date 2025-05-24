@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 @layer utilities {
+  .box {
+    @apply max-w-[1340px] mx-auto;
+  }
   .nav__bar {
     @apply shadow-md fixed w-full flex justify-between items-center px-12 py-4 flex-wrap bg-white
-    dark:shadow-black border-b-[1px] border-slate-100 dark:border-zinc-700 dark:bg-primary z-20;
+    dark:shadow-black border-b-[1px] border-slate-100 dark:border-zinc-700 dark:bg-primary;
   }
 
   .profile__features {
@@ -27,7 +30,7 @@
   }
 
   .spinner {
-    @apply border-[4px] border-bright__darker border-t-bright/90 absolute left-1/2 w-10 h-10 z-[99999];
+    @apply border-[4px] border-accent__darker border-t-accent/90 absolute left-1/2 w-10 h-10 z-[99999];
   }
 
   .modal {
@@ -69,9 +72,9 @@
   }
 
   .nav__links {
-    @apply order-4 w-full absolute top-full bg-white left-0 shadow-md z-10 px-5 lg:p-0 flex
-    flex-col py-4 transition-all duration-300 font-medium  lg:relative lg:-order-1 lg:flex-row lg:shadow-none lg:w-auto 
-  dark:bg-inherit lg:pointer-events-auto lg:text-[10px] gap-10 lg:gap-16 lg:mr-4 tracking-wider;
+    @apply absolute top-full bg-white shadow-lg w-full left-0 opacity-0 pointer-events-none transition-all duration-300 -translate-y-[600px] 
+     font-bold flex flex-col gap-10 py-6 px-4 tracking-wider lg:translate-y-0 lg:opacity-100 lg:relative lg:w-auto lg:p-0 lg:pointer-events-auto
+     lg:flex-row dark:bg-inherit lg:z-10 lg:text-[11px] lg:shadow-none lg:bg-none lg:gap-12 dark:shadow-black lg:transition-none;
   }
 }
 
@@ -110,37 +113,8 @@
   animation: spinner__ball 10s linear infinite;
 }
 
-.alert::after {
-  animation: alert 4s ease-in;
-  transform-origin: left;
-}
-
-@keyframes alert {
-  to {
-    transform: scaleX(0);
-  }
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-@keyframes scale__icon {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.6);
-    color: darkred;
-  }
-  100% {
-    transform: scale(1);
-  }
+.box {
+  perspective: 1000px;
 }
 
 @keyframes loading__spinner {
@@ -153,9 +127,57 @@
   }
 }
 
-.animate__scale {
-  animation: scale__icon linear infinite 1.5s;
-  margin-top: 1rem;
+.cursor {
+  animation: cursor ease-in-out 300ms infinite;
+}
+.cursor__text {
+  animation: cursor__text 300ms ease-in;
+}
+
+.brain__img {
+  opacity: 0;
+  transition: opacity 750ms;
+}
+
+/* .slide__container {
+  animation: slide__down 800ms ease-in;
+  background: cyan;
+  width: 70%;
+  max-width: 400px;
+  animation: slide__down 1s ease-in forwards;
+}
+
+@keyframes slide__down {
+  0% {
+    height: 2px;
+    opacity: 0.25;
+  }
+
+  100% {
+    height: 400px;
+    opacity: 1;
+  }
+} */
+
+@keyframes cursor {
+  0%,
+  100% {
+    opacity: 0;
+    color: none;
+  }
+  50% {
+    opacity: 1;
+    color: #333;
+  }
+}
+
+@keyframes cursor__text {
+  from {
+    transform: translateY(-30px);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInLeft {
@@ -174,8 +196,4 @@
   to {
     transform: translate(0);
   }
-}
-
-.nav__links {
-  animation: slideInLeft linear 300ms;
 }

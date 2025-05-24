@@ -4,19 +4,17 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        dark: "0 5px 5px hsl(0, 0, 0)",
+        light: "0 5px 5px hsla(0, 0, 20%, .5)",
+      },
       colors: {
         primary: "#121212",
         secondary: "#171717",
         secondary__lighter: "#242424",
-        accent: "#3F3F46", // 700
-        accent__darker: "#27272A", // 800
-        bright__lighter: "#FB923C",
-        bright: "#F97316",
-        bright__darker: "#9A3412",
-        warning: "#EAB308",
-        warning__darker: "#A16207",
-        danger: "#DC2626",
-        danger__darker: "#7F1D1D",
+        accent: "#0cdcf7",
+        accent__darker: "#036976",
+        accent__lighter: "#3de3f9",
       },
       fontFamily: {
         font_eng: "Engagement",

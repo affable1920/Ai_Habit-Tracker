@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import NavSearch from "./NavSearch";
 import authService from "../services/authService";
 import AuthContext from "../context/AuthContext";
@@ -11,18 +11,13 @@ import { LuLogOut } from "react-icons/lu";
 import { TbUserDown } from "react-icons/tb";
 import { MdSettings } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { BiSolidLogInCircle } from "react-icons/bi";
 
 const NavBar = () => {
   const [showLinks, setShowLinks] = useState(false);
   const [showFeatures, setShowFeatures] = useState(false);
 
-  const { pathname } = useLocation();
   const { user } = useContext(AuthContext);
 
-  const showLogin = pathname != "/login" && pathname != "/register" && !user;
-
-  const name = user?.username;
   const common = "cp icon__with__bg";
 
   const navLinks = [
@@ -50,7 +45,7 @@ const NavBar = () => {
       <header>
         <nav
           className="flex justify-between items-center px-8 py-4 dark:bg-primary bg-white shadow-md 
-          flex-wrap relative dark:shadow-black text-xs"
+          flex-wrap text-xs relative dark:shadow-black"
         >
           <div className="md:-order-2">
             <Link to="/">
@@ -60,10 +55,8 @@ const NavBar = () => {
 
           <ul
             className={`nav__links ${
-              showLinks
-                ? "opacity-100 pointer-events-auto translate-x-0"
-                : "opacity-0 pointer-events-none -translate-y-full"
-            } lg:opacity-100 lg:pointer-events-auto lg:translate-y-0`}
+              showLinks && "opacity-100 translate-y-0 pointer-events-auto z-10"
+            }`}
           >
             {navLinks.map((link, index) => (
               <li className="rounded-sm" key={link.page}>
@@ -74,7 +67,7 @@ const NavBar = () => {
                 >
                   {link.page}
                   {(index === 2 || index === 3) && (
-                    <FaChevronDown className="text-accent" size={10} />
+                    <FaChevronDown className="text-accent__darker" size={10} />
                   )}
                 </Link>
               </li>
@@ -87,7 +80,7 @@ const NavBar = () => {
               <ThemeToggler />
             </div>
 
-            <div className=" flex items-center gap-3 flex-wrap">
+            <div className=" flex items-center gap-3 flex-wrap z-[10000]">
               <HiMenuAlt3
                 className="cp icon__with__bg lg:hidden"
                 onClick={() => setShowLinks(!showLinks)}
@@ -126,17 +119,6 @@ const NavBar = () => {
           </div>
         </nav>
       </header>
-      {showLogin && (
-        <div className="w-full bg-bright flex items-center justify-center ">
-          <Link
-            to="/login"
-            className="italic p-2 w-fit text-white text-xs tracking-wide gap-2 font-bold flex items-center"
-          >
-            <p className="text__scale">Login to access all new features</p>
-            <BiSolidLogInCircle />
-          </Link>
-        </div>
-      )}
     </>
   );
 };

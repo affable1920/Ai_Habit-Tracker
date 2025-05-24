@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import useSlider from "../hooks/useSlider";
 
 let rawImages = import.meta.glob("../assets/slides/*.png", {

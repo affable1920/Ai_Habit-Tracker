@@ -67,9 +67,9 @@ const RegisterForm = () => {
             register={register}
             errors={errors}
           />
-          <button className="btn btn__primary w-full mt-2">Register</button>
+          <button className="btn btn__accent w-full mt-2">Register</button>
           <button
-            className="mt-3 btn btn__white w-full cp"
+            className="mt-3 btn btn__primary w-full"
             onClick={() => navigate("/login")}
           >
             Already have an account ?

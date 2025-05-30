@@ -79,10 +79,10 @@ const Habit = ({ habit }) => {
               completed: true,
             })
           }
-          className={`flex items-center gap-2 font-bold disabled:opacity-70 text-[9px] tracking-widest text-black p-2 rounded-md shadow-sm justify-self-end 
-            mb-3 relative ${
-              habit.completed ? "bg-green-400" : "bg-yellow-400"
-            }`}
+          className={`flex items-center gap-1 font-bold disabled:opacity-70 text-[8px] tracking-widest
+              p-2 rounded-md shadow-sm justify-self-end mb-3 relative ${
+                habit.completed ? "bg-green-400" : "bg-yellow-400"
+              }`}
         >
           {habit.status}
           <GoChevronRight />
@@ -93,7 +93,7 @@ const Habit = ({ habit }) => {
           {isEditable ? (
             <div className="flex items-center relative">
               <input
-                className="input__add"
+                className="input"
                 value={title}
                 name="title"
                 onChange={(e) => setTitle(e.target.value)}
@@ -130,7 +130,7 @@ const Habit = ({ habit }) => {
         {isEditable ? (
           <div className="flex items-center relative">
             <input
-              className="input__add"
+              className="input"
               value={description}
               name="description"
               onChange={(e) => setDescription(e.target.value)}

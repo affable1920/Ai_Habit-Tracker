@@ -2,122 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  max-width: 100%;
-}
-
-#root {
-  height: 100%;
-}
-
 @layer base {
-  .dark {
-    @apply bg-secondary text-slate-300;
+  *,
+  *::after,
+  *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
   }
+
+  html {
+    @apply h-full w-full max-w-full box-border;
+  }
+
+  #root {
+    @apply h-full;
+  }
+
+  .dark {
+    @apply bg-primary text-light;
+  }
+
+  .out {
+    @apply outline-none;
+  }
+
   .cp {
     @apply cursor-pointer;
   }
-  .transition__colors {
-    @apply transition-colors;
+
+  button {
+    outline: none;
+  }
+
+  .pers {
+    perspective: 200px;
   }
 }
 
-a {
-  outline: none;
+@layer utilities {
+  .wrapper {
+    @apply w-full max-w-[1440px] mx-auto;
+  }
+
+  .box {
+    @apply p-2 rounded-md;
+  }
+
+  .box__wrapper {
+    @apply max-w-[1200px] mx-auto;
+  }
+
+  .box__lg {
+    @apply hidden md:block;
+  }
+
+  .modal {
+    animation: scale 300ms ease-out;
+  }
+
+  .d__shadow {
+    @apply shadow-black/15 dark:shadow-black/50;
+  }
+
+  .bx {
+    @apply ring-2 ring-cyan-600;
+  }
 }
 
-@layer utilities {
-  /* Base Styles */
-  .container {
-    @apply max-w-sm md:max-w-xl;
+@layer components {
+  /* Inputs */
+  .input {
+    @apply rounded-lg text-xs placeholder:text-xs tracking-widest out py-2 px-2 bg-inherit ring-2 ring-light-darker 
+    dark:ring-secondary focus:ring-accent-lightest/50 focus:ring-2 w-full dark:focus:ring-accent-darker/75
+    transition-colors duration-200 shadow-inner shadow-black/10 dark:shadow-black/75 focus:shadow-md focus:shadow-black/15 
+    dark:focus:shadow-black/75 placeholder:italic placeholder:scale-90;
+  }
+
+  /* Interactives */
+  .icon {
+    @apply cp text-secondary-lighter dark:text-light-darkest dark:active:text-light transition-colors duration-200 
+    w-[14px] h-[14px] scale-90 active:scale-100;
+  }
+
+  .icon__large {
+    @apply w-[16px] h-[16px];
+  }
+
+  .icon__accent {
+    @apply text-accent-darker hover:focus:text-accent;
+  }
+
+  .btn__icon {
+    @apply bg-inherit flex justify-center items-center rounded-md ring-1 ring-light-darker p-1 
+    dark:ring-secondary shadow-md d__shadow focus:ring-accent-darker focus:shadow-lg;
+  }
+
+  .btn {
+    @apply rounded-lg out p-2 px-4 font-semibold text-xs italic tracking-widest shadow-black/20 
+    focus:shadow-black/20 dark:focus:shadow-black/60 focus:shadow-md shadow-inner dark:shadow-black/40 active:shadow-black/15 ring-1 transition-shadow 
+    duration-300 focus:ring-accent-darker/80;
+  }
+
+  .btn__primary {
+    @apply dark:bg-primary dark:hover:bg-primary-lighter
+    ring-light-darker dark:focus:bg-primary-lighter dark:ring-secondary-lighter/75 dark:focus:ring-accent-darker/80 
+    focus:ring-accent-darker/80;
+  }
+
+  .btn__accent {
+    @apply dark:bg-accent-lighter bg-accent-lighter text-white ring-accent dark:ring-1 
+    ring-2 hover:bg-accent hover:ring-accent-darker
+     focus:ring-accent-darker dark:focus:ring-accent-lighter/25 dark:focus:ring-4;
+  }
+
+  .btn__white {
+    @apply bg-light-lightest ring-2 focus:ring-accent-lighter dark:focus:ring-accent-darker text-black ring-light-darker;
   }
 
   .label {
     @apply text-xs tracking-wider font-medium opacity-75 ml-[2px] italic;
   }
   .input__group {
-    @apply flex flex-col gap-3 my-5;
-  }
-  .input {
-    @apply rounded-lg text-xs placeholder:text-xs tracking-wide
-     pl-2 py-2 outline-none hidden lg:block font-mono px-24 transition__colors;
-  }
-
-  .input__teritiary {
-    @apply bg-gray-100 py-[6px] pl-3 pr-7 rounded-md outline-none text-xs font-medium tracking-widest text-slate-800
-    focus:shadow-sm focus:ring-1 focus:ring-accent/50 dark:bg-secondary__lighter 
-    dark:shadow-md dark:focus:shadow-lg dark:focus:ring-sky-700/80 border-[1px] border-gray-300 dark:border-zinc-700;
-  }
-
-  .link__with__bg {
-    @apply underline p-1 hover:bg-accent__lighter/60 rounded-md outline-0
-    focus:bg-accent__lighter/60 transition-colors duration-200;
-  }
-
-  .input__secondary {
-    @apply px-4 py-2 rounded-lg transition-colors tracking-wide text-xs bg-slate-100 focus:bg-slate-50 
-    border-[1px] border-zinc-700  outline-none focus:shadow-lg
-    dark:focus:bg-primary dark:focus:border-slate-400 dark:shadow-black
-    dark:placeholder:opacity-70;
-  }
-
-  .input__add {
-    @apply border-2 px-4 border-slate-200 dark:border-accent dark:shadow-black shadow-sm
-     dark:bg-secondary__lighter outline-none transition-all duration-300 rounded-lg py-1 dark:placeholder:opacity-70
-    italic placeholder:text-xs text-xs tracking-widest focus:border-accent dark:focus:border-accent;
+    @apply flex flex-col gap-2 my-5;
   }
 
   .habit {
-    @apply border-[1px] p-2 border-slate-300 shadow-sm rounded-sm dark:border-zinc-700 
-    dark:shadow-black cp hover:bg-slate-100 dark:hover:bg-secondary__lighter transition-colors mt-1;
+    @apply ring-[1px] p-3 md:p-2 ring-light-darker shadow-sm rounded-sm lg:rounded-md 
+    dark:ring-secondary-lighter/60 dark:shadow-black/65 cp hover:bg-light-lighter 
+    dark:hover:bg-primary-lighter transition-colors;
   }
 
   .habit__title {
     @apply text-sm tracking-wider leading-tight font-medium font-mono;
   }
 
-  .icon {
-    @apply cp text-sm dark:text-slate-300 dark:active:text-white lg:text-lg text-zinc-800;
-  }
-  .icon__with__bg {
-    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-zinc-800 text-xl dark:shadow-black
-    border-[1px] border-slate-200 dark:border-zinc-700 dark:text-slate-200 focus:text-white;
-  }
-  .icon__with__bg__large {
-    @apply bg-white shadow-lg p-1 rounded-lg dark:bg-zinc-800 text-2xl dark:shadow-black
-    border-[1px] border-slate-200 dark:border-slate-800;
-  }
   .option__icon__container {
     @apply text-xs font-medium tracking-wider flex rounded-md flex-col p-3 justify-center items-center gap-2 cursor-pointer;
-  }
-
-  .btn {
-    @apply transition-all duration-200 rounded-lg p-2 focus:outline-none
-    outline-none font-semibold tracking-wider italic text-xs;
-  }
-
-  .btn__white {
-    @apply bg-white text-black shadow-xl ring-2 ring-slate-100 dark:focus:ring-accent;
-  }
-
-  .btn__primary {
-    @apply bg-white shadow-lg dark:bg-secondary__lighter focus:border-2 focus:border-accent dark:shadow-black ring-1
-     ring-slate-200 text-xs dark:ring-accent italic tracking-widest;
-  }
-
-  .btn__accent {
-    @apply shadow-md duration-300 bg-accent text-xs text-black focus:bg-accent__lighter ring-1
-     focus:ring-accent__darker focus:ring-2 italic ring-accent__darker tracking-wider font-bold;
   }
 
   .error__input {
@@ -126,26 +147,26 @@ a {
   }
 
   .headings__large {
-    @apply font-black tracking-wide text-2xl text-primary dark:text-slate-200;
+    @apply font-black tracking-wide text-2xl text-primary dark:text-light;
   }
   .form__link {
     @apply text-xs tracking-wider outline-none font-medium bg-zinc-700 text-white
-    p-2 px-3 rounded-lg hover:border-[1px] hover:border-zinc-700 transition-colors duration-200 flex justify-center 
+    p-2 px-3 rounded-lg hover:ring-[1px] hover:ring-zinc-700 transition-colors duration-200 flex justify-center 
     mt-5 max-w-fit shadow-lg;
   }
   .error__component {
     @apply grid place-items-center text-xs tracking-wide font-semibold text-red-800 bg-blue-100 shadow-sm rounded-lg 
-    p-2 ring-2 border-2;
+    p-2 ring-2 ring-2;
   }
   .navigation__link {
     @apply text-black font-bold bg-red-200 p-1 rounded-lg m-1;
   }
   .options {
-    @apply text-xs gap-1  from-slate-600 to-zinc-700 text-white rounded-lg flex
-    flex-col ring-[1px] ring-slate-600  items-center overflow-hidden absolute -right-10 top-0;
+    @apply text-xs gap-1  from-light to-zinc-700 text-white rounded-lg flex
+    flex-col ring-[1px] ring-light  items-center overflow-hidden absolute -right-10 top-0;
   }
   .recommendation {
-    @apply border-[2px] border-slate-200 m-2 shadow-lg dark:border-zinc-700
+    @apply ring-[2px] ring-light m-2 shadow-lg dark:ring-zinc-700
     rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;
   }
   .overlay {
@@ -155,15 +176,6 @@ a {
   .link {
     @apply outline-none focus:underline focus:font-semibold;
   }
-
-  /* Animations */
-  .animate__arrow__spin {
-    animation: arrow__spin infinite ease-out 1s;
-  }
-}
-
-.modal {
-  animation: scale 300ms ease-out;
 }
 
 @keyframes scale {

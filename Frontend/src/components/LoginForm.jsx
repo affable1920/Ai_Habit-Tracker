@@ -77,7 +77,7 @@ const LoginForm = () => {
           label="Password"
           type="password"
         />
-        <button className="btn btn__primary w-full mt-1 mb-2">Login</button>
+        <button className="btn btn__accent w-full mt-1 mb-2">Login</button>
       </form>
       <Link
         className="link text-[10px] italic tracking-widest text-center block"
@@ -85,13 +85,13 @@ const LoginForm = () => {
       >
         New Joinee ?
       </Link>
-      <div className="flex italic text-xs justify-center items-center gap-2 mt-2 opacity-80">
-        <div className="border-[1px] border-slate-200 dark:border-accent w-16"></div>
+      <div className="flex italic text-xs font-semibold justify-center tracking-widest items-center gap-2 mt-2 opacity-80">
+        <div className="border-[1.25px] border-slate-200 dark:border-accent w-16"></div>
         <div>OR</div>
-        <div className="border-[1px] border-slate-200 dark:border-accent w-16"></div>
+        <div className="border-[1.25px] border-slate-200 dark:border-accent w-16"></div>
       </div>
       <button
-        className="btn btn__white w-full mt-2 flex items-center justify-center gap-3"
+        className="btn btn__primary w-full mt-2 flex items-center justify-center gap-3"
         onClick={googleSignIn}
       >
         Sign in with <FcGoogle />

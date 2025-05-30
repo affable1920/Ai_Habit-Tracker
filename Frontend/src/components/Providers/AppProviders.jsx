@@ -1,14 +1,13 @@
-import React from "react";
 import ThemeProvider from "./ThemeProvider";
 import AuthProvider from "./AuthProvider";
 import ModalProvider from "./ModalProvider";
 
 const AppProviders = ({ children }) => (
-  <ThemeProvider>
-    <AuthProvider>
+  <AuthProvider>
+    <ThemeProvider>
       <ModalProvider>{children}</ModalProvider>
-    </AuthProvider>
-  </ThemeProvider>
+    </ThemeProvider>
+  </AuthProvider>
 );
 
 export default AppProviders;

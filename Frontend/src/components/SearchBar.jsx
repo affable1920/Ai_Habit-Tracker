@@ -1,24 +1,15 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { IoIosClose } from "react-icons/io";
 import AuthContext from "../context/AuthContext";
 import queryStore from "../stores/queryStore";
 import useHabitStore from "../stores/habitStore";
+import { debounce } from "../Utils/utils";
 
 const SearchBar = () => {
   const { user } = useContext(AuthContext);
   const { query, setSearchQuery } = queryStore();
 
   const habits = useHabitStore((s) => s.habits);
-
-  const debounce = (func, delay) => {
-    let timer;
-
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
   let setSearch_Query = debounce(setSearchQuery, 100);
 
   return (
@@ -27,7 +18,7 @@ const SearchBar = () => {
         onChange={(e) => setSearch_Query(e.target.value)}
         disabled={!user || (!query.search_query && habits.length) === 0}
         placeholder={user ? "Search for a habit!" : "Login you MORON!"}
-        className="search__bar"
+        className="input"
         value={query.search_query}
       />
       <div className="flex items-center absolute right-0 mr-2">

@@ -29,8 +29,8 @@ const HabitFilterButtons = () => {
         <div>
           <Link
             to="/teamtab"
-            className="text-xs italic bg-slate-100 p-2 py-[6px] rounded-lg shadow-md border-[1px] 
-            dark:border-accent hover:border-accent dark:bg-accent__darker"
+            className="text-xs italic  p-2 py-[6px] rounded-lg shadow-md dark:shadow-black/50 border-[1px] 
+            dark:bg-secondary__lighter dark:border-zinc-600"
           >
             Team Tab
           </Link>
@@ -41,10 +41,10 @@ const HabitFilterButtons = () => {
           <Link to="/archived">
             <MdArchive
               className="archive"
-              onMouseEnter={() =>
-                show({ msg: "View Archived", element: ".archive" })
-              }
-              onMouseLeave={hide}
+              // onMouseEnter={() =>
+              //   show({ msg: "View Archived", element: ".archive" })
+              // }
+              // onMouseLeave={hide}
             />
           </Link>
         </div>

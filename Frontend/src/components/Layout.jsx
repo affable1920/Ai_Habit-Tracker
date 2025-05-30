@@ -34,10 +34,14 @@ const Layout = () => {
 
   const AppLayout = () => {
     return (
-      <main className="flex flex-col h-full">
-        <NavBar />
-        <Outlet />
-      </main>
+      <>
+        <header>
+          <NavBar />
+        </header>
+        <main className="flex flex-col h-screen">
+          <Outlet />
+        </main>
+      </>
     );
   };
 

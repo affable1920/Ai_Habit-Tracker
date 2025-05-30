@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback, useState } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import AuthContext from "../context/AuthContext";
@@ -52,29 +52,10 @@ const App = () => {
 
     const overlay = document.querySelector(".overlay");
 
-    if (overlay) {
-      overlay.addEventListener("click", escapeModal);
+    if (overlay) overlay.addEventListener("click", escapeModal);
 
-      return () => overlay.removeEventListener("click", escapeModal);
-    }
+    return () => overlay.removeEventListener("click", escapeModal);
   }, [user, modal?.openModals]);
-
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8000/ws");
-
-    ws.onopen = () => {
-      console.log("WebSocket connection Established !");
-    };
-
-    ws.onmessage = (ev) => {
-      console.log(ev);
-    };
-
-    setSocket(ws);
-    return () => ws.close();
-  }, []);
 
   return <RouterProvider router={router} />;
 };

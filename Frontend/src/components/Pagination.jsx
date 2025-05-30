@@ -1,4 +1,3 @@
-import React from "react";
 import { IoCaretBackSharp, IoCaretForwardSharp } from "react-icons/io5";
 import queryStore from "../stores/queryStore";
 
@@ -16,8 +15,8 @@ const Pagination = () => {
   return (
     <div className="flex justify-end mt-6 justify-self-end self-end">
       <div
-        className="flex items-center rounded-md px-2 gap-2 bg-zinc-50 py-1 border-[1.5px] border-slate-200
-        dark:bg-secondary__lighter dark:border-accent"
+        className="flex items-center rounded-md px-2 gap-2 bg-brand-light py-1 border-2 border-slate-200 italic
+        dark:bg-secondary__lighter dark:border-none"
       >
         <div className="text-xs font-semibold tracking-wide flex items-center font-mono">
           <label htmlFor="pageSize">Showing:</label>
@@ -26,7 +25,7 @@ const Pagination = () => {
             value={query.limit}
             name="pageSize"
             className="cp rounded-md ml-1 outline-none p-[2px] text-center border-[1.4px]
-            border-slate-200 dark:bg-secondary__lighter dark:border-accent mr-1"
+            border-slate-200 dark:bg-secondary dark:border-none mr-1"
           >
             {optionMap.map(({ value }) => (
               <option key={value} value={value}>
@@ -41,7 +40,7 @@ const Pagination = () => {
             onClick={() => setPage((query.page -= 1))}
           />
           <span
-            className="text-xs font-mono font-bold inline-grid px-1 py-[2px] bg-slate-300 dark:bg-accent
+            className="text-xs font-mono font-bold inline-grid px-1 py-[2px] bg-slate-300 dark:bg-secondary
             place-items-center rounded-md"
           >
             {query.page}

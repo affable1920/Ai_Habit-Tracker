@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAnimation } from "framer-motion";
 
 const useSlider = (ref) => {
@@ -17,7 +17,7 @@ const useSlider = (ref) => {
       x: "-100vw",
       height: "2px",
       backgroundColor: "cyan",
-      transition: { duration: 1 },
+      transition: { duration: 0.75 },
     },
     step1: {
       x: "50px",
@@ -37,8 +37,8 @@ const useSlider = (ref) => {
     },
     step5: {
       height: "400px",
+      backgroundColor: "unset",
       opacity: 1,
-      backgroundColor: "black",
       transition: { duration: 0.75 },
     },
   };
@@ -103,7 +103,7 @@ const useSlider = (ref) => {
         setImgIndex((prev) => {
           return lastChar ? (lastPhrase ? prev : prev + 1) : prev;
         });
-      }, delay);
+      }, 100);
     }
 
     // const cursor = document.querySelector(".cursor");

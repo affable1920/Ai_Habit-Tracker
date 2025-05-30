@@ -4,7 +4,7 @@ export const ThemeContext = React.createContext();
 ThemeContext.displayName = "ThemeContext";
 
 const ThemeProvider = ({ children }) => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   return (
     <ThemeContext.Provider value={{ isDark, setIsDark }}>

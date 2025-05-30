@@ -1,5 +1,3 @@
-import React from "react";
-
 const InputAdd = ({ register, errors, optional, large = false, ...rest }) => {
   const { name, label, type = "text" } = rest;
   const errorMsg = errors[name]?.message || "";
@@ -10,7 +8,7 @@ const InputAdd = ({ register, errors, optional, large = false, ...rest }) => {
         <label className="label" htmlFor="description">
           {label} {!optional && "*"}
         </label>
-        <textarea className="input__add" name={name} {...register(name)} />
+        <textarea className="input" name={name} {...register(name)} />
         {errors[name] && (
           <div className="text-xs italic text-red-700 dark:text-red-400 tracking-wider text-center">
             "{errorMsg[1].toUpperCase() + errorMsg.slice(2)}
@@ -29,12 +27,12 @@ const InputAdd = ({ register, errors, optional, large = false, ...rest }) => {
       <input
         {...rest}
         type={type}
-        className={`input__add ${errors[name] && "error__boundary"}`}
+        className={`input`}
         name={name}
         {...register(name)}
       />
       {errors[name] && (
-        <div className="text-xs italic text-red-700 dark:text-red-400 tracking-wider text-center">
+        <div className="text-xs italic text-rose-600 dark:text-red-500/80 tracking-widest text-center mt-1">
           "{errorMsg[1].toUpperCase() + errorMsg.slice(2)}
         </div>
       )}

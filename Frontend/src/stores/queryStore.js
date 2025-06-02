@@ -10,14 +10,16 @@ const init = {
 const queryStore = create((set) => ({
   query: init,
 
-  setSearchQuery: (searchQuery) =>
+  setSearchQuery: (searchQuery) => {
+    console.log(searchQuery);
     set((state) => ({
       query: {
         ...state.query,
         search_query: searchQuery,
         status: null,
       },
-    })),
+    }));
+  },
 
   setMax: (max) => set((state) => ({ query: { ...state.query, max } })),
 
@@ -29,7 +31,7 @@ const queryStore = create((set) => ({
 
   setPage: (page) => set((state) => ({ query: { ...state.query, page } })),
 
-  reset: () => set(() => ({ query: { query: init } })),
+  reset: (max) => set({ query: { ...init, max } }),
 
   setQuery: (updates) =>
     set((state) => ({ query: { ...state.query, ...updates } })),

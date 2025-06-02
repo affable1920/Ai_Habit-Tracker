@@ -42,31 +42,27 @@
 
 @layer utilities {
   .wrapper {
-    @apply w-full max-w-[1440px] mx-auto;
+    @apply w-full max-w-[calc(100vw-6rem)] mx-auto;
   }
 
   .box {
     @apply p-2 rounded-md;
   }
 
+  .box__shadow {
+    @apply shadow-black/15 dark:shadow-black/50 shadow-md;
+  }
+
   .box__wrapper {
     @apply max-w-[1200px] mx-auto;
   }
 
-  .box__lg {
+  .box__lg__screen {
     @apply hidden md:block;
   }
 
   .modal {
     animation: scale 300ms ease-out;
-  }
-
-  .d__shadow {
-    @apply shadow-black/15 dark:shadow-black/50;
-  }
-
-  .bx {
-    @apply ring-2 ring-cyan-600;
   }
 }
 
@@ -94,20 +90,22 @@
   }
 
   .btn__icon {
-    @apply bg-inherit flex justify-center items-center rounded-md ring-1 ring-light-darker p-1 
-    dark:ring-secondary shadow-md d__shadow focus:ring-accent-darker focus:shadow-lg;
+    @apply bg-inherit flex justify-center items-center rounded-md ring-1 ring-light-darkest/60 p-1
+    dark:ring-secondary-lighter/65 active:bg-light-lighter dark:active:bg-secondary-lighter/65
+    active:shadow-inner focus:ring-light-darkest/75 
+    focus:shadow-lg shadow-black/10
+    shadow-md dark:shadow-black/75;
   }
 
   .btn {
     @apply rounded-lg out p-2 px-4 font-semibold text-xs italic tracking-widest shadow-black/20 
     focus:shadow-black/20 dark:focus:shadow-black/60 focus:shadow-md shadow-inner dark:shadow-black/40 active:shadow-black/15 ring-1 transition-shadow 
-    duration-300 focus:ring-accent-darker/80;
+    duration-300 active:ring-accent-darker/80 active:scale-95 active:shadow-inner;
   }
 
   .btn__primary {
     @apply dark:bg-primary dark:hover:bg-primary-lighter
-    ring-light-darker dark:focus:bg-primary-lighter dark:ring-secondary-lighter/75 dark:focus:ring-accent-darker/80 
-    focus:ring-accent-darker/80;
+    ring-light-darker dark:focus:bg-primary-lighter dark:ring-secondary-lighter/75;
   }
 
   .btn__accent {
@@ -117,7 +115,7 @@
   }
 
   .btn__white {
-    @apply bg-light-lightest ring-2 focus:ring-accent-lighter dark:focus:ring-accent-darker text-black ring-light-darker;
+    @apply bg-light-lightest ring-2 active:ring-accent-lighter dark:active:ring-accent-darker text-black ring-light-darker;
   }
 
   .label {

@@ -5,10 +5,10 @@ from datetime import datetime
 
 
 class Query(BaseModel):
-    limit: int = Field(10, gt=0)
     page: int = Field(1, gt=0)
     search_query: str = Field("")
     status: bool = Field(None)
+    max: int = Field(0)
 
 
 class FE_Data(BaseModel):

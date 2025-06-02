@@ -1,55 +1,27 @@
-import { IoCaretBackSharp, IoCaretForwardSharp } from "react-icons/io5";
 import queryStore from "../stores/queryStore";
+import { IoArrowForwardOutline, IoArrowBackOutline } from "react-icons/io5";
 
 const Pagination = () => {
-  const { query, setPageSize, setPage } = queryStore();
-
-  const optionMap = [
-    { value: 10 },
-    { value: 15 },
-    { value: 20 },
-    { value: 30 },
-    { value: 40 },
-  ];
+  const query = queryStore((s) => s.query);
+  const setPage = queryStore((s) => s.setPage);
 
   return (
     <div className="flex justify-end mt-6 justify-self-end self-end">
-      <div
-        className="flex items-center rounded-md px-2 gap-2 bg-brand-light py-1 border-2 border-slate-200 italic
-        dark:bg-secondary__lighter dark:border-none"
-      >
-        <div className="text-xs font-semibold tracking-wide flex items-center font-mono">
-          <label htmlFor="pageSize">Showing:</label>
-          <select
-            onChange={(e) => setPageSize(parseInt(e.target.value))}
-            value={query.limit}
-            name="pageSize"
-            className="cp rounded-md ml-1 outline-none p-[2px] text-center border-[1.4px]
-            border-slate-200 dark:bg-secondary dark:border-none mr-1"
-          >
-            {optionMap.map(({ value }) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex items-center gap-1">
-          <IoCaretBackSharp
-            className="cp"
+      <div className="flex items-center gap-1">
+        {query.page > 1 && (
+          <button
+            className={`btn btn__primary flex items-center p-[6px]`}
             onClick={() => setPage((query.page -= 1))}
-          />
-          <span
-            className="text-xs font-mono font-bold inline-grid px-1 py-[2px] bg-slate-300 dark:bg-secondary
-            place-items-center rounded-md"
           >
-            {query.page}
-          </span>
-          <IoCaretForwardSharp
-            className="cp"
-            onClick={() => setPage((query.page += 1))}
-          />
-        </div>
+            <IoArrowBackOutline />
+          </button>
+        )}
+        <button
+          className="btn btn__accent flex items-center p-[6px] font-semibold"
+          onClick={() => setPage((query.page += 1))}
+        >
+          <span>Next</span> <IoArrowForwardOutline className="mt-[2.75px]" />
+        </button>
       </div>
     </div>
   );

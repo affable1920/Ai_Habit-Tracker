@@ -1,46 +1,36 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import StatusFilter from "./StatusFilter";
-import { BiReset } from "react-icons/bi";
-import { RiAddBoxFill } from "react-icons/ri";
+import { RiResetLeftFill } from "react-icons/ri";
 import { MdArchive } from "react-icons/md";
 import AuthContext from "../context/AuthContext";
-import tootlipStore from "../stores/tooltipStore";
 import queryStore from "../stores/queryStore";
-import useHabitStore from "../stores/habitStore";
+import Icon from "./Icon";
 
 const HabitFilterButtons = () => {
   const { user } = useContext(AuthContext);
-  const habits = useHabitStore((s) => s.habits);
-
-  const { show, hide } = tootlipStore();
   const reset = queryStore((s) => s.reset);
+  const query = queryStore((s) => s.query);
 
   return (
-    <div className="flex items-center justify-between justify-self-start">
-      <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between box">
+      <div className="flex items-center gap-2 w-full justify-start">
         {(user || (user && data?.habits.length !== 0)) && (
-          <Link to="/add">
-            <RiAddBoxFill className="icon__with__bg__large cp" />
-          </Link>
+          <button className="btn btn__primary">
+            <Link to="/add">Add</Link>
+          </button>
         )}
         <SearchBar />
-        <div>
-          <Link
-            to="/teamtab"
-            className="text-xs italic  p-2 py-[6px] rounded-lg shadow-md dark:shadow-black/50 border-[1px] 
-            dark:bg-secondary__lighter dark:border-zinc-600"
-          >
-            Team Tab
-          </Link>
-        </div>
       </div>
-      <div className="flex items-center gap-4">
+
+      {/* Query Icons */}
+      <div className="flex items-center gap-2">
         <div className="relative">
           <Link to="/archived">
-            <MdArchive
-              className="archive"
+            <Icon
+              Icon={MdArchive}
+              bg={true}
               // onMouseEnter={() =>
               //   show({ msg: "View Archived", element: ".archive" })
               // }
@@ -50,20 +40,15 @@ const HabitFilterButtons = () => {
         </div>
         <StatusFilter />
         <div className="flex items-center gap-1">
-          <BiReset
-            className="reset icon"
-            onClick={reset}
-            onMouseEnter={() =>
-              show({ msg: "Reset queries", element: ".reset" })
-            }
-            onMouseLeave={hide}
+          <Icon
+            Icon={RiResetLeftFill}
+            bg={true}
+            fn={() => reset(query.max)}
+            // onMouseEnter={() =>
+            //   show({ msg: "Reset queries", element: ".reset" })
+            // }
+            // onMouseLeave={hide}
           />
-          <span
-            className="cp font-semibold border-slate-300 p-[4px] bg-secondary__lighter text-white
-          rounded-md ml-2 mr-1 text-xs font-mono bg-accent__primary block dark:bg-slate-300 dark:text-black"
-          >
-            {habits?.length}
-          </span>
         </div>
       </div>
     </div>

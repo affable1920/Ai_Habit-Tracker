@@ -7,13 +7,14 @@ import { debounce } from "../Utils/utils";
 
 const SearchBar = () => {
   const { user } = useContext(AuthContext);
-  const { query, setSearchQuery } = queryStore();
+  const query = queryStore((s) => s.query);
+  const setSearchQuery = queryStore((s) => s.setSearchQuery);
 
   const habits = useHabitStore((s) => s.habits);
   let setSearch_Query = debounce(setSearchQuery, 100);
 
   return (
-    <div className="inline-flex items-center relative justify-between">
+    <div className={`inline-flex items-center relative justify-between`}>
       <input
         onChange={(e) => setSearch_Query(e.target.value)}
         disabled={!user || (!query.search_query && habits.length) === 0}
@@ -23,7 +24,10 @@ const SearchBar = () => {
       />
       <div className="flex items-center absolute right-0 mr-2">
         {query.search_query && (
-          <IoIosClose className="icon" onClick={() => setSearchQuery("")} />
+          <IoIosClose
+            className="font-bold text-md cp"
+            onClick={() => setSearch_Query("")}
+          />
         )}
       </div>
     </div>

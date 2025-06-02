@@ -1,17 +1,17 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import NavSearch from "./NavSearch";
 import authService from "../services/authService";
 import AuthContext from "../context/AuthContext";
 import ThemeToggler from "./ThemeToggler";
-import { FaGithub, FaGithubSquare } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { FaChevronDown } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { TbUserDown } from "react-icons/tb";
 import { MdSettings } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import Icon from "./Icon";
 
 const NavBar = () => {
@@ -45,8 +45,8 @@ const NavBar = () => {
 
   const Logo = () => {
     return (
-      <Link to="/" className="dark:text-black text-light">
-        <Icon Icon={FaGithub} />;
+      <Link to="/">
+        <Icon Icon={FaGithub} bg={true} />
       </Link>
     );
   };

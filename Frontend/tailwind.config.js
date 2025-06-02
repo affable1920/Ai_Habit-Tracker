@@ -43,6 +43,9 @@ export default {
           darkest: colors.slate[300],
         },
       },
+      screens: {
+        semi_md: "840px",
+      },
     },
   },
   plugins: [

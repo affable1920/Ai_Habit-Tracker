@@ -17,6 +17,7 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.7.9",
+    "caniuse-lite": "^1.0.30001720",
     "dotenv": "^16.4.7",
     "firebase": "^11.1.0",
     "framer-motion": "^12.4.10",

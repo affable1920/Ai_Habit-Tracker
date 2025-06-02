@@ -49,8 +49,8 @@ class CRUD:
 
         habits = self.read_all(filename)
 
-        start = (query["page"] - 1) * query["limit"]
-        end = query["limit"] * query["page"]
+        start = (query["page"] - 1) * query["max"]
+        end = query["max"] * query["page"]
 
         if query["search_query"]:
             sq = query["search_query"].lower()

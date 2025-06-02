@@ -1,10 +1,11 @@
-import React from "react";
+import Icon from "./Icon";
 import queryStore from "../stores/queryStore";
-import { FaArrowsTurnToDots } from "react-icons/fa6";
-import { IoIosCloudDone } from "react-icons/io";
+import { LuListTodo } from "react-icons/lu";
+import { MdPendingActions } from "react-icons/md";
 
 const StatusFilter = () => {
-  const { query, setStatus } = queryStore();
+  const query = queryStore((s) => s.query);
+  const setStatus = queryStore((s) => s.setStatus);
 
   const handleSetStatus = () => {
     setStatus(query.status ? false : true);
@@ -12,13 +13,11 @@ const StatusFilter = () => {
 
   return (
     <>
-      <button onClick={handleSetStatus}>
-        {query.status ? (
-          <FaArrowsTurnToDots className="icon" />
-        ) : (
-          <IoIosCloudDone className="icon" />
-        )}
-      </button>
+      <Icon
+        fn={handleSetStatus}
+        bg={true}
+        Icon={query.status ? MdPendingActions : LuListTodo}
+      />
     </>
   );
 };

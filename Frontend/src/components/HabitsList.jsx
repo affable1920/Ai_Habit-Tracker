@@ -21,8 +21,8 @@ const HabitsList = () => {
     fetchHabits(query);
   }, [query]);
 
-  const maxHabitWidth = "240px";
-  const maxHabitHeight = "100px";
+  const minHabitWidth = "240px";
+  const minHabitHeight = "100px";
 
   const [maxHabitsCount, setMaxHabitsCount] = useState(0);
 
@@ -30,16 +30,17 @@ const HabitsList = () => {
 
   const resizeCallback = ([e]) => {
     const { width, height } = e.contentRect;
+    const regex = /\W/;
 
-    const minWidthInt = maxHabitWidth.match(/\d+/);
-    const minHeightInt = maxHabitHeight.match(/\d+/);
+    minHabitWidth.replace(regex, "");
+    minHabitHeight.replace(regex, "");
 
-    if ((!minWidthInt instanceof Number) & (!minHeightInt instanceof Number))
-      setMaxHabitsCount(window.innerWidth / 240);
-
-    setMaxHabitsCount(
-      Math.floor(width / minWidthInt) + Math.floor(height / minHeightInt)
-    );
+    if (typeof minHabitWidth != "number" || typeof minHabitHeight != "number") {
+      setMaxHabitsCount(Math.floor(window.innerWidth / 240));
+    } else
+      setMaxHabitsCount(
+        Math.floor(width / minHabitWidth) + Math.floor(height / minHabitHeight)
+      );
   };
 
   useEffect(() => {

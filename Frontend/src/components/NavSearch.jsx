@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { IoMdSearch } from "react-icons/io";
 import { ModalContext } from "./Providers/ModalProvider";
 import AuthContext from "../context/AuthContext";
-import Icon from "./Icon";
+import { IoMdSearch } from "react-icons/io";
+import IconComponent from "./IconComponent";
 
 const NavSearch = () => {
   const { dispatch } = useContext(ModalContext);
@@ -17,13 +17,17 @@ const NavSearch = () => {
       });
   };
 
+  const shortcutBtn = <button className="italic font-medium">Ctrl K</button>;
+  const classes = `font-medium mr-2 p-[2px]`;
+
   return (
-    <div className="flex justify-center items-center relative text-xs">
-      <input type="text" className="input" placeholder="Search ..." />
-      <div className="absolute right-2 flex items-center gap-2">
-        <Icon Icon={IoMdSearch} fn={generateModal} />
-      </div>
-    </div>
+    <IconComponent
+      Icon={IoMdSearch}
+      bg
+      fn={generateModal}
+      children={shortcutBtn}
+      chClass={classes}
+    />
   );
 };
 

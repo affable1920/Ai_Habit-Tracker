@@ -8,12 +8,13 @@ import LoginForm from "./LoginForm";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./Dashboard";
 import LandingPage from "./LandingPage";
+import PrivateRoutes from "./PrivateRoutes";
+import HabitsTracker from "./HabitsTracker";
+import AuthRoutes from "./AuthRoutes";
 
 const Chat = React.lazy(() => import("./Chat"));
 const Profile = React.lazy(() => import("./Profile"));
 const Archived = React.lazy(() => import("./Archived"));
-import PrivateRoutes from "./PrivateRoutes";
-import HabitsTracker from "./HabitsTracker";
 
 const router = createBrowserRouter([
   {
@@ -21,19 +22,24 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "", element: <Dashboard /> },
+      { path: "", element: <LandingPage /> },
+      { path: "dashboard", element: <Dashboard /> },
       { path: "tracker", element: <HabitsTracker /> },
-      { path: "home", element: <LandingPage /> },
       { path: "archived", element: <Archived /> },
-      { path: "login", element: <LoginForm /> },
-      { path: "register", element: <RegisterForm /> },
       { path: "logout", element: <Logout /> },
       {
         element: <PrivateRoutes />,
         children: [
           { path: "profile", element: <Profile /> },
-          { path: "add/:id?", element: <AddHabitComponent /> },
+          { path: "add", element: <AddHabitComponent /> },
           { path: "chat", element: <Chat /> },
+        ],
+      },
+      {
+        element: <AuthRoutes />,
+        children: [
+          { path: "login", element: <LoginForm /> },
+          { path: "register", element: <RegisterForm /> },
         ],
       },
     ],

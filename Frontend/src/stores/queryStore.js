@@ -4,14 +4,13 @@ const init = {
   page: 1,
   search_query: "",
   status: null,
-  max: 0,
+  max: 5,
 };
 
 const queryStore = create((set) => ({
   query: init,
 
   setSearchQuery: (searchQuery) => {
-    console.log(searchQuery);
     set((state) => ({
       query: {
         ...state.query,

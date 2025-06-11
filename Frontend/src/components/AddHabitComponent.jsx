@@ -1,24 +1,22 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
+import { toast } from "sonner";
+import { ModalContext } from "./Providers/ModalProvider";
 import useIntersection from "../hooks/useIntersection";
 import habitSchema from "../schemas/habitSchema";
-import { toast } from "sonner";
-import Spinner from "./Spinner";
 import useHabitStore from "../stores/habitStore";
 import useExtraStore from "../stores/extraStore";
-import { ModalContext } from "./Providers/ModalProvider";
-import { GrPowerReset } from "react-icons/gr";
+import Form from "./common/Form";
 
 const Step1 = React.lazy(() => import("./AddForm/Step1"));
 const Step2 = React.lazy(() => import("./AddForm/Step2"));
 
 const AddHabitComponent = () => {
-  const { modal, dispatch } = useContext(ModalContext);
+  const { modals, dispatch } = useContext(ModalContext);
   const [step, setStep] = useState(1);
 
   const steps = [Step1, Step2];
-  const StepComponent = steps[step - 1];
 
   const { addHabit } = useHabitStore();
   const { extra } = useExtraStore();
@@ -36,16 +34,18 @@ const AddHabitComponent = () => {
       dispatch({ type: "OPEN_MODAL", name: "reminderModal" });
   }, [freq]);
 
+  console.log(extra);
+
   useEffect(
     () => {
       if (
-        modal.props.modalName === "reminderModal" &&
-        modal.props.action === "CLOSE"
+        modals.props.modalName === "reminderModal" &&
+        modals.props.action === "CLOSE"
       ) {
         form.setValue("frequency", null);
       }
     },
-    modal.props ? [modal.props] : []
+    modals.props ? [modals.props] : []
   );
 
   const handleBack = () =>
@@ -57,6 +57,7 @@ const AddHabitComponent = () => {
       return;
     } else {
       if (extra) formData = { ...formData, ...extra };
+      console.log(formData);
 
       let { success, msg } = await addHabit(formData);
 
@@ -74,27 +75,22 @@ const AddHabitComponent = () => {
     }
   };
 
+  const resetFn = () => {
+    form.reset();
+    if (step != 1) setStep(1);
+  };
+
+  const StepComponent = steps[step - 1];
+
   return (
-    <section>
-      <section className="p-24 flex flex-col justify-start items-center">
-        <div
-          ref={elementRef}
-          className={`form__control duration-500 ${
-            !visible
-              ? "opacity-0 pointer-events-none"
-              : "opacity-100 pointer-events-auto"
-          } relative`}
-        >
-          <GrPowerReset
-            className="icon__with__bg cp absolute bottom-2 right-2"
-            onClick={() => {
-              form.reset();
-              step != 1 && setStep(1);
-            }}
-          />
-          <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(handleNext)}>
-              <React.Suspense fallback={<Spinner />}>
+    <div className="wrapper__full">
+      <div className="pad__box"></div>
+      <div className="mid__box p-6 flex flex-col gap-6">
+        <h2 className="heading__md font-semibold">What's on your mind ?</h2>
+        <FormProvider {...form}>
+          <div className="form__content__wrapper">
+            <Form onSubmit={form.handleSubmit(handleNext)}>
+              <React.Suspense>
                 <StepComponent />
               </React.Suspense>
               <div
@@ -106,20 +102,20 @@ const AddHabitComponent = () => {
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="btn btn__accent"
+                    className="btn btn__accent btn__small"
                   >
                     {"<"}
                   </button>
                 )}
-                <button className="btn btn__accent">
+                <button className="btn btn__accent btn__small">
                   {lastStep ? "Submit" : "Next"}
                 </button>
               </div>
-            </form>
-          </FormProvider>
-        </div>
-      </section>
-    </section>
+            </Form>
+          </div>
+        </FormProvider>
+      </div>
+    </div>
   );
 };
 

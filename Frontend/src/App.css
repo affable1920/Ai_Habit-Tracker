@@ -5,30 +5,33 @@
 @layer components {
   .navbar {
     @apply flex justify-between items-center px-8 py-4 dark:bg-primary-darker bg-light-lightest shadow-md 
-    flex-wrap text-xs relative dark:shadow-black/75 z-[5000];
+    flex-wrap text-xs relative dark:shadow-black/75 z-[5000] lg:px-12;
   }
 
   .nav__links {
-    @apply absolute top-full bg-white dark:bg-primary-darker shadow-md w-full left-0 opacity-0 pointer-events-none transition-all duration-300 
-     font-bold flex flex-col gap-10 py-6 px-4 tracking-widest lg:opacity-100 lg:relative lg:w-auto lg:p-0 lg:pointer-events-auto
-     lg:flex-row lg:text-[11px] lg:shadow-none lg:bg-none lg:gap-12 dark:shadow-black/50 lg:transition-none;
+    @apply absolute top-full bg-light-lightest dark:bg-primary-darker shadow-md w-full left-0 opacity-0 pointer-events-none transition-opacity 
+    duration-100 font-bold flex flex-col gap-14 py-6 px-6 tracking-widest lg:opacity-100 lg:relative lg:w-auto lg:p-0 lg:pointer-events-auto
+     lg:flex-row text-[10px] lg:shadow-none lg:bg-none md:gap-24 dark:shadow-black/50 lg:transition-none;
   }
 
   .nav__link {
-    @apply flex items-center justify-between md:gap-3 p-2 px-3 rounded-sm lg:rounded-md transition-colors duration-200
-   text-primary-lighter dark:text-light-darkest hover:bg-light-darker hover:text-primary-darker dark:hover:bg-secondary
-    dark:hover:text-light focus:ring-1 focus:ring-accent outline-none lg:bg-none focus:shadow-md focus:shadow-black/15 
-    dark:focus:shadow-black lg:hover:scale-95;
+    @apply hover:bg-light-darker focus:bg-light-darker dark:hover:bg-secondary dark:focus:bg-secondary focus:ring-1 
+    focus:ring-light-darkest dark:focus:ring-secondary-lighter/50 p-2 rounded-sm focus:scale-y-90 outline-none focus:shadow-inner
+    focus:shadow-black/15 dark:focus:shadow-black hover:shadow-black;
+  }
+
+  .active__link {
+    @apply bg-light-darker dark:bg-secondary ring-1 ring-light-darkest dark:ring-secondary-lighter/50 scale-y-90 shadow-inner
+    shadow-black/15 dark:shadow-black;
   }
 
   .profile__features {
-    @apply absolute top-10 -right-8 bg-white shadow-lg flex flex-col gap-4 p-4 rounded-sm 
-    dark:shadow-black dark:bg-secondary-lighter opacity-0 pointer-events-none transition-opacity duration-200;
+    @apply flex flex-col gap-10 italic font-normal tracking-widest;
   }
 
   .profile__feature {
-    @apply pr-8 py-2 pl-2 relative hover:bg-light rounded-md transition-colors duration-300
-    dark:hover:bg-zinc-700;
+    @apply flex justify-center gap-3 items-center p-2 hover:bg-primary-darker rounded-sm shadow-inner focus:shadow-black 
+    outline-none focus:bg-primary-darker focus:ring-1 focus:ring-secondary-lighter/25;
   }
 
   .error__boundary {
@@ -39,9 +42,13 @@
     @apply border-[4px] border-accent-darker border-t-accent/90 absolute left-1/2 w-10 h-10 z-[99999];
   }
 
+  .overlay {
+    @apply fixed w-full h-full bg-slate-950/70 left-0 inset-0 z-[999];
+  }
+
   .modal {
-    @apply bg-white p-8 dark:bg-secondary-lighter dark:shadow-black rounded-md text-xs border-2 
-    border-light dark:border-accent z-[99998] max-w-[70%];
+    @apply bg-gradient-to-tr from-primary-darker via-secondary to-primary rounded-2xl text-xs text-white z-[99998] tracking-wider
+     w-full max-w-min min-w-[240px] mx-auto py-6 px-3 pt-3 shadow-white/75 shadow-sm;
   }
 
   .tooltip {
@@ -128,3 +135,5 @@
     transform: translate(0);
   }
 }
+
+/* Dashboard */

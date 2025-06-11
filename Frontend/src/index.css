@@ -15,12 +15,16 @@
     @apply h-full w-full max-w-full box-border;
   }
 
+  body {
+    @apply h-full;
+  }
+
   #root {
     @apply h-full;
   }
 
   .dark {
-    @apply bg-primary text-light;
+    @apply bg-primary text-light-darkest;
   }
 
   .out {
@@ -42,7 +46,7 @@
 
 @layer utilities {
   .wrapper {
-    @apply w-full max-w-[calc(100vw-6rem)] mx-auto;
+    @apply w-full md:max-w-[calc(100vw-6rem)] mx-auto;
   }
 
   .box {
@@ -50,7 +54,7 @@
   }
 
   .box__shadow {
-    @apply shadow-black/15 dark:shadow-black/50 shadow-md;
+    @apply shadow-black/10 dark:shadow-black/60 shadow-lg;
   }
 
   .box__wrapper {
@@ -61,37 +65,82 @@
     @apply hidden md:block;
   }
 
-  .modal {
-    animation: scale 300ms ease-out;
+  .icon__bg__lg {
+    @apply p-2;
+  }
+
+  .heading__md {
+    @apply text-center text-xl;
   }
 }
 
 @layer components {
+  /* Containers */
+  .wrapper__full {
+    @apply flex flex-col h-full;
+  }
+
+  .pad__box {
+    @apply grow-[.25];
+  }
+
+  .mid__box {
+    @apply rounded-xl shadow-black/10 shadow-md dark:shadow-black/50 ring-2 ring-light-darker/35
+    dark:ring-secondary-lighter/50 w-full max-w-[380px] mx-auto grow h-full max-h-[480px];
+  }
+
+  .form__content__wrapper {
+    @apply w-full max-w-[290px] mx-auto;
+  }
+
+  .link {
+    @apply text-[10px] italic tracking-widest font-medium hover:bg-light dark:hover:bg-secondary-lighter p-1 rounded-md;
+  }
+
   /* Inputs */
+
   .input {
-    @apply rounded-lg text-xs placeholder:text-xs tracking-widest out py-2 px-2 bg-inherit ring-2 ring-light-darker 
-    dark:ring-secondary focus:ring-accent-lightest/50 focus:ring-2 w-full dark:focus:ring-accent-darker/75
-    transition-colors duration-200 shadow-inner shadow-black/10 dark:shadow-black/75 focus:shadow-md focus:shadow-black/15 
+    @apply rounded-lg text-xs placeholder:text-xs tracking-widest out py-2 px-2 bg-inherit ring-2 w-full transition-colors duration-200 shadow-inner shadow-black/10
+    dark:ring-secondary focus:ring-accent-lightest/50 focus:ring-2  dark:focus:ring-accent-darker/75
+    dark:shadow-black/75 focus:shadow-md focus:shadow-black/15 ring-light-darker 
     dark:focus:shadow-black/75 placeholder:italic placeholder:scale-90;
+  }
+
+  .input__box {
+    @apply rounded-lg text-xs tracking-widest bg-inherit ring-2 ring-light-darker dark:ring-secondary
+    transition-colors duration-200 shadow-inner shadow-black/10 dark:shadow-black/75;
+  }
+
+  .input__ring {
+    @apply focus:ring-accent-lightest/50 focus:ring-2 dark:focus:ring-accent-darker/75
+    transition-colors duration-200;
+  }
+
+  .input__group {
+    @apply flex flex-col gap-2;
   }
 
   /* Interactives */
   .icon {
-    @apply cp text-secondary-lighter dark:text-light-darkest dark:active:text-light transition-colors duration-200 
+    @apply cp text-primary-darker dark:text-light-darkest dark:active:text-light transition-colors duration-200 
     w-[14px] h-[14px] scale-90 active:scale-100;
   }
 
   .icon__large {
-    @apply w-[16px] h-[16px];
+    @apply w-[20px] h-[20px];
+  }
+
+  .icon__small {
+    @apply w-[12px] h-[12px];
   }
 
   .icon__accent {
     @apply text-accent-darker hover:focus:text-accent;
   }
 
-  .btn__icon {
-    @apply bg-inherit flex justify-center items-center rounded-md ring-1 ring-light-darkest/60 p-1
-    dark:ring-secondary-lighter/65 active:bg-light-lighter dark:active:bg-secondary-lighter/65
+  .icon__bg {
+    @apply bg-inherit flex justify-center items-center rounded-md ring-1 ring-light-darkest/40 p-1
+    dark:ring-secondary-lighter/30 active:bg-light-lighter dark:active:bg-secondary-lighter/65
     active:shadow-inner focus:ring-light-darkest/75 
     focus:shadow-lg shadow-black/10
     shadow-md dark:shadow-black/75;
@@ -101,6 +150,10 @@
     @apply rounded-lg out p-2 px-4 font-semibold text-xs italic tracking-widest shadow-black/20 
     focus:shadow-black/20 dark:focus:shadow-black/60 focus:shadow-md shadow-inner dark:shadow-black/40 active:shadow-black/15 ring-1 transition-shadow 
     duration-300 active:ring-accent-darker/80 active:scale-95 active:shadow-inner;
+  }
+
+  .btn__small {
+    @apply p-1 px-[6px] text-[10px];
   }
 
   .btn__primary {
@@ -121,14 +174,11 @@
   .label {
     @apply text-xs tracking-wider font-medium opacity-75 ml-[2px] italic;
   }
-  .input__group {
-    @apply flex flex-col gap-2 my-5;
-  }
 
   .habit {
-    @apply ring-[1px] p-3 md:p-2 ring-light-darker shadow-sm rounded-sm lg:rounded-md 
+    @apply ring-1 p-2 ring-light-darker shadow-sm rounded-sm lg:rounded-md 
     dark:ring-secondary-lighter/60 dark:shadow-black/65 cp hover:bg-light-lighter 
-    dark:hover:bg-primary-lighter transition-colors;
+    dark:hover:bg-primary-lighter transition-colors hover:shadow-black/75 md:min-w-[240px];
   }
 
   .habit__title {
@@ -140,8 +190,7 @@
   }
 
   .error__input {
-    @apply p-1 px-2 text-red-700 italic dark:bg-inherit dark:text-red-400 tracking-wider 
-    text-xs text-center leading-4;
+    @apply text-xs italic text-red-700 dark:text-red-400 tracking-wider text-center;
   }
 
   .headings__large {
@@ -154,7 +203,7 @@
   }
   .error__component {
     @apply grid place-items-center text-xs tracking-wide font-semibold text-red-800 bg-blue-100 shadow-sm rounded-lg 
-    p-2 ring-2 ring-2;
+    p-2 ring-2;
   }
   .navigation__link {
     @apply text-black font-bold bg-red-200 p-1 rounded-lg m-1;
@@ -167,50 +216,8 @@
     @apply ring-[2px] ring-light m-2 shadow-lg dark:ring-zinc-700
     rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;
   }
-  .overlay {
-    @apply fixed w-full h-full bg-black/55 left-0 inset-0 flex items-center justify-center z-[999];
-  }
 
   .link {
     @apply outline-none focus:underline focus:font-semibold;
-  }
-}
-
-@keyframes scale {
-  0% {
-    transform: translateY(400px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.icon__spin {
-  animation: arrow__spin 1s infinite linear;
-}
-
-@keyframes arrow__spin {
-  to {
-    transform: rotate(1turn);
-  }
-}
-
-.text__scale {
-  animation: scale__text infinite 2s linear;
-}
-
-@keyframes scale__text {
-  0%,
-  100% {
-    transform: scale(0.8);
-  }
-  25% {
-    transform: scale(0.85);
-  }
-  50% {
-    transform: scale(0.9);
-  }
-  75% {
-    transform: scale(0.95);
   }
 }

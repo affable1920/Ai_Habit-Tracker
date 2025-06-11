@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { MdDarkMode } from "react-icons/md";
 import { FaRegLightbulb } from "react-icons/fa";
 import { ThemeContext } from "./Providers/ThemeProvider";
-import Icon from "./Icon";
+import IconComponent from "./IconComponent";
 
 const ThemeToggler = () => {
   const { isDark, setIsDark } = useContext(ThemeContext);
@@ -19,10 +19,10 @@ const ThemeToggler = () => {
   }, [isDark]);
 
   return (
-    <Icon
+    <IconComponent
       Icon={isDark ? FaRegLightbulb : MdDarkMode}
       fn={() => setIsDark(!isDark)}
-      bg={true}
+      bg
     />
   );
 };

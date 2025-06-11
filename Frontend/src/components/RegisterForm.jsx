@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Joi from "joi";
 import Form from "./common/Form";
-import InputAdd from "./common/InputAdd";
+import Input from "./common/Input";
 import loadingStore from "../stores/loadingStore";
 import AuthContext from "../context/AuthContext";
 
@@ -45,38 +45,31 @@ const RegisterForm = () => {
   };
 
   return (
-    <>
-      <Form label="Sign Up">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <InputAdd
-            name="email"
-            label="Email"
-            register={register}
-            errors={errors}
-          />
-          <InputAdd
+    <div className="wrapper__full">
+      <div className="pad__box" />
+      <div className="mid__box p-8">
+        <h2 className="heading__md">Welcome</h2>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Input name="email" register={register} errors={errors} />
+          <Input
             name="password"
-            label="Password"
             type="password"
             register={register}
             errors={errors}
           />
-          <InputAdd
-            name="username"
-            label="Username"
-            register={register}
-            errors={errors}
-          />
-          <button className="btn btn__accent w-full mt-2">Register</button>
-          <button
-            className="mt-3 btn btn__primary w-full"
-            onClick={() => navigate("/login")}
-          >
-            Already have an account ?
-          </button>
-        </form>
-      </Form>
-    </>
+          <Input name="username" register={register} errors={errors} />
+          <div className="flex flex-col gap-4">
+            <button className="btn btn__accent">Register</button>
+            <button
+              className="btn btn__primary"
+              onClick={() => navigate("/login")}
+            >
+              Already have an account ?
+            </button>
+          </div>
+        </Form>
+      </div>
+    </div>
   );
 };
 

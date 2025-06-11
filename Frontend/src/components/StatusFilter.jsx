@@ -1,7 +1,7 @@
-import Icon from "./Icon";
 import queryStore from "../stores/queryStore";
 import { LuListTodo } from "react-icons/lu";
 import { MdPendingActions } from "react-icons/md";
+import IconComponent from "./IconComponent";
 
 const StatusFilter = () => {
   const query = queryStore((s) => s.query);
@@ -13,9 +13,9 @@ const StatusFilter = () => {
 
   return (
     <>
-      <Icon
+      <IconComponent
         fn={handleSetStatus}
-        bg={true}
+        bg
         Icon={query.status ? MdPendingActions : LuListTodo}
       />
     </>

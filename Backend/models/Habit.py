@@ -14,10 +14,13 @@ class Query(BaseModel):
 class FE_Data(BaseModel):
     title: str
     description: Optional[str] = None
-    priority: Optional[str] = None
+
+    category: Optional[str] = None
+    priority: Optional[str | int] = None
     frequency: Optional[str] = None
+
     interval: Optional[int | str] = None
-    interval_times: Optional[str] = None
+    interval_time: Optional[str] = None
 
 
 class Defaults(BaseModel):

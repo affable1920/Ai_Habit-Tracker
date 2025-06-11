@@ -34,14 +34,14 @@ const Layout = () => {
 
   const AppLayout = () => {
     return (
-      <>
+      <section className="flex flex-col h-full">
         <header>
           <NavBar />
         </header>
-        <main className="flex flex-col h-screen">
+        <main className="grow">
           <Outlet />
         </main>
-      </>
+      </section>
     );
   };
 

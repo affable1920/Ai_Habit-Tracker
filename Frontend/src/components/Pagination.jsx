@@ -6,23 +6,22 @@ const Pagination = () => {
   const setPage = queryStore((s) => s.setPage);
 
   return (
-    <div className="flex justify-end mt-6 justify-self-end self-end">
-      <div className="flex items-center gap-1">
-        {query.page > 1 && (
-          <button
-            className={`btn btn__primary flex items-center p-[6px]`}
-            onClick={() => setPage((query.page -= 1))}
-          >
-            <IoArrowBackOutline />
-          </button>
-        )}
+    <div className="flex items-center gap-3 justify-end">
+      {query.page > 1 && (
         <button
-          className="btn btn__accent flex items-center p-[6px] font-semibold"
-          onClick={() => setPage((query.page += 1))}
+          className={`btn btn__accent btn__small flex gap-1 items-end`}
+          onClick={() => setPage((query.page -= 1))}
         >
-          <span>Next</span> <IoArrowForwardOutline className="mt-[2.75px]" />
+          <IoArrowBackOutline />
+          <span>Back</span>
         </button>
-      </div>
+      )}
+      <button
+        className="btn btn__accent btn__small flex gap-1 items-end"
+        onClick={() => setPage((query.page += 1))}
+      >
+        <span>Next</span> <IoArrowForwardOutline />
+      </button>
     </div>
   );
 };

@@ -8,35 +8,34 @@ const ModalProvider = ({ children }) => {
     switch (action.type) {
       case "OPEN_MODAL":
         return {
-          openModals: action.keepPrevious
-            ? [...state.openModals, action.name]
+          open: action.keepPrevious
+            ? [...state.open, action.name]
             : [action.name],
 
-          props: { ...action.props } || {},
+          props: action.props ? action.props : {},
         };
 
       case "CLOSE_MODAL":
         return {
-          ...state,
-          openModals: state.openModals?.filter((m) => m != action.name),
-          props: { ...action.props } || {},
+          open: state.open?.filter((m) => m != action.name),
+          props: action.props ? action.props : {},
         };
 
       case "CLOSE_ALL":
-        return { openModals: [], props: action.props || {} };
+        return { open: [], props: action.props ? action.props : {} };
 
       default:
         return state;
     }
   };
 
-  const [modal, dispatch] = useReducer(ModalReducer, {
-    openModals: [],
+  const [modals, dispatch] = useReducer(ModalReducer, {
+    open: [],
     props: {},
   });
 
   return (
-    <ModalContext.Provider value={{ modal, dispatch }}>
+    <ModalContext.Provider value={{ modals, dispatch }}>
       {children}
     </ModalContext.Provider>
   );

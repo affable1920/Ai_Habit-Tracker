@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MdStart } from "react-icons/md";
 import Habit from "./Habit";
 import useHabitStore from "../stores/habitStore";
 import queryStore from "./../stores/queryStore";
-import Icon from "./Icon";
-import { debounce } from "../Utils/utils";
+import IconComponent from "./IconComponent";
 
 const HabitsList = () => {
   const habits = useHabitStore((store) => store.habits);
@@ -14,59 +13,17 @@ const HabitsList = () => {
   const query = queryStore((s) => s.query);
   const search_query = queryStore((s) => s.search_query);
 
-  let setMax = queryStore((s) => s.setMax);
-  setMax = debounce(setMax, 300);
-
   useEffect(() => {
     fetchHabits(query);
   }, [query]);
 
-  const minHabitWidth = "240px";
-  const minHabitHeight = "100px";
+  const resizeCallback = () => {};
+  const ro = new ResizeObserver(resizeCallback);
 
-  const [maxHabitsCount, setMaxHabitsCount] = useState(0);
-
-  const trackerRef = useRef(null);
-
-  const resizeCallback = ([e]) => {
-    const { width, height } = e.contentRect;
-    const regex = /\W/;
-
-    minHabitWidth.replace(regex, "");
-    minHabitHeight.replace(regex, "");
-
-    if (typeof minHabitWidth != "number" || typeof minHabitHeight != "number") {
-      setMaxHabitsCount(Math.floor(window.innerWidth / 240));
-    } else
-      setMaxHabitsCount(
-        Math.floor(width / minHabitWidth) + Math.floor(height / minHabitHeight)
-      );
-  };
-
-  useEffect(() => {
-    const ro = new ResizeObserver(resizeCallback);
-    const el = trackerRef.current;
-
-    const isHTMLELEMENT = el && el instanceof HTMLElement;
-
-    if (isHTMLELEMENT);
-    ro.observe(el);
-
-    return () => {
-      if (isHTMLELEMENT) ro.unobserve(el);
-    };
-  }, []);
-
-  useEffect(() => {
-    setMax(maxHabitsCount);
-  }, [maxHabitsCount]);
+  useEffect(() => {}, []);
 
   return (
-    <section
-      ref={trackerRef}
-      className="flex flex-col gap-2 md:grid
-        md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] mt-4 box"
-    >
+    <section className={`flex gap-2 flex-col`}>
       {habits?.length === 0 && (
         <div className="flex items-center flex-col gap-2">
           <p className="text-sm font-bold font-mono tracking-widest mt-4">
@@ -74,7 +31,7 @@ const HabitsList = () => {
           </p>
           {!search_query && (
             <Link to="/add">
-              <Icon Icon={MdStart} bg={true} />
+              <IconComponent Icon={MdStart} bg />
             </Link>
           )}
         </div>

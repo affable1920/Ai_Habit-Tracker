@@ -1,6 +1,4 @@
-import React from "react";
 import Select from "../common/Select";
-import InputAdd from "../common/InputAdd";
 import { useFormContext } from "react-hook-form";
 
 const Step3 = () => {
@@ -13,7 +11,6 @@ const Step3 = () => {
     <>
       <Select
         name="reminder"
-        label="Want a reminder ?"
         register={register}
         errors={errors}
         options={["YES", "NO"]}
@@ -21,7 +18,6 @@ const Step3 = () => {
       />
       <InputAdd
         name="reminderTimes"
-        label="Times ?"
         register={register}
         errors={errors}
         type="datetime-local"

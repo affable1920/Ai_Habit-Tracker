@@ -111,19 +111,58 @@ class CRUD:
         log = []
 
         if completion_upd:
-            now = datetime.now().isoformat()
+
+            dated = datetime.now()
+            today_str = dated.isoformat()
+
+            date_str = dated.strftime("%Y-%m-%d")
+            time_str = dated.strftime("%H:%M:%S")
+
+            hour = dated.hour
+            weekday = dated.weekday()
+
+            creation_time = to_upd.get("created_at", datetime.now().isoformat())
+            creation_time = datetime.fromisoformat(creation_time)
+
+            comp_logs = to_upd.get("completion_log", [])
+            prev_three_logs = []
+
+            if not comp_logs:
+                pass
+
+            else:
+                prev_three_logs = [log for i, log in enumerate(comp_logs) if i <= 2]
+
+                for log in comp_logs and len(prev_three_logs) != 3:
+                    prev_three_logs.append(log)
+
             logger.info("Launcing completion update procedure.")
             to_upd["completion_log"] = (
-                [*to_upd["completion_log"], now] if to_upd["completion_log"] else [now]
+                [*to_upd["completion_log"], today_str]
+                if to_upd["completion_log"]
+                else [today_str]
             )
-            to_upd["last_completed"] = now
+            to_upd["last_completed"] = today_str
             to_upd["status"] = "completed"
+
+            # logs related to datetime
+            # timestamp - full ISO str datetime.now().isoformat()
+            # date - ISO date
+            # time ISO time
+            # day_of_week 0 - 6
+            # time_of_day 0 -23
 
             log = [
                 habit_id,
                 to_upd.get("title", None),
-                date.today().isoformat(),
-                datetime.now().time().isoformat(),
+                to_upd.get("category", None),
+                to_upd.get("priority", 2),
+                today_str,
+                date_str,
+                time_str,
+                hour,
+                weekday,
+                prev_three_logs,
                 to_upd.get("completed", False),
             ]
 

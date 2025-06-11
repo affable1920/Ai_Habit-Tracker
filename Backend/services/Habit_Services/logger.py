@@ -11,7 +11,20 @@ class Csv_Logger:
     def write_logs(self, filename: Path, log: list):
         exists = filename.exists()
 
-        header: list[str] = ["habit_id", "habit_name", "date", "time", "completed"]
+        header: list[str] = [
+            "habit_id",
+            "habit_name",
+            "habit_category",
+            "priority",
+            "timestamp",
+            "date",
+            "time",
+            "time_of_day",
+            "day_of_week",
+            "past_three_days",
+            "completed",
+        ]
+
         has_headers = False
 
         if exists:

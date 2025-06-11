@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import InputAdd from "./common/InputAdd";
+import { useContext } from "react";
+import Input from "./common/Input";
 import { useForm } from "react-hook-form";
 import Select from "./common/Select";
 import Joi from "joi";
@@ -31,6 +31,8 @@ const Reminder = () => {
     });
   };
 
+  const intervalTimes = ["Minutes", "Hours", "Days", "Weeks"];
+
   return (
     <>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -38,7 +40,7 @@ const Reminder = () => {
           Repeat every ?
         </h4>
         <div className="flex flex-col gap-2">
-          <InputAdd
+          <Input
             name={"interval"}
             label="Interval"
             register={form.register}
@@ -50,7 +52,7 @@ const Reminder = () => {
             label="Interval_Time"
             register={form.register}
             errors={errors}
-            options={["Days", "Weeks", "Months"]}
+            options={intervalTimes}
           />
         </div>
         <div className="self-center mt-5">

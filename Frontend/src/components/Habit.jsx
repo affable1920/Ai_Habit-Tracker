@@ -5,6 +5,13 @@ import { GoChevronRight } from "react-icons/go";
 import { MdModeEdit } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { toast } from "sonner";
+import {
+  FcLowPriority,
+  FcMediumPriority,
+  FcHighPriority,
+  FcReadingEbook,
+  FcRegisteredTrademark,
+} from "react-icons/fc";
 import useHabitStore from "../stores/habitStore";
 
 const deCapitalize = (str) => {
@@ -27,7 +34,7 @@ const Habit = ({ habit }) => {
   const [loadMore, setLoadMore] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
-  const { modal, dispatch } = useContext(ModalContext);
+  const { dispatch } = useContext(ModalContext);
 
   const loadRef = useRef(null);
   const editHabit = useHabitStore((s) => s.editHabit);
@@ -69,9 +76,20 @@ const Habit = ({ habit }) => {
       setLoadMore(!loadMore);
   };
 
+  const levels = {
+    1: FcLowPriority,
+    2: FcReadingEbook,
+    3: FcMediumPriority,
+    4: FcRegisteredTrademark,
+    5: FcHighPriority,
+  };
+
+  const PriorityTag = levels[habit?.priority - 1];
+
   return (
     <article ref={loadRef} onClick={onLoad} className="habit" key={habit.id}>
-      <div>
+      <div className="flex justify-between mb-3">
+        <span>{PriorityTag && <PriorityTag />}</span>
         <button
           disabled={habit.completed}
           onClick={() =>
@@ -80,7 +98,7 @@ const Habit = ({ habit }) => {
             })
           }
           className={`flex items-center gap-1 font-bold disabled:opacity-70 text-[8px] tracking-widest
-              p-2 rounded-md shadow-sm justify-self-end mb-3 relative ${
+              p-2 py-[6px] rounded-md shadow-sm relative text-black ${
                 habit.completed ? "bg-green-400" : "bg-yellow-400"
               }`}
         >
@@ -145,7 +163,7 @@ const Habit = ({ habit }) => {
         ) : (
           <p className="text-xs font-mono leading-4">{habit?.description}</p>
         )}
-        <span className="tracking-wide text-xs italic text-gray-200 font-medium">
+        <span className="tracking-widest text-[10px] italic font-medium">
           Streak: <span>{habit?.streak}</span>
         </span>
       </div>

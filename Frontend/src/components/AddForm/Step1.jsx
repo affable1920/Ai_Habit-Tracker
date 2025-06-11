@@ -1,5 +1,4 @@
-import React from "react";
-import InputAdd from "../common/InputAdd";
+import Input from "../common/Input";
 import { useFormContext } from "react-hook-form";
 
 const Step1 = () => {
@@ -7,19 +6,13 @@ const Step1 = () => {
 
   return (
     <>
-      <InputAdd
-        name="title"
-        label="Habit Title"
-        register={register}
-        errors={formState.errors}
-        large={true}
-      />
-      <InputAdd
+      <Input name="title" register={register} errors={formState.errors} />
+      <Input
         name="description"
         register={register}
         errors={formState.errors}
-        label="Description"
-        large={true}
+        large
+        optional
       />
     </>
   );

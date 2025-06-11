@@ -2,17 +2,14 @@ import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
 import HabitFilterButtons from "./HabitFilterButtons";
 
-const HabitsTracker = ({ classes }) => {
+const HabitsTracker = () => {
   return (
-    <section
-      className={`flex flex-col shadow-black/10 shadow-md dark:shadow-black box 
-        box__wrapper h-full justify-between min-h-full`}
-    >
-      <div className="flex flex-col">
+    <section className={`flex flex-col gap-6 p-6 box__shadow rounded-sm`}>
+      <div className="flex flex-col gap-5">
         <HabitFilterButtons />
         <HabitsList />
       </div>
-      <div className="p-1">
+      <div>
         <Pagination />
       </div>
     </section>

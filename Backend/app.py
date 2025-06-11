@@ -14,6 +14,9 @@ import logging
 from scripts.path_scripts import init_dirs_and_paths
 from services.Habit_Services.batch_ops import BatchOps
 
+from ml.ml import LogScrapper
+
+scrapper = LogScrapper()
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -31,6 +34,7 @@ async def root(app: FastAPI):
     init_dirs_and_paths()
 
     batch_ops = BatchOps()
+    scrapper.load_logs()
 
     scheduler.add_job(
         batch_ops.update_streak,

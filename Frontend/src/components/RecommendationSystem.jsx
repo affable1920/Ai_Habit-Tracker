@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Recommendation from "./Recommendation";
 import AuthContext from "../context/AuthContext";

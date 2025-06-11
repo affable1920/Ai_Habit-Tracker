@@ -1,15 +1,18 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Joi from "joi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import authService from "../services/authService";
-import Form from "./common/Form";
-import InputAdd from "./common/InputAdd";
+import Input from "./common/Input";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import loadingStore from "../stores/loadingStore";
 import AuthContext from "../context/AuthContext";
+import Form from "./common/Form";
+import IconComponent from "./IconComponent";
+import { FaGithub } from "react-icons/fa";
+import { SiOpenai } from "react-icons/si";
+import { RiNotionFill } from "react-icons/ri";
 
 const LoginForm = () => {
   const { setLoading } = loadingStore();
@@ -50,7 +53,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      await authService.login();
+      await login();
 
       navigate("/");
       toast.success("Successfully logged in.");
@@ -62,41 +65,46 @@ const LoginForm = () => {
   };
 
   return (
-    <Form label="Login">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputAdd
-          name="email"
-          register={register}
-          errors={errors}
-          label="Email"
-        />
-        <InputAdd
-          name="password"
-          register={register}
-          errors={errors}
-          label="Password"
-          type="password"
-        />
-        <button className="btn btn__accent w-full mt-1 mb-2">Login</button>
-      </form>
-      <Link
-        className="link text-[10px] italic tracking-widest text-center block"
-        to="/register"
-      >
-        New Joinee ?
-      </Link>
-      <div className="flex italic text-xs font-semibold justify-center tracking-widest items-center gap-2 mt-2 opacity-80">
-        <div className="border-[1.25px] border-slate-200 dark:border-accent w-16"></div>
-        <div>OR</div>
-        <div className="border-[1.25px] border-slate-200 dark:border-accent w-16"></div>
+    <div className="wrapper__full">
+      <div className="pad__box" />
+      <div className="mid__box p-8 flex flex-col gap-4">
+        <h2 className="heading__md">Login</h2>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Input name="email" register={register} errors={errors} />
+          <Input
+            name="password"
+            register={register}
+            errors={errors}
+            type="password"
+          />
+          <button className="btn btn__accent w-full mt-1 mb-2">Login</button>
+        </Form>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between">
+            <Link className="link" to="/register">
+              New Joinee ?
+            </Link>
+            <Link className="link" to="/">
+              Forgot password ?
+            </Link>
+          </div>
+          <div className="flex flex-col gap-6">
+            <div className="flex italic text-xs font-semibold justify-center tracking-widest items-center gap-6 mt-2 opacity-80">
+              <div className="ring-1 ring-light-darker/50 dark:ring-secondary-lighter w-full"></div>
+              <div>OR</div>
+              <div className="ring-1 ring-light-darker/50 dark:ring-secondary-lighter w-full"></div>
+            </div>
+            <div className="flex gap-8 justify-center">
+              <IconComponent bg Icon={FcGoogle} fn={googleSignIn} />
+              <IconComponent bg Icon={FaGithub} />
+              <IconComponent bg Icon={SiOpenai} />
+              <IconComponent bg Icon={RiNotionFill} />
+            </div>
+          </div>
+        </div>
       </div>
-      <button
-        className="btn btn__primary w-full mt-2 flex items-center justify-center gap-3"
-        onClick={googleSignIn}
-      >
-        Sign in with <FcGoogle />
-      </button>
-    </Form>
+    </div>
   );
 };
 

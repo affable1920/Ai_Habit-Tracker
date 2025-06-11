@@ -1,35 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { CgProfile } from "react-icons/cg";
-import { MdSettings } from "react-icons/md";
-import { FaChevronDown } from "react-icons/fa";
-import { HiMenuAlt3 } from "react-icons/hi";
+import { Link, useLocation } from "react-router-dom";
 
-const NavLinks = () => {
+const NavLinks = ({ showLinks }) => {
+  const { pathname: route } = useLocation();
+
   const navLinks = [
     { page: "Home", path: "/" },
-    { page: "Dashboard", path: "/" },
-    { page: "Products", path: "/" },
-    { page: "Docs", path: "/" },
-    { page: "About us", path: "/" },
+    { page: "Dashboard", path: "/dashboard" },
+    { page: "Track", path: "/tracker" },
+    { page: "Stats", path: "/stats" },
   ];
 
   return (
-    <div className="flex justify-end p-2 ">
-      <HiMenuAlt3 />
-      <ul className="text-xs flex flex-col justify-between">
-        {navLinks.map((link, index) => (
-          <li className={``} key={link.page}>
-            <Link to={link.path} className="">
-              {link.page}
-              {(index === 2 || index === 3) && (
-                <FaChevronDown className="text-color__accent" size={10} />
-              )}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul
+      className={`nav__links ${showLinks && "opacity-100 pointer-events-auto"}`}
+    >
+      {navLinks.map((link) => (
+        <Link
+          onClick={(e) => console.log(e)}
+          to={link.path}
+          className={`nav__link ${
+            route === link.path &&
+            `w-fit bg-light-darker shadow-inner shadow-black/10 dark:shadow-black md:active__link 
+            dark:bg-secondary-lighter/50 ring-1 ring-light-darkest dark:bg-secondary dark:ring-secondary-lighter 
+            pointer-events-none opacity-75`
+          }`}
+          key={link.path}
+        >
+          <li>{link.page}</li>
+        </Link>
+      ))}
+    </ul>
   );
 };
 

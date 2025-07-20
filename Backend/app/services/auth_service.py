@@ -2,13 +2,13 @@ from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from typing import Annotated
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
+import os
 import jwt
 import json
 
-from variables.paths import users_file
-import os
+from app.variables.paths import users_file
 from dotenv import load_dotenv
 
 ALG = "HS256"
@@ -34,8 +34,10 @@ def get_users():
 
 
 def create_access_token(user_data):
-    iat = datetime.now().timestamp()
-    exp = (datetime.now() + timedelta(hours=24)).timestamp()
+    now = datetime.now(timezone.utc)
+
+    iat = now.timestamp()
+    exp = (now + timedelta(seconds=6)).timestamp()
 
     payload = {**user_data, "iat": iat, "exp": exp}
     return jwt.encode(payload, S_KEY, ALG)
@@ -47,7 +49,8 @@ def decode_access_token(token: Annotated[str, Depends(auth_scheme)]):
 
     except jwt.ExpiredSignatureError:
         raise HTTPException(
-            403, "Session expired. Please log in again !", {"SESSION_EXP": "true"}
+            403, "Session expired. Please log in again !", {
+                "x-session-exp": "true"}
         )
 
     except jwt.InvalidTokenError as e:

@@ -18,5 +18,7 @@ class LogScrapper:
             with open(file, "r") as f:
                 df = pd.read_csv(f)
 
+                # print(df.head())
+
 
 messy = LogScrapper()

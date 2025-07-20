@@ -1,4 +1,4 @@
-import variables.paths as paths
+import app.variables.paths as paths
 
 
 def all_initialised():

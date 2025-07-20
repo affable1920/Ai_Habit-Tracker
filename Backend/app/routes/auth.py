@@ -1,18 +1,18 @@
+import json
+from uuid import uuid4
+
 from typing import Annotated
 from fastapi.responses import JSONResponse
 from fastapi import Depends, HTTPException, APIRouter
 
-import json
-from uuid import uuid4
+from app.models import user
 from passlib.context import CryptContext
 
 
-from models import user
-from variables.paths import users_file
-import services.auth_service as auth_service
+from app.variables.paths import users_file
+import app.services.auth_service as auth_service
 
 router = APIRouter()
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -52,7 +52,8 @@ async def login(user: user.LoginUser):
     if not user.email in emails:
         raise HTTPException(400, "User not found. Please register first !")
 
-    user_obj = next((x for x in users.values() if x["email"] == user.email), None)
+    user_obj = next((x for x in users.values()
+                    if x["email"] == user.email), None)
 
     pwd_valid = pwd_context.verify(user.password, user_obj["password"])
     if not pwd_valid:
@@ -68,6 +69,7 @@ async def get_profile(token: Annotated[str, Depends(auth_service.decode_access_t
     user_id = token["id"]
 
     if not user_id in users:
-        raise HTTPException(404, "You are not a part of our community so FUCK OFF !")
+        raise HTTPException(
+            404, "You are not a part of our community so FUCK OFF !")
 
     return users[user_id]

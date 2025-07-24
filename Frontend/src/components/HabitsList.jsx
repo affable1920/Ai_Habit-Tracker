@@ -17,11 +17,6 @@ const HabitsList = () => {
     fetchHabits(query);
   }, [query]);
 
-  const resizeCallback = () => {};
-  const ro = new ResizeObserver(resizeCallback);
-
-  useEffect(() => {}, []);
-
   return (
     <section className={`flex gap-2 flex-col`}>
       {habits?.length === 0 && (

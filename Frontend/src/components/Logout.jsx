@@ -6,20 +6,25 @@ import { ModalContext } from "./Providers/ModalProvider";
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
 
-  const { dispatch } = useContext(ModalContext);
+  const { logout, token } = useContext(AuthContext);
+  const { modals, dispatch } = useContext(ModalContext);
+
+  console.log("Logout called.")
+  console.log(token)
 
   useEffect(() => {
     try {
+      if (modals.open.length != 0)
+      dispatch({ type: "CLOSE_ALL" });
+
       toast.info("Logging out...")
       logout();
-      dispatch({ type: "CLOSE_ALL" });
 
       navigate("/login");
       toast.info("Logged out !");
     } catch (ex) {}
-  }, []);
+  }, [token]);
 
   return null;
 };

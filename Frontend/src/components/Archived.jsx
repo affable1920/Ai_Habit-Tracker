@@ -1,6 +1,3 @@
-import { IoMdPaper } from "react-icons/io";
-import Icon from "./Icon";
-
 const Archived = () => {
   return (
     <div className="box h-auto">

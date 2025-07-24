@@ -47,6 +47,7 @@ const Layout = () => {
     
     ws.onclose = (ev) => {
       if(ev.reason == sessionExpired) {
+        console.log("calling logout. session exp")
         logout();
       }
     }

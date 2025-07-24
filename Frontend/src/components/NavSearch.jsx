@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ModalContext } from "./Providers/ModalProvider";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 import { IoMdSearch } from "react-icons/io";
 import IconComponent from "./IconComponent";
 

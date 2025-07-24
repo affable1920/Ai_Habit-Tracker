@@ -8,7 +8,7 @@ import { ModalContext } from "./Providers/ModalProvider";
 import useExtraStore from "./../stores/extraStore";
 
 const Reminder = () => {
-  const { modal, dispatch } = useContext(ModalContext);
+  const { modals, dispatch } = useContext(ModalContext);
 
   const extra = useExtraStore((s) => s.extra);
   const setValues = useExtraStore((s) => s.setValues);

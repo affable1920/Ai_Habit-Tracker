@@ -7,7 +7,7 @@ import Input from "./common/Input";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import loadingStore from "../stores/loadingStore";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 import Form from "./common/Form";
 import IconComponent from "./IconComponent";
 import { FaGithub } from "react-icons/fa";

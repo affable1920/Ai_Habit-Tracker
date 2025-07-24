@@ -6,7 +6,6 @@ import Overlay from "./Overlay";
 import useHabitStore from "../stores/habitStore";
 import { toast } from "sonner";
 import IconComponent from "./IconComponent";
-import RecommendationSystem from "./RecommendationSystem";
 import UserActions from "./UserActions";
 import { TiTick } from "react-icons/ti";
 
@@ -38,7 +37,6 @@ const Modal = () => {
   if (modals.open.length === 0) return null;
 
   const modalMap = {
-    rec_system: <RecommendationSystem />,
     user_action: <UserActions />,
     edit_habit: (
       <button

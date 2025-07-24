@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +6,12 @@ import { toast } from "sonner";
 import Joi from "joi";
 import Form from "./common/Form";
 import Input from "./common/Input";
+import { AuthContext } from "./Providers/AuthProvider";
 import loadingStore from "../stores/loadingStore";
-import AuthContext from "../context/AuthContext";
 
 const RegisterForm = () => {
   const { setLoading } = loadingStore();
-  const { register: userRegister } = useContext(AuthContext);
+  const { register: userRegister } = React.useContext(AuthContext);
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),

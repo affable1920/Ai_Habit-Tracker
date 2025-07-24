@@ -1,56 +1,58 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 import { ModalContext } from "./Providers/ModalProvider";
 import Modal from "./Modal";
 import NavBar from "./NavBar";
 import Spinner from "./Spinner";
 import Tooltip from "./Tooltip";
 import { toast } from "sonner";
-import eventEmitter from "../services/eventEmiiter";
-import { jwtDecode } from 'jwt-decode';
+import evEmitter from "../services/eventEmiiter";
+import { jwtDecode } from "jwt-decode";
 
 const Layout = () => {
+  const sessionExpired = "SESSION_EXP";
+
   const { user, token, logout } = React.useContext(AuthContext);
   const { modals, dispatch } = React.useContext(ModalContext);
 
-
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
 
     // backend returns jwt with exp and iat in utc: seconds since epoch, so must multiply by 1000 or divide now by 1000
-    let now = Date.now()
-    let exp = jwtDecode(token)["exp"] * 1000
+    let now = Date.now();
+    let exp = jwtDecode(token)["exp"] * 1000;
 
     let timeLeft = (exp - now) / 1000;
-    if(!timeLeft || timeLeft <= 0)
-      logout();
+    if (!timeLeft || timeLeft <= 0) logout();
 
     const WSURL = `ws://localhost:8000/ws`;
     const ws = new WebSocket(WSURL, [token]);
 
-    const sessionExpired = "SESSION_EXP";
-
     ws.onopen = () => {
       toast.success("Ws connected");
-      console.log('Connected.')
-      ws.send("Hello server")
+      console.log("Connected.");
+      ws.send("Hello server");
     };
 
     ws.onmessage = (ev) => {
-      console.log(JSON.parse(ev.data))
+      console.log(JSON.parse(ev.data));
     };
 
     ws.onerror = (ev) => {
-      console.log(ev)
-    }
-    
+      console.log(ev);
+    };
+
     ws.onclose = (ev) => {
-      if(ev.reason == sessionExpired) {
-        console.log("calling logout. session exp")
+      if (ev.reason == sessionExpired) {
+        toast("Session Expired", {
+          description: "Logging out ...",
+          duration: 1200,
+        });
+        evEmitter.emit(sessionExpired);
         logout();
       }
-    }
+    };
 
     return () => {
       ws.close();
@@ -116,8 +118,7 @@ const Layout = () => {
       <section className="flex flex-col h-full">
         <header>
           <NavBar />
-          <div>
-          </div>
+          <div></div>
         </header>
         <main className="grow">
           <Outlet />

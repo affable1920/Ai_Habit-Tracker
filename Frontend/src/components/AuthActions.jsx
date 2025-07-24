@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useLocation, Link } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 import { ModalContext } from "./Providers/ModalProvider";
 import NavSearch from "./NavSearch";
 import ThemeToggler from "./ThemeToggler";

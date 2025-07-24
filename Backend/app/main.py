@@ -8,13 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes import auth
 from app.routes import habits
-from app.services.auth_service import decode_access_token, get_users
 from app.scripts.path_scripts import init_dirs_and_paths
+from app.services.auth_service import decode_access_token, get_users
 
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://default-jade.vercel.app",
+    "https://aihabittracker-one.vercel.app",
 ]
 
 
@@ -53,21 +53,6 @@ def health_check():
 
 
 ws_conns: dict[str, WebSocket] = {}
-
-
-# async def ws_close(
-#     websocket,
-#     status: int,
-#     err_msg: str,
-#     u_id: str | None = None,
-# ):
-#     if websocket.application_state != WebSocketState.DISCONNECTED:
-#         # await websocket.send_json()
-#         await websocket.close(status, err_msg, {"x-websocket-disconnect": "true"})
-
-#     if u_id in ws_conns:
-#         ws_conns.pop(u_id)
-
 
 MUST_EXIT = {"code": status.WS_1010_MANDATORY_EXT, "reason": "SESSION_EXP"}
 NO_AUTH = {"code": status.WS_1008_POLICY_VIOLATION,

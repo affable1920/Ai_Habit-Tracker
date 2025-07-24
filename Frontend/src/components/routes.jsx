@@ -2,7 +2,6 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import RegisterForm from "./RegisterForm";
 import AddHabitComponent from "./AddHabitComponent";
-import Logout from "./Logout";
 import Layout from "./Layout";
 import LoginForm from "./LoginForm";
 import ErrorPage from "./ErrorPage";
@@ -26,7 +25,6 @@ const router = createBrowserRouter([
       { path: "", element: <Dashboard /> },
       { path: "tracker", element: <HabitsTracker /> },
       { path: "archived", element: <Archived /> },
-      { path: "logout", element: <Logout /> },
       {
         element: <PrivateRoutes />,
         children: [

@@ -1,15 +1,12 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import StatusFilter from "./StatusFilter";
 import { RiResetLeftFill } from "react-icons/ri";
-import { MdArchive, MdGifBox } from "react-icons/md";
-import AuthContext from "../context/AuthContext";
+import { MdArchive } from "react-icons/md";
 import queryStore from "../stores/queryStore";
 import IconComponent from "./IconComponent";
 
 const HabitFilterButtons = () => {
-  const { user } = useContext(AuthContext);
   const reset = queryStore((s) => s.reset);
   const query = queryStore((s) => s.query);
 

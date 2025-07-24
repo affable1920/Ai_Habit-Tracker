@@ -57,7 +57,7 @@ async def login(user: user.LoginUser):
 
     pwd_valid = pwd_context.verify(user.password, user_obj["password"])
     if not pwd_valid:
-        raise HTTPException(401, "Invalid Password !")
+        raise HTTPException(403, "Invalid Password !")
 
     user_data = {k: v for k, v in user_obj.items() if k != "password"}
     return auth_service.create_access_token(user_data)

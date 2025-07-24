@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { isRouteErrorResponse, Link, useRouteError } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 
 const ErrorPage = () => {
   const error = useRouteError();

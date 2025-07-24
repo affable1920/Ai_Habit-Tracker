@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 import { CgProfile } from "react-icons/cg";
 import { MdSettings } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";

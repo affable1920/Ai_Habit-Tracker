@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import http from "../services/httpService"
 
-const endPoint = "/auth"
+const endPoint = "/auth";
+const tokenKey = "token";
 
 const authStore = create((set, get, api) => ({
     user: null, 

@@ -4,13 +4,13 @@ class EventEmitter {
   }
 
   on(ev, listener) {
-    if (!this.events[ev]) this.events[ev] = new Set();
+    if (!this.events[ev]) this.events[ev] = [];
 
     if (typeof listener !== "function") {
       throw new Error("The listener must be a function!");
     }
 
-    this.events[ev].add(listener);
+    this.events[ev].push(listener);
   }
 
   emit(ev, ...args) {
@@ -25,10 +25,9 @@ class EventEmitter {
       throw new Error("The listener must be a function!");
     }
 
-    if (this.events[ev].has(listener)) {
+    if (this.events[ev].includes(listener)) {
       this.events[ev].delete(listener);
     } else {
-      throw new Error(`The listener is not registered for the event`);
     }
   }
 
@@ -38,5 +37,5 @@ class EventEmitter {
   }
 }
 
-const eventEmitter = new EventEmitter();
-export default eventEmitter;
+const evEmitter = new EventEmitter();
+export default evEmitter;

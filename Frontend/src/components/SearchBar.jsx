@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IoIosClose } from "react-icons/io";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "./Providers/AuthProvider";
 import queryStore from "../stores/queryStore";
 import useHabitStore from "../stores/habitStore";
 

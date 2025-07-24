@@ -1,5 +1,5 @@
 import axios from "axios";
-import eventEmitter from "./eventEmiiter";
+import evEmitter from "./eventEmiiter";
 
 const url = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -44,7 +44,7 @@ api.interceptors.response.use(null, (err) => {
 
   const expired = response.headers[ev] === "true";
   if (expired) {
-    eventEmitter.emit(ev);
+    evEmitter.emit(ev);
     errObject = {
       name: "Session Expired",
       msg: "Session expired, Logging out...",

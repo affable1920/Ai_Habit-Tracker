@@ -1,16 +1,16 @@
-from typing import Any
 from pydantic import BaseModel
 
 
-class Response(BaseModel):
-    msg: str | None = None
+class ResponseModel(BaseModel):
     status: int = 200
     success: bool = True
-    data: dict[str, Any] | None = None
-    details: dict[str, Any] | None = None
+    msg: str | None = None
+    data: dict | None = None
+    details: dict | None = None
 
 
-class ErrResponse(Response):
-    status = 400
-    success = False
-    error: dict[str | Any] | None = None
+class ErrResponse(ResponseModel):
+    msg: str = "Not Authenticated. Please login first or register."
+    status: int = 403
+    success: bool = False
+    error: dict | None = None

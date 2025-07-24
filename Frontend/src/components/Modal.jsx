@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import IconComponent from "./IconComponent";
 import RecommendationSystem from "./RecommendationSystem";
 import UserActions from "./UserActions";
+import { TiTick } from "react-icons/ti";
 
 const Modal = () => {
   const { modals, dispatch } = useContext(ModalContext);
@@ -17,6 +18,7 @@ const Modal = () => {
   };
 
   const editHabit = useHabitStore((s) => s.editHabit);
+  const deleteHabit = useHabitStore((s) => s.deleteHabit);
 
   const onEdit = async () => {
     const { success, msg } = await editHabit(
@@ -38,6 +40,22 @@ const Modal = () => {
   const modalMap = {
     rec_system: <RecommendationSystem />,
     user_action: <UserActions />,
+    edit_habit: (
+      <button
+        onClick={onEdit}
+        className="btn btn__accent flex items-center gap-2"
+      >
+        Mark Complete <TiTick />
+      </button>
+    ),
+    delete_modal: (
+      <button
+        onClick={() => deleteHabit(modals.props.habitId)}
+        className="btn btn__accent"
+      >
+        Confirm Deletion ?
+      </button>
+    ),
   };
 
   return createPortal(

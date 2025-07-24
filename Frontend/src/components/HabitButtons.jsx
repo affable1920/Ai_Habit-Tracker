@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { ModalContext } from "./Providers/ModalProvider";
 import { IoMdArrowDropdown } from "react-icons/io";
 import HabitOptions from "./HabitOptions";
@@ -11,7 +11,7 @@ const HabitButtons = ({ onDropdownClick, habit }) => {
   const onExtra = () => {
     dispatch({
       type: "OPEN_MODAL",
-      name: "habitDetails",
+      name: "habit_details",
       props: { habit },
     });
   };
@@ -24,13 +24,13 @@ const HabitButtons = ({ onDropdownClick, habit }) => {
         onClick={() =>
           dispatch({
             type: "OPEN_MODAL",
-            name: "deleteModal",
+            name: "delete_modal",
             props: { habitId: habit.id },
           })
         }
         className="icon__with__bg"
       />
-      <HabitOptions habit={habit} />
+      {/* <HabitOptions habit={habit} /> */}
     </div>
   );
 };

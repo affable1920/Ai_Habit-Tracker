@@ -22,8 +22,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "", element: <LandingPage /> },
-      { path: "dashboard", element: <Dashboard /> },
+      { path: "dashboard", element: <LandingPage /> },
+      { path: "", element: <Dashboard /> },
       { path: "tracker", element: <HabitsTracker /> },
       { path: "archived", element: <Archived /> },
       { path: "logout", element: <Logout /> },

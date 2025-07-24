@@ -1,62 +1,56 @@
-import { useEffect, useState } from "react";
-import AuthContext from "../../context/AuthContext";
+import React, { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import http, { setJwt } from "../../services/httpService";
-import { eventEmitter } from "../../Utils/utils";
-import useHabitStore from "../../stores/habitStore";
+import AuthContext from "../../context/AuthContext";
+import http from "../../services/httpService";
 
 const endPoint = "/auth";
 const tokenKey = "token";
 
 const getUser = (jwt) => jwtDecode(jwt);
-
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const fetchHabits = useHabitStore((s) => s.fetchHabits);
+  const [user, setUser] = React.useState(null);
+  const [token, setToken] = React.useState(null);
 
   useEffect(() => {
     const jwt = localStorage.getItem(tokenKey);
 
-    if (jwt) setUser(getUser(jwt));
-    else setUser(null);
+    if (jwt) {
+      setToken(jwt)
+      setUser(getUser(jwt))
+    }
+
+    else {
+      setUser(null);
+      setToken(null)
+    };
   }, []);
-
-  useEffect(() => {
-    const session_exp = "session_exp";
-    eventEmitter.on(session_exp, () => {
-      console.log("Session expired, logging out...");
-      logout();
-    });
-
-    return () =>
-      eventEmitter.events[session_exp].filter((ev) => ev != session_exp);
-  }, [eventEmitter.events]);
 
   const register = async (user) => {
     const response = await http.post(endPoint + "/register", user);
     const jwt = response.headers["x-auth-token"];
 
-    setJwt(jwt);
-    setUser(getUser(jwt));
-
+    setToken(jwt)
     localStorage.setItem(tokenKey, jwt);
+
+    setUser(getUser(jwt));
   };
 
   const login = async (userCred) => {
     const { data: jwt } = await http.post(endPoint + "/login", userCred);
+
+    setToken(jwt)
     localStorage.setItem(tokenKey, jwt);
 
-    setJwt(jwt);
     setUser(getUser(jwt));
+
+    console.log("all done")
   };
 
   function logout() {
-    setJwt(null);
-
     setUser(null);
-    localStorage.removeItem(tokenKey);
+    setToken(null)
 
-    fetchHabits();
+    localStorage.removeItem(tokenKey);
   }
 
   const getProfile = async () => {
@@ -69,7 +63,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, getProfile }}>
+    <AuthContext.Provider value={{ user, token, login, logout, register, getProfile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,35 +1,69 @@
 import axios from "axios";
-import { eventEmitter } from "../Utils/utils";
+import eventEmitter from "./eventEmiiter";
 
 const url = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-export const axiosInstance = axios.create({
+export const api = axios.create({
   baseURL: url,
 });
 
 console.log("API_URL in use ", url);
 
-axiosInstance.interceptors.response.use(null, (ex) => {
-  const expectedErr =
-    ex.response && ex.response.status >= 400 && ex.response.status <= 500;
+let errObject = {
+  name: "Unexpected Error",
+  msg: "An unexpected error occurred!, Please try after sometime.",
+  status: 500,
+};
 
-  if (!expectedErr) return Promise.reject("An unexpected error occurred !");
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (!token) delete config.headers["Authorization"];
+    else config.headers["Authorization"] = `Bearer ${token}`;
 
-  const { response } = ex;
-  if (
-    response.headers["session_exp"] &&
-    response.headers["session_exp"] == "true"
-  ) {
-    eventEmitter.emit("session_exp");
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  }
+);
+
+api.interceptors.response.use(null, (err) => {
+  const { response } = err;
+
+  if (err.request && !response) {
+    errObject = {
+      name: "Network Error",
+      msg: "You don't seem to be connected to the internet.",
+      status: 0,
+    };
+    return Promise.reject(errObject);
   }
 
-  return Promise.reject(ex.response.data.detail);
+  const ev = "x-session-exp";
+
+  const expired = response.headers[ev] === "true";
+  if (expired) {
+    eventEmitter.emit(ev);
+    errObject = {
+      name: "Session Expired",
+      msg: "Session expired, Logging out...",
+      status: response.status || 403,
+    };
+
+    return Promise.reject(errObject);
+  }
+
+  const expErr = response && response.status < 500 && response.status >= 400;
+  if (expErr) {
+    const { statusText: errName } = response;
+    const errMsg = response.data.detail || "A client side error occurred!";
+
+    errObject = { name: errName, msg: errMsg, status: response.status };
+    return Promise.reject(errObject);
+  }
+
+  return Promise.reject(errObject);
 });
 
-export function setJwt(jwt) {
-  if (!jwt) delete axiosInstance.defaults.headers.common["Authorization"];
-
-  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
-}
-
-export default axiosInstance;
+export default api;

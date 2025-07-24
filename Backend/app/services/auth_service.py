@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from typing import Annotated
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import os
 import jwt
@@ -34,12 +34,10 @@ def get_users():
 
 
 def create_access_token(user_data):
-    now = datetime.now(timezone.utc)
+    iat = datetime.now()
+    exp = iat + timedelta(seconds=5)
 
-    iat = now.timestamp()
-    exp = (now + timedelta(seconds=6)).timestamp()
-
-    payload = {**user_data, "iat": iat, "exp": exp}
+    payload = {**user_data, "iat": iat.timestamp(), "exp": exp.timestamp()}
     return jwt.encode(payload, S_KEY, ALG)
 
 
@@ -53,6 +51,5 @@ def decode_access_token(token: Annotated[str, Depends(auth_scheme)]):
                 "x-session-exp": "true"}
         )
 
-    except jwt.InvalidTokenError as e:
-        print(e)
+    except jwt.InvalidTokenError:
         raise HTTPException(403, "Unauthorized. Invalid token recieved !")

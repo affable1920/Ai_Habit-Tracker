@@ -208,10 +208,7 @@
   .navigation__link {
     @apply text-black font-bold bg-red-200 p-1 rounded-lg m-1;
   }
-  .options {
-    @apply text-xs gap-1  from-light to-zinc-700 text-white rounded-lg flex
-    flex-col ring-[1px] ring-light  items-center overflow-hidden absolute -right-10 top-0;
-  }
+
   .recommendation {
     @apply ring-[2px] ring-light m-2 shadow-lg dark:ring-zinc-700
     rounded-md p-4 text-xs dark:shadow-black italic font-medium max-w-[400px] tracking-wider;

@@ -1,54 +1,29 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Recommendation from "./Recommendation";
 import AuthContext from "../context/AuthContext";
 import { RiAiGenerate } from "react-icons/ri";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
-import { useQuery } from "@tanstack/react-query";
 import { SiLivechat } from "react-icons/si";
 import { ModalContext } from "./Providers/ModalProvider";
-import axios from "axios";
-import loadingStore from "../stores/loadingStore";
 
 const RecommendationSystem = () => {
   const { user } = useContext(AuthContext);
-  const firestore = "fs";
 
   const navigate = useNavigate();
   // const recRef = collection(firestore, "users", user?.uid, "recommendations");
   const onThumbsUp = async (rec) => {
     try {
       // await setDoc(doc(recRef, rec.id), { ...rec, type: "liked" });
-    } catch (err) {
-      alert(err);
-    }
+    } catch (err) {}
   };
 
   const onThumbsDown = async (rec) => {
     try {
       // await setDoc(doc(recRef, rec.id), { ...rec, type: "disliked" });
-    } catch (err) {
-      alert(err);
-    }
+    } catch (err) {}
   };
 
   const { dispatch } = useContext(ModalContext);
-  const { setLoading } = loadingStore();
-
-  const {
-    data = {},
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["recommendations"],
-    queryFn: async () =>
-      axios
-        .get("http://localhost:8000/recommendations")
-        .then(({ data }) => data),
-    enabled: false,
-  });
-
-  if (isLoading) setLoading(true);
 
   return (
     <section>
@@ -59,17 +34,7 @@ const RecommendationSystem = () => {
       </header>
       <div>
         <div className="flex flex-col">
-          <ul className="flex gap-2">
-            {data?.recommendations &&
-              data?.recommendations?.map((rec) => (
-                <li>
-                  <Recommendation
-                    rec={rec}
-                    handleRecFeedback={{ onThumbsUp, onThumbsDown }}
-                  />
-                </li>
-              ))}
-          </ul>
+          <ul className="flex gap-2"></ul>
           <div
             className={`flex gap-2 m-2 justify-center md:hidden ${
               "recommendations.length" <= 1 && "hidden"
@@ -100,20 +65,13 @@ const RecommendationSystem = () => {
             }`}
           >
             <button
-              onClick={refetch}
               className={`btn bg-color-white text-black shadow-md ring-2 ring-slate-100 dark:text-slate-100
                  flex items-center gap-2 dark:shadow-black dark:bg-zinc-800 dark:ring-zinc-700`}
             >
               Generate
               <RiAiGenerate />
             </button>
-            <SiLivechat
-              className="icon__with__bg cp"
-              onClick={() => {
-                navigate("/chat");
-                dispatch({ type: "CLOSE_ALL" });
-              }}
-            />
+            <SiLivechat className="icon__with__bg cp" />
           </div>
         </div>
       </div>

@@ -7,11 +7,11 @@ export const capitalize = (str) => {
 };
 
 const Habitdetails = () => {
-  const { modal, dispatch } = useContext(ModalContext);
+  const { modal: modals } = useContext(ModalContext);
   let habit = {};
 
   const unwanted = ["id", "category", "status", "archived"];
-  if (modal.props) habit = modal.props.habit;
+  if (modals.props) habit = modals.props.habit;
 
   const properties = Object.entries(habit).filter(([key, value]) => {
     if (!unwanted.includes(key)) return value ? [key, value] : [key, "N/A"];

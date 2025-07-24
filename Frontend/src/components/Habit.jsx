@@ -45,7 +45,7 @@ const Habit = ({ habit }) => {
     if (allowEdit) {
       dispatch({
         type: "OPEN_MODAL",
-        name: "editHabit",
+        name: "edit_habit",
         props: {
           habitId: habit.id,
           fieldsToUpdate: fields,

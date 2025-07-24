@@ -1,20 +1,15 @@
-import jwt
-
+import asyncio
+from datetime import datetime
 from contextlib import asynccontextmanager
 
-from fastapi.websockets import WebSocketState
-from fastapi.middleware.cors import CORSMiddleware
-
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from fastapi import WebSocket, WebSocketDisconnect
-
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes import auth
 from app.routes import habits
 from app.services.auth_service import decode_access_token, get_users
-
 from app.scripts.path_scripts import init_dirs_and_paths
-
 
 origins = [
     "http://localhost:5173",
@@ -57,59 +52,74 @@ def health_check():
     return {"message": "The app is working fine ."}
 
 
-ws_conns: dict = {}
+ws_conns: dict[str, WebSocket] = {}
 
 
-async def ws_close(
-    websocket,
-    status: int,
-    err_msg: str,
-    u_id: str | None = None,
-):
-    if websocket.application_state != WebSocketState.DISCONNECTED:
-        # await websocket.send_json()
-        await websocket.close(status, err_msg, {"x-websocket-disconnect": "true"})
+# async def ws_close(
+#     websocket,
+#     status: int,
+#     err_msg: str,
+#     u_id: str | None = None,
+# ):
+#     if websocket.application_state != WebSocketState.DISCONNECTED:
+#         # await websocket.send_json()
+#         await websocket.close(status, err_msg, {"x-websocket-disconnect": "true"})
 
-    if u_id in ws_conns:
-        ws_conns.pop(u_id)
+#     if u_id in ws_conns:
+#         ws_conns.pop(u_id)
+
+
+MUST_EXIT = {"code": status.WS_1010_MANDATORY_EXT, "reason": "SESSION_EXP"}
+NO_AUTH = {"code": status.WS_1008_POLICY_VIOLATION,
+           "reason": "NOT_AUTHENTICATED"}
 
 
 @app.websocket("/ws")
 async def ws(websocket: WebSocket):
-    token = websocket.headers.get("sec-websocket-protocol", None)
+    token = websocket.headers.get('sec-websocket-protocol')
 
     if not token:
-        websocket.send_denial_response(
-            "Who are you ? Login first or register !")
-        await websocket.close(1007, "Not Authenticated")
+        await websocket.close(**NO_AUTH)
+        return
 
     try:
         user = decode_access_token(token)
+        user_id, exp = user.get('id'), user.get("exp")
 
-    except jwt.InvalidTokenError:
-        await ws_close(websocket, 1008, "Invalid token Please log in again!")
-
-    except jwt.ExpiredSignatureError:
-        await ws_close(websocket, 1008, "Session expired. Please log in again !")
-
-    user_id = user.get("id")
-
-    if not user_id or user_id not in get_users():
-        websocket.send_denial_response(
-            "You must be a registered user to access this resource."
-        )
-        await ws_close(websocket, 1008)
+    except Exception:
+        await websocket.close(**NO_AUTH)
         return
 
+    if not user_id or user_id not in get_users():
+        await websocket.close(**NO_AUTH)
+        return
+
+    exp_timestamp = datetime.fromtimestamp(exp) - datetime.now()
+    time_left = exp_timestamp.total_seconds()
+
+    if time_left <= 0:
+        await websocket.close(**MUST_EXIT)
+        return
+
+    async def schedule_logout(u_id, delay):
+        await asyncio.sleep(delay)
+        await websocket.close(**MUST_EXIT)
+
+        if u_id in ws_conns:
+            del ws_conns[u_id]
+
     await websocket.accept(subprotocol=token)
+    asyncio.create_task(schedule_logout(user_id, time_left))
+
     ws_conns[user_id] = websocket
+    try:
+        while True:
+            rqst = await websocket.receive()
+            print(rqst)
 
-    while True:
-        try:
-            usr_rqst = await websocket.receive_text()
-            await websocket.send_text("Hello from server")
+            await websocket.send_json("Hello")
 
-        except WebSocketDisconnect:
-            if user_id in ws_conns:
-                ws_conns.pop(user_id)
-            return
+    except WebSocketDisconnect:
+        if user_id in ws_conns:
+            del ws_conns[user_id]
+        return

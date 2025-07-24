@@ -80,6 +80,7 @@ header = [
 
 # Generate 100 rows
 logs = [generate_log_entry() for _ in range(100)]
+print(logs)
 
 # Create DataFrame
 df = pd.DataFrame(logs, columns=header)

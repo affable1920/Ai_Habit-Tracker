@@ -12,29 +12,31 @@ const HabitOptions = ({ habit }) => {
       label: "timer",
       component: <RiTimerFlashFill />,
     },
+    {
+      label: "timer",
+      component: <RiTimerFlashFill />,
+    },
+    {
+      label: "timer",
+      component: <RiTimerFlashFill />,
+    },
   ];
 
   const [showOptions, setShowOptions] = useState(false);
 
   return (
-    <div>
+    <div className="relative">
       <SlOptionsVertical
         onClick={() => setShowOptions(!showOptions)}
-        className="text-xs text-slate-400 icon__with__bg"
+        className="icon icon__small"
       />
-      {showOptions && (
-        <ul className="options">
+      {/* {showOptions && (
+        <ul className="absolute">
           {options.map((option) => (
-            <li
-              className="cp p-2 hover:bg-slate-700 w-full text-slate-200 hover:text-white rounded-sm 
-              transition-colors"
-              key={option.label}
-            >
-              {option.component}
-            </li>
+            <li key={option.label}>{option.component}</li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
   );
 };

@@ -34,8 +34,6 @@ const AddHabitComponent = () => {
       dispatch({ type: "OPEN_MODAL", name: "reminderModal" });
   }, [freq]);
 
-  console.log(extra);
-
   useEffect(
     () => {
       if (
@@ -57,8 +55,6 @@ const AddHabitComponent = () => {
       return;
     } else {
       if (extra) formData = { ...formData, ...extra };
-      console.log(formData);
-
       let { success, msg } = await addHabit(formData);
 
       if (typeof msg != "string")

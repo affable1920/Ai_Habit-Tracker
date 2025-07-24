@@ -3,7 +3,6 @@ import { IoIosClose } from "react-icons/io";
 import AuthContext from "../context/AuthContext";
 import queryStore from "../stores/queryStore";
 import useHabitStore from "../stores/habitStore";
-import { debounce } from "../Utils/utils";
 
 const SearchBar = () => {
   const { user } = useContext(AuthContext);
@@ -11,6 +10,8 @@ const SearchBar = () => {
   const setSearchQuery = queryStore((s) => s.setSearchQuery);
 
   const habits = useHabitStore((s) => s.habits);
+
+  const debounce = (fn) => fn;
   let setSearch_Query = debounce(setSearchQuery, 100);
 
   return (

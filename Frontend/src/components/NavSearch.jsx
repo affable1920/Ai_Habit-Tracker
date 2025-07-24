@@ -13,11 +13,11 @@ const NavSearch = () => {
     else
       dispatch({
         type: "OPEN_MODAL",
-        name: "searchBox",
+        name: "search_box",
       });
   };
 
-  const shortcutBtn = <button className="italic font-medium">Ctrl K</button>;
+  const shortcutBtn = <div className="italic font-medium">Ctrl K</div>;
   const classes = `font-medium mr-2 p-[2px]`;
 
   return (

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 
-const NavLinks = ({ showLinks }) => {
+const NavLinks = ({ showLinks, onNavLinkToggle }) => {
   const { pathname: route } = useLocation();
 
   const navLinks = [
@@ -16,7 +16,7 @@ const NavLinks = ({ showLinks }) => {
     >
       {navLinks.map((link) => (
         <Link
-          onClick={(e) => console.log(e)}
+          onClick={onNavLinkToggle}
           to={link.path}
           className={`nav__link ${
             route === link.path &&

@@ -18,7 +18,7 @@ const LoginForm = () => {
   const { setLoading } = loadingStore();
   const navigate = useNavigate();
 
-  const { login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
 
   const schema = Joi.object({
     email: Joi.string()
@@ -35,15 +35,19 @@ const LoginForm = () => {
   } = useForm({ resolver: joiResolver(schema) });
 
   const onSubmit = async (data) => {
+    // if (user) return;
+
     setLoading(true);
     try {
       await login(data);
 
       navigate("/");
       toast.success("Succesfully logged in !");
-    } catch (ex) {
-      if (typeof ex != "string") ex = "Unable to login !";
-      toast.error(ex, { description: "Please try again ." });
+    } catch (err) {
+      console.log(err);
+
+      if (typeof err != "string") err = "Unable to login !";
+      toast.error(err, { description: "Please try again ." });
     } finally {
       setLoading(false);
     }

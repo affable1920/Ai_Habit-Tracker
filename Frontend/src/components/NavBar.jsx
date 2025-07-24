@@ -22,7 +22,10 @@ const NavBar = () => {
     <>
       <nav className="navbar">
         <Logo toggleFn={() => setShowLinks(!showLinks)} />
-        <NavLinks showLinks={showLinks} />
+        <NavLinks
+          showLinks={showLinks}
+          onNavLinkToggle={() => setShowLinks(false)}
+        />
         <AuthActions />
       </nav>
     </>

@@ -41,6 +41,9 @@ const useHabitStore = create((set, get) => ({
   },
 
   editHabit: async (habitId, fields) => {
+    let url = endPoint + "/" + habitId;
+    if (fields.completed) url = `${endPoint}/complete/${habitId}`;
+
     const orgHabit = get().habits.find((h) => h.id === habitId);
 
     set((store) => ({
@@ -51,7 +54,7 @@ const useHabitStore = create((set, get) => ({
     }));
 
     try {
-      const response = await http.put(`${endPoint}/${habitId}`, fields);
+      const response = await http.put(url, fields);
       set((store) => ({
         ...store,
         habits: store.habits.map((h) =>
@@ -78,7 +81,6 @@ const useHabitStore = create((set, get) => ({
 
     set((store) => ({
       ...store,
-
       habits: store.habits.filter((h) => h.id != habitId),
     }));
 

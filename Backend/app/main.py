@@ -54,7 +54,7 @@ def health_check():
 
 ws_conns: dict[str, WebSocket] = {}
 
-MUST_EXIT = {"code": status.WS_1010_MANDATORY_EXT, "reason": "SESSION_EXP"}
+MUST_EXIT = {"code": status.WS_1010_MANDATORY_EXT, "reason": "SESSION_EXPIRE"}
 NO_AUTH = {"code": status.WS_1008_POLICY_VIOLATION,
            "reason": "NOT_AUTHENTICATED"}
 

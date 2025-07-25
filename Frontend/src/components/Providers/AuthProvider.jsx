@@ -13,34 +13,26 @@ AuthContext.displayName = "AuthContext";
 const endPoint = "/auth";
 const tokenKey = "token";
 
-const ev = import.meta.env.SESSION_EXPIRE;
-
-const authSetter = (token) => {
-  localStorage.setItem(tokenKey, token);
-  return { token, user: jwtDecode(token) };
-};
+const ev = import.meta.env.VITE_SESSION_EXPIRE;
+const authSetter = (token) => ({ token, user: jwtDecode(token) });
 
 // Actual Provider Component
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = React.useState(initAuth);
+  const [auth, setAuth] = React.useState(() => {
+    const jwt = localStorage.getItem(tokenKey);
+    return jwt ? { token: jwt, user: authSetter(jwt) } : initAuth;
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem(tokenKey);
-
-    if (token) {
-      setAuth(authSetter(token));
-      evEmitter.on(ev, logout);
-    } else {
-      setAuth(initAuth);
-      evEmitter.remove(ev);
-    }
-  }, []);
+    if (auth.token) evEmitter.on(ev, logout, true);
+  }, [auth.token]);
 
   const register = async (user) => {
     const response = await http.post(endPoint + "/register", user);
     const token = response.headers["x-auth-token"];
 
     setAuth(authSetter(token));
+    localStorage.setItem(tokenKey, token);
   };
 
   const login = async (userCred) => {

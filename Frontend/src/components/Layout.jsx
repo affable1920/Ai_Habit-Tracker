@@ -11,7 +11,7 @@ import evEmitter from "../services/eventEmiiter";
 import { jwtDecode } from "jwt-decode";
 
 const Layout = () => {
-  const sessionExpired = "SESSION_EXP";
+  const sessionExpired = import.meta.env.VITE_SESSION_EXPIRE;
 
   const { user, token, logout } = React.useContext(AuthContext);
   const { modals, dispatch } = React.useContext(ModalContext);
@@ -45,12 +45,11 @@ const Layout = () => {
 
     ws.onclose = (ev) => {
       if (ev.reason == sessionExpired) {
-        toast("Session Expired", {
+        toast("Session Expired!", {
           description: "Logging out ...",
           duration: 1200,
         });
         evEmitter.emit(sessionExpired);
-        logout();
       }
     };
 

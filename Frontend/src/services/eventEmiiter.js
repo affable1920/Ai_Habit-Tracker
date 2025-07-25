@@ -3,14 +3,21 @@ class EventEmitter {
     this.events = {};
   }
 
-  on(ev, listener) {
-    if (!this.events[ev]) this.events[ev] = [];
+  on(ev, listener, once = false) {
+    console.log("on called.");
+    if (!this.events[ev]) this.events[ev] = new Set();
 
     if (typeof listener !== "function") {
       throw new Error("The listener must be a function!");
     }
 
-    this.events[ev].push(listener);
+    const wrapped = (...args) => {
+      listener(...args);
+      if (once) this.off(wrapped);
+    };
+
+    wrapped._original = listener;
+    this.events[ev].add(wrapped);
   }
 
   emit(ev, ...args) {
@@ -25,10 +32,12 @@ class EventEmitter {
       throw new Error("The listener must be a function!");
     }
 
-    if (this.events[ev].includes(listener)) {
-      this.events[ev].delete(listener);
-    } else {
-    }
+    this.events[ev].forEach((fn) => {
+      if (fn == listener && fn._original == listener) {
+        this.events[ev].delete(fn);
+        return;
+      }
+    });
   }
 
   remove(ev) {

@@ -13,7 +13,6 @@ import AuthRoutes from "./AuthRoutes";
 
 const Chat = React.lazy(() => import("./Chat"));
 const Profile = React.lazy(() => import("./Profile"));
-const Archived = React.lazy(() => import("./Archived"));
 
 const router = createBrowserRouter([
   {
@@ -24,7 +23,6 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <LandingPage /> },
       { path: "", element: <Dashboard /> },
       { path: "tracker", element: <HabitsTracker /> },
-      { path: "archived", element: <Archived /> },
       {
         element: <PrivateRoutes />,
         children: [

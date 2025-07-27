@@ -10,10 +10,13 @@ from passlib.context import CryptContext
 
 
 from app.variables.paths import users_file
-import app.services.auth_service as auth_service
+from app.services.auth_service import AuthService
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+auth_service = AuthService()
 
 
 @router.post("/register")

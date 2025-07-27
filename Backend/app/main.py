@@ -5,11 +5,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, status
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.websockets import WebSocketState
 
 from app.routes import auth
 from app.routes import habits
 from app.scripts.path_scripts import init_dirs_and_paths
-from app.services.auth_service import decode_access_token, get_users
+from app.services.auth_service import AuthService
 
 origins = [
     "http://localhost:5173",
@@ -28,6 +29,7 @@ async def root(app: FastAPI):
 
 
 app = FastAPI(lifespan=root)
+auth_service = AuthService()
 
 app.add_middleware(
     CORSMiddleware,
@@ -41,10 +43,6 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(habits.router, prefix="/habits", tags=["Habit_CRUD"])
-
-
-async def broadcase_msgs(msg: str):
-    pass
 
 
 @app.get("/healthz")
@@ -68,14 +66,14 @@ async def ws(websocket: WebSocket):
         return
 
     try:
-        user = decode_access_token(token)
+        user = auth_service.decode_access_token(token)
         user_id, exp = user.get('id'), user.get("exp")
 
     except Exception:
         await websocket.close(**NO_AUTH)
         return
 
-    if not user_id or user_id not in get_users():
+    if not user_id or user_id not in auth_service.get_users():
         await websocket.close(**NO_AUTH)
         return
 
@@ -101,6 +99,9 @@ async def ws(websocket: WebSocket):
         while True:
             rqst = await websocket.receive()
             print(rqst)
+
+            if not websocket.application_state == WebSocketState.CONNECTED:
+                return
 
             await websocket.send_json("Hello")
 

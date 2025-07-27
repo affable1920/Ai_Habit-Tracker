@@ -4,12 +4,13 @@ from fastapi import APIRouter, Depends, Query
 
 import app.models.Habit as model
 from app.services.Habit_Services.crud import CRUD
-from app.services.auth_service import decode_access_token
+from app.services.auth_service import AuthService
 
 router = APIRouter()
+auth_service = AuthService()
 
 
-def get_CRUD(token: Annotated[str, Depends(decode_access_token)]) -> CRUD:
+def get_CRUD(token: Annotated[str, Depends(auth_service.decode_access_token)]) -> CRUD:
     user_id = token["id"]
     return CRUD(user_id)
 

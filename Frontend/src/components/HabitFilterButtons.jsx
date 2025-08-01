@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import StatusFilter from "./StatusFilter";
 import { RiResetLeftFill } from "react-icons/ri";
-import { MdArchive } from "react-icons/md";
 import queryStore from "../stores/queryStore";
 import IconComponent from "./IconComponent";
 
@@ -20,11 +19,6 @@ const HabitFilterButtons = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="relative">
-          <Link to="/archived">
-            <IconComponent Icon={MdArchive} bg />
-          </Link>
-        </div>
         <StatusFilter />
         <div className="flex items-center gap-1">
           <IconComponent

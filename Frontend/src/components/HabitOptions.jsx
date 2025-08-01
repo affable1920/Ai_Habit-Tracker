@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
-import { CiEdit } from "react-icons/ci";
-import { IoMdArchive } from "react-icons/io";
 import { RiTimerFlashFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 

@@ -10,7 +10,7 @@ const Habitdetails = () => {
   const { modal: modals } = useContext(ModalContext);
   let habit = {};
 
-  const unwanted = ["id", "category", "status", "archived"];
+  const unwanted = ["id", "category", "status"];
   if (modals.props) habit = modals.props.habit;
 
   const properties = Object.entries(habit).filter(([key, value]) => {

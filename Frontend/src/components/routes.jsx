@@ -20,8 +20,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "dashboard", element: <LandingPage /> },
       { path: "", element: <Dashboard /> },
+      { path: "dashboard", element: <LandingPage /> },
       { path: "tracker", element: <HabitsTracker /> },
       {
         element: <PrivateRoutes />,

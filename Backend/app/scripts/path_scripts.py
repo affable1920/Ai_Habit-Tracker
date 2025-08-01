@@ -1,7 +1,7 @@
 import app.variables.paths as paths
 
 
-def all_initialised():
+def all_initialised() -> bool:
     return all(
         (dir.exists() for dir in paths.get_dirs())
         and (file.exists() for file in paths.get_files())

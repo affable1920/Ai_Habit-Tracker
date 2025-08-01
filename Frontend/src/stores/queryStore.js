@@ -25,9 +25,6 @@ const queryStore = create((set) => ({
   setStatus: (status) =>
     set((state) => ({ query: { ...state.query, status } })),
 
-  setPageSize: (pageSize) =>
-    set((state) => ({ query: { ...state.query, pageSize } })),
-
   setPage: (page) => set((state) => ({ query: { ...state.query, page } })),
 
   reset: (max) => set({ query: { ...init, max } }),

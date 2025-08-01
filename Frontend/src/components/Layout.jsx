@@ -16,6 +16,8 @@ const Layout = () => {
   const { user, token, logout } = React.useContext(AuthContext);
   const { modals, dispatch } = React.useContext(ModalContext);
 
+  const [wsMsg, setWsMsg] = React.useState("");
+
   useEffect(() => {
     if (!token) return;
 
@@ -27,7 +29,7 @@ const Layout = () => {
     if (!timeLeft || timeLeft <= 0) logout();
 
     const WSURL = `ws://localhost:8000/ws`;
-    const ws = new WebSocket(WSURL, [token]);
+    const ws = new WebSocket(WSURL + `?token=${token}`);
 
     ws.onopen = () => {
       toast.success("Ws connected");
@@ -35,8 +37,12 @@ const Layout = () => {
       ws.send("Hello server");
     };
 
-    ws.onmessage = (ev) => {
-      console.log(JSON.parse(ev.data));
+    ws.onmessage = ({ data }) => {
+      let msg;
+      if (data) msg = JSON.parse(data);
+
+      toast.success(msg);
+      setWsMsg(msg);
     };
 
     ws.onerror = (ev) => {
@@ -56,7 +62,7 @@ const Layout = () => {
     return () => {
       ws.close();
     };
-  }, [token]);
+  }, [token, wsMsg]);
 
   const shortcut = React.useCallback((e) => {
     const shortcutKey = e.ctrlKey
@@ -117,7 +123,9 @@ const Layout = () => {
       <section className="flex flex-col h-full">
         <header>
           <NavBar />
-          <div></div>
+          <div className="text-white p-4 text-center bg-red-300 font-bold italic text-lg">
+            {wsMsg && <div className="">{wsMsg}</div>}
+          </div>
         </header>
         <main className="grow">
           <Outlet />

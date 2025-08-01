@@ -73,6 +73,6 @@ async def get_profile(token: Annotated[str, Depends(auth_service.decode_access_t
 
     if not user_id in users:
         raise HTTPException(
-            404, "You are not a part of our community so FUCK OFF !")
+            404, "You are not a part of our community !")
 
     return users[user_id]

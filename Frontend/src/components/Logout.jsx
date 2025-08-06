@@ -1,14 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./Providers/AuthProvider";
+import useAuthStore from "../stores/authStore";
 
 const Logout = () => {
-  const { logout } = React.useContext(AuthContext);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const logout = useAuthStore((s) => s.logout);
 
   React.useEffect(() => {
-    logout();
-    navigate("/login");
+    try {
+      logout();
+      navigate("/login");
+    } catch (ex) {}
   }, []);
 
   return null;

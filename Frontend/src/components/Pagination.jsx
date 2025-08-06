@@ -10,7 +10,7 @@ const Pagination = () => {
       {query.page > 1 && (
         <button
           className={`btn btn__accent btn__small flex gap-1 items-end`}
-          onClick={() => setPage((query.page -= 1))}
+          onClick={() => setPage(query.page - 1)}
         >
           <IoArrowBackOutline />
           <span>Back</span>
@@ -18,7 +18,7 @@ const Pagination = () => {
       )}
       <button
         className="btn btn__accent btn__small flex gap-1 items-end"
-        onClick={() => setPage((query.page += 1))}
+        onClick={() => setPage(query.page + 1)}
       >
         <span>Next</span> <IoArrowForwardOutline />
       </button>

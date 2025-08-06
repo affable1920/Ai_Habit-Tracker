@@ -1,12 +1,13 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { IoIosClose } from "react-icons/io";
-import { AuthContext } from "./Providers/AuthProvider";
 import queryStore from "../stores/queryStore";
 import useHabitStore from "../stores/habitStore";
-import debounce from "../Utils/debounce";
+import debounce from "../Utils/utilFns";
+import useAuthStore from "../stores/authStore";
 
 const SearchBar = () => {
-  const { user } = useContext(AuthContext);
+  const user = useAuthStore((s) => s.user);
+
   const query = queryStore((s) => s.query);
   const setSearchQuery = queryStore((s) => s.setSearchQuery);
 

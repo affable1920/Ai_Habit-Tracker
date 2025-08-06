@@ -1,20 +1,16 @@
-import { useContext } from "react";
-import { ModalContext } from "./Providers/ModalProvider";
-import { AuthContext } from "./Providers/AuthProvider";
-import { IoMdSearch } from "react-icons/io";
 import IconComponent from "./IconComponent";
+import useAuthStore from "../stores/authStore";
+import useModalStore from "../stores/modalStore";
+import { MODALS } from "../../constants/MODALS";
+import { IoMdSearch } from "react-icons/io";
 
 const NavSearch = () => {
-  const { dispatch } = useContext(ModalContext);
-  const { user } = useContext(AuthContext);
+  const user = useAuthStore((s) => s.user);
+  const openModal = useModalStore((s) => s.openModal);
 
   const generateModal = () => {
-    if (!user) dispatch({ type: "OPEN_MODAL", name: "loginModal" });
-    else
-      dispatch({
-        type: "OPEN_MODAL",
-        name: "search_box",
-      });
+    if (!user) openModal(MODALS.LOGIN);
+    else openModal(MODALS.SEARCH_BOX);
   };
 
   const shortcutBtn = <div className="italic font-medium">Ctrl K</div>;

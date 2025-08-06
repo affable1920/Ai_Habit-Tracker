@@ -1,4 +1,3 @@
-import React from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +5,14 @@ import { toast } from "sonner";
 import Joi from "joi";
 import Form from "./common/Form";
 import Input from "./common/Input";
-import { AuthContext } from "./Providers/AuthProvider";
 import loadingStore from "../stores/loadingStore";
+import useAuthStore from "../stores/authStore";
 
 const RegisterForm = () => {
-  const { setLoading } = loadingStore();
-  const { register: userRegister } = React.useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const setLoading = loadingStore((s) => s.setLoading);
+  const { register: registerFn } = useAuthStore((s) => s);
 
   const schema = Joi.object({
     email: Joi.string().required().label("Email"),
@@ -19,26 +20,21 @@ const RegisterForm = () => {
     username: Joi.string().min(3).required().label("Username"),
   });
 
+  const form = useForm({ resolver: joiResolver(schema) });
   const {
-    register,
-    handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm({ resolver: joiResolver(schema) });
-
-  const navigate = useNavigate();
+  } = form;
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await userRegister(data);
-      reset();
+      await registerFn(data);
+      form.reset();
 
       navigate("/");
-      toast.success("Account created successfully !");
+      toast.success("Successfully registered !");
     } catch (ex) {
-      if (typeof ex != "string") ex = "Error creating account !";
-      toast.error(ex);
+      console.log(ex);
     } finally {
       setLoading(false);
     }
@@ -49,15 +45,15 @@ const RegisterForm = () => {
       <div className="pad__box" />
       <div className="mid__box p-8">
         <h2 className="heading__md">Welcome</h2>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Input name="email" register={register} errors={errors} />
+        <Form onSubmit={form.handleSubmit(onSubmit)}>
+          <Input name="email" register={form.register} errors={errors} />
           <Input
             name="password"
             type="password"
-            register={register}
+            register={form.register}
             errors={errors}
           />
-          <Input name="username" register={register} errors={errors} />
+          <Input name="username" register={form.register} errors={errors} />
           <div className="flex flex-col gap-4">
             <button className="btn btn__accent">Register</button>
             <button

@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { AuthContext } from "./Providers/AuthProvider";
 import { Navigate, Outlet } from "react-router-dom";
+import useAuthStore from "../stores/authStore";
 
 const AuthRoutes = () => {
-  const { user } = useContext(AuthContext);
+  const user = useAuthStore((s) => s.user);
 
   if (user) return <Navigate to="/" />;
   return <Outlet />;

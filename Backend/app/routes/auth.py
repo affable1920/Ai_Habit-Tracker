@@ -26,13 +26,13 @@ async def register(new_user: user.CreateUser):
     emails = set(map(lambda x: x["email"], users.values())) if users else set()
 
     if new_user.email in emails:
-        raise HTTPException(400, f"User already registered !")
+        raise HTTPException(400, f"Email already in use !")
 
     hashed_pwd = pwd_context.hash(new_user.password)
     id = str(uuid4())
 
     user = {"id": id, **new_user.model_dump(), "password": hashed_pwd}
-    users[user["id"]] = user
+    users[id] = user
 
     try:
         with open(users_file, "w") as f:
@@ -43,14 +43,20 @@ async def register(new_user: user.CreateUser):
 
             return JSONResponse(user_data, 201, {"x-auth-token": token})
 
-    except json.JSONDecodeError:
-        raise HTTPException(500, "An internal server error occurred !")
+    except (PermissionError, Exception) as ex:
+        raise HTTPException(
+            500, f"{str(ex)}:  Unable to create users file !")
+
+#
 
 
 @router.post("/login")
 async def login(user: user.LoginUser):
     users = auth_service.get_users()
-    emails = set(map(lambda x: x["email"], users.values())) if users else set()
+    if not users:
+        raise HTTPException(404, "Please register first !")
+
+    emails = set(map(lambda x: x["email"], users.values())) or set()
 
     if not user.email in emails:
         raise HTTPException(400, "User not found. Please register first !")
@@ -63,13 +69,19 @@ async def login(user: user.LoginUser):
         raise HTTPException(403, "Invalid Password !")
 
     user_data = {k: v for k, v in user_obj.items() if k != "password"}
-    return auth_service.create_access_token(user_data)
+    token = auth_service.create_access_token(user_data)
+    return JSONResponse(user_data, 200, {"x-auth-token": token})
 
 
 @router.get("/profile")
 async def get_profile(token: Annotated[str, Depends(auth_service.decode_access_token)]):
     users = auth_service.get_users()
-    user_id = token["id"]
+
+    try:
+        user_id = token["id"]
+
+    except KeyError:
+        raise HTTPException(401, "Unauthorized user. Missing attributes !")
 
     if not user_id in users:
         raise HTTPException(

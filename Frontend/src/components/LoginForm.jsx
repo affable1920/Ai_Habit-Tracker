@@ -1,24 +1,23 @@
-import { useContext } from "react";
 import Joi from "joi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Input from "./common/Input";
+import loadingStore from "../stores/loadingStore";
+import useAuthStore from "../stores/authStore";
+import IconComponent from "./IconComponent";
+import Form from "./common/Form";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
-import loadingStore from "../stores/loadingStore";
-import { AuthContext } from "./Providers/AuthProvider";
-import Form from "./common/Form";
-import IconComponent from "./IconComponent";
 import { FaGithub } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
 import { RiNotionFill } from "react-icons/ri";
 
 const LoginForm = () => {
-  const { setLoading } = loadingStore();
+  const setLoading = loadingStore((s) => s.setLoading);
   const navigate = useNavigate();
 
-  const { user, login } = useContext(AuthContext);
+  const login = useAuthStore((s) => s.login);
 
   const schema = Joi.object({
     email: Joi.string()
@@ -28,26 +27,20 @@ const LoginForm = () => {
     password: Joi.string().required().label("Password"),
   });
 
+  const form = useForm({ resolver: joiResolver(schema) });
   const {
-    register,
-    handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: joiResolver(schema) });
+  } = form;
 
   const onSubmit = async (data) => {
-    // if (user) return;
-
     setLoading(true);
     try {
       await login(data);
 
       navigate("/");
-      toast.success("Succesfully logged in !");
-    } catch (err) {
-      console.log(err);
-
-      if (typeof err != "string") err = "Unable to login !";
-      toast.error(err, { description: "Please try again ." });
+      toast.success("Successfully logged in.");
+    } catch (ex) {
+      console.log(ex);
     } finally {
       setLoading(false);
     }
@@ -73,11 +66,11 @@ const LoginForm = () => {
       <div className="pad__box" />
       <div className="mid__box p-8 flex flex-col gap-4">
         <h2 className="heading__md">Login</h2>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Input name="email" register={register} errors={errors} />
+        <Form onSubmit={form.handleSubmit(onSubmit)}>
+          <Input name="email" register={form.register} errors={errors} />
           <Input
             name="password"
-            register={register}
+            register={form.register}
             errors={errors}
             type="password"
           />

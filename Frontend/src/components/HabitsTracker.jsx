@@ -1,12 +1,12 @@
-import React from "react";
+import { Navigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
+import useAuthStore from "../stores/authStore";
 import HabitFilterButtons from "./HabitFilterButtons";
-import { AuthContext } from "./Providers/AuthProvider";
-import { Navigate } from "react-router-dom";
 
 const HabitsTracker = () => {
-  const { token } = React.useContext(AuthContext);
+  const token = useAuthStore((s) => s.token);
+
   if (!token) return <Navigate to="/login" />;
 
   return (

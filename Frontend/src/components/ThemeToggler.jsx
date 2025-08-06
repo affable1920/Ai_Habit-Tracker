@@ -1,29 +1,20 @@
-import { useContext, useEffect } from "react";
 import { MdDarkMode } from "react-icons/md";
 import { FaRegLightbulb } from "react-icons/fa";
-import { ThemeContext } from "./Providers/ThemeProvider";
+import useThemeStore from "../stores/themeStore";
 import IconComponent from "./IconComponent";
+import React from "react";
 
 const ThemeToggler = () => {
-  const { isDark, setIsDark } = useContext(ThemeContext);
+  const dark = useThemeStore((s) => s.dark);
+  const toggle = useThemeStore((s) => s.toggle);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const root = document.documentElement;
-    if (isDark) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
+    root.classList.toggle("dark");
+  }, [dark]);
 
   return (
-    <IconComponent
-      Icon={isDark ? FaRegLightbulb : MdDarkMode}
-      fn={() => setIsDark(!isDark)}
-      bg
-    />
+    <IconComponent Icon={dark ? FaRegLightbulb : MdDarkMode} fn={toggle} bg />
   );
 };
 

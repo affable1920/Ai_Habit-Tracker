@@ -1,69 +1,58 @@
 import axios from "axios";
 import evEmitter from "./eventEmiiter";
 
-const url = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const url = import.meta.env.VITE_API_URL;
 
 export const api = axios.create({
   baseURL: url,
 });
 
 console.log("API_URL in use ", url);
+console.log("ENV_MODE in use ", import.meta.env.MODE);
 
-let errObject = {
-  name: "Unexpected Error",
-  msg: "An unexpected error occurred!, Please try after sometime.",
-  status: 500,
-};
+// Header event.
+const sessionExpiry = "x-session-expire";
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (!token) delete config.headers["Authorization"];
-    else config.headers["Authorization"] = `Bearer ${token}`;
+    try {
+      const { state: authState } = JSON.parse(localStorage.getItem("token"));
 
+      if (!authState || !authState.token)
+        delete config.headers["Authorization"];
+      //
+      else config.headers["Authorization"] = `Bearer ${authState.token}`;
+    } catch (ex) {
+      delete config.headers["Authorization"];
+    }
     return config;
   },
-  (err) => {
-    return Promise.reject(err);
-  }
+  (ex) => Promise.reject(ex)
 );
 
-api.interceptors.response.use(null, (err) => {
-  const { response } = err;
+api.interceptors.response.use(null, (ex) => {
+  // No response: Network Error
+  if (!ex?.response)
+    return Promise.reject({
+      type: "NETWORK_ERROR",
+      msg: "Check your internet connection !",
+    });
 
-  if (err.request && !response) {
-    errObject = {
-      name: "Network Error",
-      msg: "You don't seem to be connected to the internet.",
-      status: 0,
-    };
-    return Promise.reject(errObject);
+  const { response } = ex;
+
+  if (response.status >= 500)
+    return Promise.reject({
+      type: "SERVER_ERROR",
+      msg: "Server down. Please check back later !",
+    });
+
+  if (sessionExpiry in response.headers) {
+    evEmitter.emit(sessionExpiry);
+    return Promise.reject(() => {});
   }
 
-  const ev = "x-session-exp";
-
-  const expired = response.headers[ev] === "true";
-  if (expired) {
-    evEmitter.emit(ev);
-    errObject = {
-      name: "Session Expired",
-      msg: "Session expired, Logging out...",
-      status: response.status || 403,
-    };
-
-    return Promise.reject(errObject);
-  }
-
-  const expErr = response && response.status < 500 && response.status >= 400;
-  if (expErr) {
-    const { statusText: errName } = response;
-    const errMsg = response.data.detail || "A client side error occurred!";
-
-    errObject = { name: errName, msg: errMsg, status: response.status };
-    return Promise.reject(errObject);
-  }
-
-  return Promise.reject(errObject);
+  console.log(ex);
+  return Promise.reject(() => {});
 });
 
 export default api;

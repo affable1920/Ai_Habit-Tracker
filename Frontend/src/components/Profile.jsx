@@ -1,36 +1,52 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "./Providers/AuthProvider";
+import React from "react";
 import { capitalize } from "./Habitdetails";
+import useAuthStore from "../stores/authStore";
+import useLoadingStore from "../stores/loadingStore";
 
 const Profile = () => {
-  const [profile, setProfile] = useState();
-  const { getProfile } = useContext(AuthContext);
+  const getProfile = useAuthStore((s) => s.getProfile);
+  // if (!getProfile) return null;
 
+  const [profile, setProfile] = React.useState(null);
   const unwanted = ["id", "password", "createdAt", "updatedAt"];
 
-  const fetchProfile = async () => {
-    setProfile(
-      Object.entries(await getProfile()).filter(([key, value]) => {
-        if (!unwanted.includes(key)) return [key, value];
-      })
-    );
-  };
+  const setLoading = useLoadingStore((s) => s.setLoading);
 
-  useEffect(() => {
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      try {
+        let userProfile = await getProfile();
+
+        if (userProfile)
+          setProfile(() => {
+            // Object.entries -> an array so must keep a seperate obj.
+            return Object.entries(userProfile).filter(([key, value]) => {
+              if (unwanted.includes(key)) return;
+              return [key, value];
+            });
+          });
+      } catch (ex) {
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProfile();
   }, []);
 
   return (
     <div className="m-14">
-      {profile?.map(([key, value]) => (
-        <div
-          className="flex justify-between gap-3 items-center italic tracking-wider"
-          key={key}
-        >
-          <div>{capitalize(key)}</div>
-          <div>{value}</div>
-        </div>
-      ))}
+      {Array.isArray(profile) &&
+        profile.map(([key, value]) => (
+          <div
+            className="flex justify-between gap-3 items-center italic tracking-wider"
+            key={key}
+          >
+            <div>{capitalize(key)}</div>
+            <div>{value}</div>
+          </div>
+        ))}
     </div>
   );
 };

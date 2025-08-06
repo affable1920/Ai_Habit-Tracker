@@ -1,17 +1,14 @@
-import { useContext } from "react";
-import { ModalContext } from "./Providers/ModalProvider";
 import { IoMdArrowDropdown } from "react-icons/io";
-import HabitOptions from "./HabitOptions";
 import { MdDelete } from "react-icons/md";
 import { RiCollapseHorizontalFill } from "react-icons/ri";
+import useModalStore from "../stores/modalStore";
+import { MODALS } from "../../constants/MODALS";
 
 const HabitButtons = ({ onDropdownClick, habit }) => {
-  const { dispatch } = useContext(ModalContext);
+  const { openModal } = useModalStore();
 
   const onExtra = () => {
-    dispatch({
-      type: "OPEN_MODAL",
-      name: "habit_details",
+    openModal(MODALS.HABIT_DETAILS, {
       props: { habit },
     });
   };
@@ -22,9 +19,8 @@ const HabitButtons = ({ onDropdownClick, habit }) => {
       <IoMdArrowDropdown className="icon__with__bg" onClick={onDropdownClick} />
       <MdDelete
         onClick={() =>
-          dispatch({
-            type: "OPEN_MODAL",
-            name: "delete_modal",
+          openModal({
+            name: MODALS.DELETE_CONFIRM,
             props: { habitId: habit.id },
           })
         }

@@ -4,7 +4,6 @@ class EventEmitter {
   }
 
   on(ev, listener, once = false) {
-    console.log("on called.");
     if (!this.events[ev]) this.events[ev] = new Set();
 
     if (typeof listener !== "function") {

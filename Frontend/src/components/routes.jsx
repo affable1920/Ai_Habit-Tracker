@@ -10,9 +10,9 @@ import LandingPage from "./LandingPage";
 import PrivateRoutes from "./PrivateRoutes";
 import HabitsTracker from "./HabitsTracker";
 import AuthRoutes from "./AuthRoutes";
-
-const Chat = React.lazy(() => import("./Chat"));
-const Profile = React.lazy(() => import("./Profile"));
+import Logout from "./Logout";
+import Profile from "./Profile";
+import Chat from "./Chat";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
       { path: "", element: <Dashboard /> },
       { path: "dashboard", element: <LandingPage /> },
       { path: "tracker", element: <HabitsTracker /> },
+      { path: "logout", element: <Logout /> },
       {
         element: <PrivateRoutes />,
         children: [

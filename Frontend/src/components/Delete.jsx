@@ -1,14 +1,11 @@
-import React, { useContext } from "react";
-import { ModalContext } from "./Providers/ModalProvider";
-import useHabitStore from "../stores/habitStore";
 import { toast } from "sonner";
+import useHabitStore from "../stores/habitStore";
 
 const Delete = () => {
-  const { modal, dispatch } = useContext(ModalContext);
   const deleteHabit = useHabitStore((s) => s.deleteHabit);
 
   const onDelete = async () => {
-    const { success, msg } = await deleteHabit(modal.props?.habitId);
+    const { success, msg } = await deleteHabit(props?.habitId);
 
     if (!success) {
       toast.error(msg);
@@ -16,7 +13,7 @@ const Delete = () => {
     }
 
     toast.success(msg);
-    dispatch({ type: "CLOSE_MODAL", name: "deleteModal" });
+    // dispatch({ type: "CLOSE_MODAL", name: "deleteModal" });
   };
 
   return (
@@ -28,7 +25,7 @@ const Delete = () => {
       <p>Confirm habit deletion ?</p>
       <div className="flex justify-around mt-4">
         <button
-          onClick={() => dispatch({ type: "CLOSE_MODAL", name: "deleteModal" })}
+          // onClick={() => dispatch({ type: "CLOSE_MODAL", name: "deleteModal" })}
           className="btn btn__accent"
         >
           Cancel

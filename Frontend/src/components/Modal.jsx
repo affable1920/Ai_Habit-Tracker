@@ -1,56 +1,32 @@
-import { useContext } from "react";
 import { createPortal } from "react-dom";
-import { RxCross2 } from "react-icons/rx";
-import { ModalContext } from "./Providers/ModalProvider";
 import Overlay from "./Overlay";
 import useHabitStore from "../stores/habitStore";
-import { toast } from "sonner";
+import { RxCross2 } from "react-icons/rx";
+import { TiTick } from "react-icons/ti";
 import IconComponent from "./IconComponent";
 import UserActions from "./UserActions";
-import { TiTick } from "react-icons/ti";
+import useModalStore from "../stores/modalStore";
 
 const Modal = () => {
-  const { modals, dispatch } = useContext(ModalContext);
-
-  const closeModal = () => {
-    dispatch({ type: "CLOSE_ALL" });
-  };
+  const { currentModal, closeModal } = useModalStore();
 
   const editHabit = useHabitStore((s) => s.editHabit);
   const deleteHabit = useHabitStore((s) => s.deleteHabit);
 
-  const onEdit = async () => {
-    const { success, msg } = await editHabit(
-      modals.props.habitId,
-      modals.props.fieldsToUpdate
-    );
-
-    if (!success) {
-      toast.error(msg);
-      return;
-    }
-
-    toast.success(msg);
-    dispatch({ type: "CLOSE_MODAL", name: "editHabit" });
-  };
-
-  if (modals.open.length === 0) return null;
+  if (!currentModal) return null;
 
   const modalMap = {
-    user_action: <UserActions />,
-    edit_habit: (
+    userActions: <UserActions />,
+    editHabit: (
       <button
-        onClick={onEdit}
+        onClick={editHabit}
         className="btn btn__accent flex items-center gap-2"
       >
         Mark Complete <TiTick />
       </button>
     ),
-    delete_modal: (
-      <button
-        onClick={() => deleteHabit(modals.props.habitId)}
-        className="btn btn__accent"
-      >
+    deleteModal: (
+      <button onClick={deleteHabit} className="btn btn__accent">
         Confirm Deletion ?
       </button>
     ),
@@ -70,7 +46,7 @@ const Modal = () => {
               chClass="icon__small font-bold text-light"
             />
           </div>
-          {modalMap[modals.open[modals.open.length - 1]]}
+          {modalMap[currentModal]}
         </div>
       </div>
     </Overlay>,

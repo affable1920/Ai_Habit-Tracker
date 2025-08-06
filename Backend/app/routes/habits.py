@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi.responses import JSONResponse
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 import app.models.Habit as model
 from app.services.Habit_Services.crud import CRUD
@@ -10,9 +10,15 @@ router = APIRouter()
 auth_service = AuthService()
 
 
-def get_CRUD(token: Annotated[str, Depends(auth_service.decode_access_token)]) -> CRUD:
-    user_id = token["id"]
-    return CRUD(user_id)
+def get_CRUD(token: Annotated[dict, Depends(auth_service.decode_access_token)]) -> CRUD:
+    try:
+        user_id = token["id"]
+        return CRUD(user_id)
+
+    except KeyError:
+        raise HTTPException(401, "Unauthorized user. Missing attributes !")
+    except Exception:
+        raise HTTPException(401, "Authorization failed !")
 
 
 @router.get("/")

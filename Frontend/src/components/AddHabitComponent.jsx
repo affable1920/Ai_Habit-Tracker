@@ -1,19 +1,20 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { toast } from "sonner";
-import { ModalContext } from "./Providers/ModalProvider";
 import useIntersection from "../hooks/useIntersection";
 import habitSchema from "../schemas/habitSchema";
 import useHabitStore from "../stores/habitStore";
 import useExtraStore from "../stores/extraStore";
+import useModalStore from "../stores/modalStore";
+import { MODALS } from "../../constants/MODALS";
 import Form from "./common/Form";
 
 const Step1 = React.lazy(() => import("./AddForm/Step1"));
 const Step2 = React.lazy(() => import("./AddForm/Step2"));
 
 const AddHabitComponent = () => {
-  const { modals, dispatch } = useContext(ModalContext);
+  const { openModal, modalProps } = useModalStore();
   const [step, setStep] = useState(1);
 
   const steps = [Step1, Step2];
@@ -30,21 +31,20 @@ const AddHabitComponent = () => {
   let freq = form.watch("frequency");
 
   useEffect(() => {
-    if (freq && typeof freq == "string" && freq.toLowerCase() == "custom")
-      dispatch({ type: "OPEN_MODAL", name: "reminderModal" });
+    if (freq && typeof freq == "string" && freq.toLowerCase() == "custom") {
+      openModal(MODALS.REMINDER);
+    }
   }, [freq]);
 
-  useEffect(
-    () => {
-      if (
-        modals.props.modalName === "reminderModal" &&
-        modals.props.action === "CLOSE"
-      ) {
-        form.setValue("frequency", null);
-      }
-    },
-    modals.props ? [modals.props] : []
-  );
+  useEffect(() => {
+    // Add exception handling for this
+    if (
+      modalProps.modalName === "reminderModal" &&
+      modalProps.action === "CLOSE"
+    ) {
+      form.setValue("frequency", null);
+    }
+  }, [modalProps]);
 
   const handleBack = () =>
     setStep((step) => (step === firstStep ? step : step - 1));

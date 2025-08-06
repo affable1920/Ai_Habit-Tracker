@@ -1,25 +1,16 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useRef } from "react";
 import HabitButtons from "./HabitButtons";
-import { ModalContext } from "./Providers/ModalProvider";
 import { GoChevronRight } from "react-icons/go";
 import { MdModeEdit } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { toast } from "sonner";
-import {
-  FcLowPriority,
-  FcMediumPriority,
-  FcHighPriority,
-  FcReadingEbook,
-  FcRegisteredTrademark,
-} from "react-icons/fc";
+import { FcLowPriority, FcHighPriority } from "react-icons/fc";
+import { FcMediumPriority, FcReadingEbook } from "react-icons/fc";
+import { FcRegisteredTrademark } from "react-icons/fc";
 import useHabitStore from "../stores/habitStore";
-
-const deCapitalize = (str) => {
-  if (!str) return "";
-
-  if (typeof str != "string") return str;
-  return str.toLowerCase();
-};
+import useModalStore from "../stores/modalStore";
+import { MODALS } from "../../constants/MODALS";
+import { deCapitalize } from "../Utils/utilFns";
 
 const Habit = ({ habit }) => {
   const [title, setTitle] = useState(habit.title || "");
@@ -34,7 +25,7 @@ const Habit = ({ habit }) => {
   const [loadMore, setLoadMore] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
-  const { dispatch } = useContext(ModalContext);
+  const openModal = useModalStore((s) => s.openModal);
 
   const loadRef = useRef(null);
   const editHabit = useHabitStore((s) => s.editHabit);
@@ -43,13 +34,8 @@ const Habit = ({ habit }) => {
     const allowEdit = fields.completed && !habit.completed;
 
     if (allowEdit) {
-      dispatch({
-        type: "OPEN_MODAL",
-        name: "edit_habit",
-        props: {
-          habitId: habit.id,
-          fieldsToUpdate: fields,
-        },
+      openModal(MODALS.EDIT_HABIT, {
+        props: { habitId: habit.id, fieldsToUpdate: fields },
       });
       return;
     }

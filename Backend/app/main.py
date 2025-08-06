@@ -3,10 +3,10 @@ from datetime import datetime
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, status
-from fastapi.websockets import WebSocketState
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
+# Custom modules.
 from app.routes import auth
 from app.routes import habits
 from app.conn.websocket import WSManager
@@ -19,8 +19,6 @@ origins = [
     "https://aihabittracker-one.vercel.app",
 ]
 
-# amazonq-ignore-next-line
-
 
 @asynccontextmanager
 # The context manager returned here is then passed to the FastAPI's lifespan parameter.
@@ -30,7 +28,6 @@ async def root(app: FastAPI):
     try:
         init_dirs_and_paths()
 
-    # amazonq-ignore-next-line
     except PermissionError as ex:
         print(ex)
 
@@ -50,7 +47,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
-    expose_headers=["x-auth-token", "x-session-exp", "x-websocket-disconnect"],
+    expose_headers=["x-auth-token",
+                    "x-session-expire", "x-websocket-disconnect"],
 )
 
 
@@ -73,11 +71,13 @@ ws_manager = WSManager()
 
 
 async def schedule_logout(u_id, delay):
-    await asyncio.sleep(delay)  # Asyncio func
+    return
+    await asyncio.sleep(delay)
     await ws_manager.disconnect(u_id, MUST_EXIT)
 
 
 def validate_token(token: str):
+    return
     try:
         user = auth_service.decode_access_token(token)
 
@@ -107,6 +107,7 @@ def validate_token(token: str):
 
 @app.websocket("/ws")
 async def ws(websocket: WebSocket):
+    return
     token = websocket.query_params.get("token", None)
 
     if not token:
@@ -120,12 +121,10 @@ async def ws(websocket: WebSocket):
     exp_event = asyncio.create_task(schedule_logout(user_id, time_left))
 
     try:
-        while ws_manager.is_connected(ws_id=user_id):
-            await ws_manager.broadcast("Hey all connected clients.")
-            await websocket.send_json("Hello")
+        await ws_manager.broadcast(subscribers=[user_id], msg="MUST_EXIT")
+        # await ws_manager.send_msg(ws_id=user_id, msg="Hey buddy!")
 
-    except WebSocketDisconnect as ex:
-        print(ex)
+    except WebSocketDisconnect:
         await ws_manager.disconnect(user_id, MUST_EXIT)
         exp_event.cancel()
         return

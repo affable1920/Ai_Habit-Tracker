@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { ModalContext } from "./Providers/ModalProvider";
+import useModalStore from "../stores/modalStore";
 
 export const capitalize = (str) => {
   if (typeof str !== "string") return str;
@@ -7,15 +6,16 @@ export const capitalize = (str) => {
 };
 
 const Habitdetails = () => {
-  const { modal: modals } = useContext(ModalContext);
-  let habit = {};
+  const { props } = useModalStore((s) => s.props);
 
   const unwanted = ["id", "category", "status"];
-  if (modals.props) habit = modals.props.habit;
+  if (props) habit = props.habit;
 
   const properties = Object.entries(habit).filter(([key, value]) => {
     if (!unwanted.includes(key)) return value ? [key, value] : [key, "N/A"];
   });
+
+  if (!props || !props?.habit) return null;
 
   return (
     <div className="flex flex-col gap-3">

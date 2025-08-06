@@ -1,87 +1,91 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { AuthContext } from "./Providers/AuthProvider";
-import { ModalContext } from "./Providers/ModalProvider";
 import Modal from "./Modal";
 import NavBar from "./NavBar";
 import Spinner from "./Spinner";
 import Tooltip from "./Tooltip";
-import { toast } from "sonner";
-import evEmitter from "../services/eventEmiiter";
-import { jwtDecode } from "jwt-decode";
+import useAuthStore from "../stores/authStore";
+import { MODALS } from "../../constants/MODALS";
+import useModalStore from "../stores/modalStore";
 
 const Layout = () => {
-  const sessionExpired = import.meta.env.VITE_SESSION_EXPIRE;
+  const { token, user } = useAuthStore();
 
-  const { user, token, logout } = React.useContext(AuthContext);
-  const { modals, dispatch } = React.useContext(ModalContext);
+  React.useEffect(() => {
+    if (token && !user)
+      useAuthStore.setState((store) => ({
+        ...store,
+        user: useAuthStore.getState().getUser(token),
+      }));
+  }, [token, user]);
 
-  const [wsMsg, setWsMsg] = React.useState("");
+  // const [wsMsg, setWsMsg] = React.useState("");
+  // const sessionExpired = import.meta.env.VITE_SESSION_EXPIRE;
 
-  useEffect(() => {
-    if (!token) return;
+  const openModal = useModalStore((s) => s.openModal);
+  const closeModal = useModalStore((s) => s.closeModal);
 
-    // backend returns jwt with exp and iat in utc: seconds since epoch, so must multiply by 1000 or divide now by 1000
-    let now = Date.now();
-    let exp = jwtDecode(token)["exp"] * 1000;
+  // useEffect(() => {
+  //   if (!token) return;
 
-    let timeLeft = (exp - now) / 1000;
-    if (!timeLeft || timeLeft <= 0) logout();
+  //   // backend returns jwt with exp and iat in utc: seconds since epoch, so must multiply by 1000 or divide now by 1000
+  //   let now = Date.now();
+  //   let exp = jwtDecode(token)["exp"] * 1000;
 
-    const WSURL = `ws://localhost:8000/ws`;
-    const ws = new WebSocket(WSURL + `?token=${token}`);
+  //   let timeLeft = (exp - now) / 1000;
+  //   if (!timeLeft || timeLeft <= 0) logout();
 
-    ws.onopen = () => {
-      toast.success("Ws connected");
-      console.log("Connected.");
-      ws.send("Hello server");
-    };
+  //   const WSURL = `ws://localhost:8000/ws`;
+  //   const ws = new WebSocket(WSURL + `?token=${token}`);
 
-    ws.onmessage = ({ data }) => {
-      let msg;
-      if (data) msg = JSON.parse(data);
+  //   ws.onopen = () => {
+  //     toast.success("Ws connected");
+  //     console.log("Connected.");
+  //     ws.send("Hello server");
+  //   };
 
-      toast.success(msg);
-      setWsMsg(msg);
-    };
+  //   ws.onmessage = ({ data }) => {
+  //     let msg;
+  //     if (data) msg = JSON.parse(data);
 
-    ws.onerror = (ev) => {
-      console.log(ev);
-    };
+  //     toast.success(msg);
+  //     setWsMsg(msg);
+  //   };
 
-    ws.onclose = (ev) => {
-      if (ev.reason == sessionExpired) {
-        toast("Session Expired!", {
-          description: "Logging out ...",
-          duration: 1200,
-        });
-        evEmitter.emit(sessionExpired);
-      }
-    };
+  //   ws.onerror = (ev) => {
+  //     console.log(ev);
+  //   };
 
-    return () => {
-      ws.close();
-    };
-  }, [token, wsMsg]);
+  //   ws.onclose = (ev) => {
+  //     if (ev.reason == sessionExpired) {
+  //       toast("Session Expired!", {
+  //         description: "Logging out ...",
+  //         duration: 1200,
+  //       });
+  //       evEmitter.emit(sessionExpired);
+  //     }
+  //   };
+
+  //   return () => {
+  //     ws.close();
+  //   };
+  // }, [token, wsMsg]);
 
   const shortcut = React.useCallback((e) => {
     const shortcutKey = e.ctrlKey
       ? "control" + e.key.toLowerCase()
       : e.key.toLowerCase();
 
-    if (shortcutKey === "escape")
-      dispatch({
-        type: "CLOSE_ALL",
-      });
+    if (shortcutKey === "escape") closeModal();
 
     if (shortcutKey === "controlk") {
       e.preventDefault();
-      dispatch({ type: "OPEN_MODAL", name: "search_bar" });
+      openModal(MODALS.SEARCH_BAR);
     }
 
     if (shortcutKey === "controlr") {
       e.preventDefault();
-      dispatch({ type: "OPEN_MODAL", name: "rec_system" });
+      openModal(MODALS.RECOMMENDATION_SYSTEM);
     }
   }, []);
 
@@ -89,13 +93,10 @@ const Layout = () => {
   //   const classes = ["modal", "nav__bar"];
 
   //   if (e.target === e.currentTarget)
-  //     dispatch({
-  //       type: "CLOSE_MODAL",
-  //       name: modals.open[modals.open.length - 1],
+  //     closeModal({
+  //       name: modals[modals.length - 1],
   //     });
   // });
-
-  const noneOpen = !user || modals?.open?.length === 0;
 
   React.useEffect(() => {
     if (!user) return;
@@ -123,9 +124,6 @@ const Layout = () => {
       <section className="flex flex-col h-full">
         <header>
           <NavBar />
-          <div className="text-white p-4 text-center bg-red-300 font-bold italic text-lg">
-            {wsMsg && <div className="">{wsMsg}</div>}
-          </div>
         </header>
         <main className="grow">
           <Outlet />

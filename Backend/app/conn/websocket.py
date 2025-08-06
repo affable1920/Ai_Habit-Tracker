@@ -1,39 +1,53 @@
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any
 from fastapi import WebSocket
+from datetime import datetime
+from pydantic import BaseModel
 from fastapi.websockets import WebSocketState
 
 
-@dataclass
-class Socket():
-    id: str
-    socket: WebSocket
+class WS_Conn(BaseModel):
     conn_at: datetime
+    socket: WebSocket
+    queue: asyncio.Queue
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class WSManager:
-    active_conns: dict[str, Socket] = {}
+    _def_maxsize = 4
+
+    def __init__(self):
+        self.active_conns: dict[str, WS_Conn] = {}
+
+#
 
     async def connect(self, ws_id: str, ws: WebSocket):
-        if ws_id in self.active_conns:
+        # Del old and connect the new conn
+        self.remove_ws(ws_id=ws_id)
+
+        try:
+            await ws.accept()
+            self.active_conns[ws_id] = WS_Conn(conn_at=datetime.now(), socket=ws,
+                                               queue=asyncio.Queue(maxsize=self._def_maxsize))
+
+        except Exception as ex:
+            print(ex)
             return
 
-        await ws.accept()
-        self.active_conns[ws_id] = Socket(
-            socket=ws, id=ws_id, conn_at=datetime.now())
+#
 
     async def disconnect(self, ws_id, reason: dict):
-        ws_to_disconnect: Socket = self.active_conns.get(ws_id, None).socket
-
+        ws_to_disconn: WS_Conn = self.active_conns.get(ws_id, None)
         # Check if the socket to disconn is already disconnected.
-        if not ws_to_disconnect or not self.is_connected(ws_id=ws_id):
+        if not ws_to_disconn or not self.is_connected(ws_id=ws_id):
             return
 
         else:
             try:
-                await ws_to_disconnect.close(**reason)
+                socket = ws_to_disconn.socket
+                await socket.close(**reason)
 
             except Exception as ex:
                 print(ex)
@@ -42,36 +56,46 @@ class WSManager:
                 self.remove_ws(ws_id=ws_id)
         return
 
+#
+
     def remove_ws(self, ws_id):
         if not ws_id in self.active_conns:
             return
         del self.active_conns[ws_id]
 
+#
+
     def is_connected(self, ws_id) -> bool:
-        ws_to_check = self.active_conns.get(ws_id, None).socket
+        ws_to_check = self.active_conns.get(ws_id, None)
         if not ws_to_check:
             return False
 
-        return all(state == WebSocketState.CONNECTED for state in (ws_to_check.application_state, ws_to_check.client_state))
+        socket = ws_to_check.socket
+        return all(state == WebSocketState.CONNECTED for state in (socket.application_state, socket.client_state))
 
-    async def broadcast(self, msg: str | Any):
-        # Create tasks to send msg to each client connected to the ws.
-        try:
-            tasks = [(ws_id, asyncio.create_task(ws.socket.send_text(
-                msg))) for ws_id, ws in self.active_conns.items() if self.is_connected(ws_id=ws_id)]
 
-            # Run tasks concurrently.
-            results = asyncio.gather(
-                *[task for _, task in tasks], return_exceptions=True)
+#
+    # A consumer method.
 
-            # Remove disconnected clients.
-            disconnected_ws_ids = []
-            for (ws_id, _), result in zip(tasks, results):
-                if isinstance(result, Exception):
-                    disconnected_ws_ids.append(ws_id)
 
-            for id in disconnected_ws_ids:
-                self.remove_ws(ws_id=id)
+    async def send_msg(self, subscribers: list[str], msg: str | None = None):
+        connected = {ws_id: self.is_connected(
+            ws_id=ws_id) for ws_id in subscribers}
 
-        except Exception as ex:
-            print(ex)
+        self.msg_qs = {id: asyncio.Queue(maxsize=5) for id in subscribers}
+        # await asyncio.gather(*(queue.put(msg) for queue in self.msg_qs.values()))
+
+        for q in self.msg_qs.values():
+            await q.put(msg)
+
+#
+    # A producer method.
+    async def broadcast(self, subscribers: list[str], msg: str | None = None):
+        for i, conn in self.active_conns.items():
+            if i in subscribers:
+                try:
+                    await conn.queue.put(msg)
+
+                except Exception as ex:
+                    print(ex)
+                    continue

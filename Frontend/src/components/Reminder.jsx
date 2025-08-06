@@ -1,14 +1,13 @@
-import { useContext } from "react";
 import Input from "./common/Input";
 import { useForm } from "react-hook-form";
 import Select from "./common/Select";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { ModalContext } from "./Providers/ModalProvider";
 import useExtraStore from "./../stores/extraStore";
+import useModalStore from "../stores/modalStore";
 
 const Reminder = () => {
-  const { modals, dispatch } = useContext(ModalContext);
+  const closeModal = useModalStore((s) => s.closeModal);
 
   const extra = useExtraStore((s) => s.extra);
   const setValues = useExtraStore((s) => s.setValues);
@@ -25,10 +24,7 @@ const Reminder = () => {
 
   const onSubmit = (data) => {
     setValues(data);
-    dispatch({
-      type: "CLOSE_MODAL",
-      name: "reminderModal",
-    });
+    closeModal();
   };
 
   const intervalTimes = ["Minutes", "Hours", "Days", "Weeks"];

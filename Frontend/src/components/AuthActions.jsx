@@ -1,24 +1,33 @@
-import { useState, useContext } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { AuthContext } from "./Providers/AuthProvider";
-import { ModalContext } from "./Providers/ModalProvider";
+import useModalStore from "../stores/modalStore";
+import useAuthStore from "../stores/authStore";
 import NavSearch from "./NavSearch";
-import ThemeToggler from "./ThemeToggler";
 import IconComponent from "./IconComponent";
+import { MODALS } from "../../constants/MODALS";
 import { TbUserDown } from "react-icons/tb";
+import ThemeToggler from "./ThemeToggler";
 
 const AuthActions = () => {
-  const [showFeatures, setShowFeatures] = useState(false);
-  const { modal, dispatch } = useContext(ModalContext);
+  const openModal = useModalStore((s) => s.openModal);
+  const closeModal = useModalStore((s) => s.closeModal);
 
-  const { user } = useContext(AuthContext);
+  const currentModal = useModalStore((s) => s.currentModal);
+
+  const user = useAuthStore((s) => s.user);
   const { pathname: route } = useLocation();
+
+  const toggleModal = () => {
+    if (currentModal == MODALS.USER_ACTIONS) closeModal();
+    else openModal(MODALS.USER_ACTIONS);
+  };
 
   return (
     <div className="flex items-center gap-6 md:gap-12">
       <div className="flex items-center gap-2">
         <NavSearch />
       </div>
+
+      <ThemeToggler />
 
       {route != "/login" && !user && (
         <Link to="/login" className="lg:order-10">
@@ -27,20 +36,9 @@ const AuthActions = () => {
       )}
 
       <div className=" flex items-center gap-3 flex-wrap">
-        <ThemeToggler />
         {user && (
           <>
-            <IconComponent
-              bg
-              Icon={TbUserDown}
-              fn={() =>
-                dispatch({
-                  type: "OPEN_MODAL",
-                  name: "user_action",
-                  keepPrevious: true,
-                })
-              }
-            />
+            <IconComponent bg Icon={TbUserDown} fn={toggleModal} />
           </>
         )}
       </div>

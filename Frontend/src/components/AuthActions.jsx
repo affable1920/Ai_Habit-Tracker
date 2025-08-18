@@ -2,8 +2,7 @@ import { useLocation, Link } from "react-router-dom";
 import useModalStore from "../stores/modalStore";
 import useAuthStore from "../stores/authStore";
 import NavSearch from "./NavSearch";
-import IconComponent from "./IconComponent";
-import { MODALS } from "../../constants/MODALS";
+import Button from "./Button";
 import { TbUserDown } from "react-icons/tb";
 import ThemeToggler from "./ThemeToggler";
 
@@ -16,30 +15,27 @@ const AuthActions = () => {
   const user = useAuthStore((s) => s.user);
   const { pathname: route } = useLocation();
 
-  const toggleModal = () => {
-    if (currentModal == MODALS.USER_ACTIONS) closeModal();
-    else openModal(MODALS.USER_ACTIONS);
-  };
+  const toggleModal = () =>
+    currentModal === "USER_ACTIONS" ? closeModal() : openModal("USER_ACTIONS");
 
   return (
-    <div className="flex items-center gap-6 md:gap-12">
-      <div className="flex items-center gap-2">
+    <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2.5">
         <NavSearch />
+        <ThemeToggler />
       </div>
 
-      <ThemeToggler />
-
       {route != "/login" && !user && (
-        <Link to="/login" className="lg:order-10">
-          <button className="btn btn__accent">Log in</button>
+        <Link to="/login">
+          <button className="button bg-amber-600">Log in</button>
         </Link>
       )}
 
-      <div className=" flex items-center gap-3 flex-wrap">
+      <div className=" gap-3">
         {user && (
-          <>
-            <IconComponent bg Icon={TbUserDown} fn={toggleModal} />
-          </>
+          <Button bg onClick={toggleModal}>
+            <TbUserDown />
+          </Button>
         )}
       </div>
     </div>

@@ -3,8 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Joi from "joi";
-import Form from "./common/Form";
-import Input from "./common/Input";
+import Input from "./Input";
 import loadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
 
@@ -41,11 +40,11 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="wrapper__full">
-      <div className="pad__box" />
-      <div className="mid__box p-8">
-        <h2 className="heading__md">Welcome</h2>
-        <Form onSubmit={form.handleSubmit(onSubmit)}>
+    <div className="container ">
+      <div className="padding-box" />
+      <div className="">
+        <h1>Welcome</h1>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <Input name="email" register={form.register} errors={errors} />
           <Input
             name="password"
@@ -54,16 +53,16 @@ const RegisterForm = () => {
             errors={errors}
           />
           <Input name="username" register={form.register} errors={errors} />
-          <div className="flex flex-col gap-4">
-            <button className="btn btn__accent">Register</button>
+          <div className="flex  gap-4">
+            <button className="button button-accent">Register</button>
             <button
-              className="btn btn__primary"
+              className="button button-primary"
               onClick={() => navigate("/login")}
             >
               Already have an account ?
             </button>
           </div>
-        </Form>
+        </form>
       </div>
     </div>
   );

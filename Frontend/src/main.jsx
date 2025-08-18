@@ -1,23 +1,27 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { injectSpeedInsights } from "@vercel/speed-insights";
+
+import Modal from "./components/Modal";
 import router from "./components/routes";
 import { Toaster } from "sonner";
-import { injectSpeedInsights } from "@vercel/speed-insights";
-import { SpeedInsights } from "@vercel/speed-insights/react";
-import { Analytics } from "@vercel/analytics/react";
-
-// CSS
-import "./index.css";
-import "./App.css";
 
 injectSpeedInsights();
+import "./stylesheets/config.css";
+import "./stylesheets/utils.css";
+
+import "./stylesheets/baseComponents.css";
+import "./stylesheets/interactives.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <Modal />
     <SpeedInsights debug />
     <Analytics />
     <RouterProvider router={router} />
-    <Toaster position="top-right" duration={1000} visibleToasts={1} />
+    <Toaster position="top-center" duration={1000} visibleToasts={2} />
   </StrictMode>
 );

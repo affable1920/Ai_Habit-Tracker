@@ -1,11 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Modal from "./Modal";
 import NavBar from "./NavBar";
-import Spinner from "./Spinner";
-import Tooltip from "./Tooltip";
 import useAuthStore from "../stores/authStore";
-import { MODALS } from "../../constants/MODALS";
 import useModalStore from "../stores/modalStore";
 
 const Layout = () => {
@@ -80,17 +76,17 @@ const Layout = () => {
 
     if (shortcutKey === "controlk") {
       e.preventDefault();
-      openModal(MODALS.SEARCH_BAR);
+      openModal("SEARCH_BAR");
     }
 
     if (shortcutKey === "controlr") {
       e.preventDefault();
-      openModal(MODALS.RECOMMENDATION_SYSTEM);
+      openModal("RECOMMENDATION_SYSTEM");
     }
   }, []);
 
   // const escapeModal = useCallback((e) => {
-  //   const classes = ["modal", "nav__bar"];
+  //   const classes = ["modal", "nav-bar"];
 
   //   if (e.target === e.currentTarget)
   //     closeModal({
@@ -115,20 +111,12 @@ const Layout = () => {
 
   return (
     <>
-      {/* Portals */}
-      <Modal />
-      <Spinner />
-      <Tooltip />
-
-      {/* Main Layout */}
-      <section className="flex flex-col h-full">
-        <header>
-          <NavBar />
-        </header>
-        <main className="grow">
-          <Outlet />
-        </main>
-      </section>
+      <header className="app-header">
+        <NavBar />
+      </header>
+      <main className="container">
+        <Outlet />
+      </main>
     </>
   );
 };

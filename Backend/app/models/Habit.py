@@ -6,7 +6,7 @@ from datetime import datetime
 
 class Query(BaseModel):
     page: int = Field(gt=0, default=1)
-    search_query: Optional[str] = ""
+    searchQuery: Optional[str] = ""
     status: Optional[bool] = None
     max: int = Field(default=10, gt=0)
 

@@ -1,0 +1,37 @@
+@import "./config.css";
+@import "./utils.css";
+
+/* Interactive utils and components layer. */
+
+@utility p-ix {
+  padding: calc(theme(--spacing) * 1) calc(theme(--spacing) * 2);
+}
+
+/* padding: calc(theme(--spacing) * 1) calc(theme(--spacing) * 2); */
+@utility p-ix-sm {
+  padding: calc(theme(--spacing) * 2) calc(theme(--spacing) * 4);
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-md text-sm tracking-widest o-none p-ix-sm bg-inherit 
+    ring-2 ring-slate-300 dark:ring-primary-light focus:ring-accent dark:focus:ring-accent-dark 
+    shadow-inner focus:shadow-md shadow-black/20 dark:shadow-black placeholder:italic placeholder:scale-90 
+    placeholder:text-xs;
+  }
+
+  .button {
+    /* Default - primary */
+    @apply rounded-md flex justify-center items-center gap-1.5 font-medium app-shadow 
+    active:scale-90 p-ix;
+
+    &.primary {
+      @apply bg-slate-50 active:bg-slate-100 text-primary dark:text-slate-300 border-[1.4px] 
+      border-slate-300 dark:border-primary-light dark:active:bg-primary-light 
+      dark:bg-primary dark:border-2;
+    }
+
+    &.accent {
+    }
+  }
+}

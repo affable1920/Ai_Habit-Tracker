@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@source "src/**/*.{html,js,jsx,css}";
+
+/* 
+Import using @import directive
+import the tailwindcss dep, includes base, layer, theme etc. by default.
+set the source using @source "{path}" for tailwind to find files for tailwindcss classes:
+relative to the current stylesheet or from the cwd eg Frontend.
+Use the theme directive for add primary styles for your project,
+utility directive for custom utilities
+custom-variant for custom variants,
+and variant for applying variants
+*/
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* primary: Black-Gray */
+  --color-primary: #242424;
+  --color-primary-dark: #141414;
+  --color-primary-light: #373737;
+
+  /* Cyan - accent */
+  --color-accent: var(--color-cyan-400);
+  --color-accent-dark: var(--color-cyan-700);
+  --color-accent-light: var(--color-cyan-100);
+
+  /* Alerts */
+  --color-error: var(--color-red-400);
+  --color-success: var(--color-green-400);
+  --color-warning: var(--color-yellow-400);
+
+  /* Defaults */
+  --default-transition-duration: 240ms;
+
+  /* Font-size */
+  --text-xs: 0.6rem;
+  --text-sm: 0.8rem;
+  --text-base: 0.9rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  --tracking-wide: 2px;
+  --tracking-wider: 2.5px;
+  --tracking-tight: 1px;
+
+  /* Animations */
+  --animate-spin: spin 1s linear infinite;
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+}
+
+/* Default DOM tag styles */
+@layer base {
+  html {
+    width: 100vw;
+    height: 100vh;
+    letter-spacing: theme(--tracking-wide);
+    font-size: theme(--text-base);
+    color: theme(--color-primary);
+    background: theme(--color-slate-50);
+
+    @variant dark {
+      background: theme(--color-primary);
+      color: theme(--color-slate-200);
+    }
+  }
+
+  body,
+  #root {
+    height: 100%;
+    display: flex;
+    max-height: 100vh;
+    flex-direction: column;
+    font-size: theme(--text-base);
+  }
+
+  main {
+    flex: 1;
+    padding: calc(theme(--spacing) * 6.5) 0;
+  }
+
+  button,
+  a {
+    outline: none;
+    cursor: pointer;
+  }
+
+  h1 {
+    font-weight: bold;
+    font-family: Merienda;
+    font-size: var(--text-2xl);
+
+    @variant dark {
+      color: theme(--color-slate-100);
+    }
+  }
+
+  select {
+    background: inherit;
+  }
+}

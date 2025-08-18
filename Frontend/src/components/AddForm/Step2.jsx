@@ -1,20 +1,14 @@
-import Select from "../common/Select";
 import { useFormContext } from "react-hook-form";
-import IconComponent from "./../IconComponent";
-import {
-  FcLowPriority,
-  FcMediumPriority,
-  FcHighPriority,
-  FcReadingEbook,
-  FcRegisteredTrademark,
-} from "react-icons/fc";
+import Select from "../Select";
+import Button from "../Button";
+
+import { FcLowPriority, FcHighPriority } from "react-icons/fc";
+import { FcMediumPriority } from "react-icons/fc";
+import { FcReadingEbook, FcRegisteredTrademark } from "react-icons/fc";
 import useExtraStore from "../../stores/extraStore";
 
 const Step2 = () => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  const { register, formState } = useFormContext();
 
   const categories = [
     "Productivity",
@@ -40,23 +34,22 @@ const Step2 = () => {
       <Select
         name="category"
         register={register}
-        errors={errors}
+        errors={formState.errors}
         options={categories}
         optional
       />
 
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex  gap-3">
         <h3 htmlFor="priority" className="label">
           Priority
         </h3>
 
-        <div className="flex gap-8 justify-between">
+        <div className="flex gap-8">
           {levels.map((level) => (
-            <IconComponent
+            <Button
               bg
-              Icon={level.el}
-              pClass="p-2"
-              fn={() => setValues({ priority: level.val })}
+              icon={level.el}
+              onClick={() => setValues({ priority: level.val })}
             />
           ))}
         </div>
@@ -65,7 +58,7 @@ const Step2 = () => {
       <Select
         name="frequency"
         register={register}
-        errors={errors}
+        errors={formState.errors}
         options={freqs}
         optional
       />

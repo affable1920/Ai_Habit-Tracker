@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import { v4 } from "uuid";
+import { create } from "zustand";
 import http from "../services/httpService";
 
 const endPoint = "/habits";
@@ -8,11 +8,16 @@ const useHabitStore = create((set, get) => ({
   habits: [],
 
   fetchHabits: async (query) => {
-    const response = await http.get(endPoint, {
-      params: { ...query },
-    });
+    try {
+      const response = await http.get(endPoint, {
+        params: { ...query },
+      });
 
-    set(() => ({ habits: response.data || [] }));
+      set(() => ({ habits: response?.data || [] }));
+    } catch (ex) {
+      console.log(ex);
+      throw ex;
+    }
   },
 
   addHabit: async (habit) => {
@@ -22,34 +27,35 @@ const useHabitStore = create((set, get) => ({
     set((store) => ({ habits: [tempHabit, ...store.habits] }));
 
     try {
-      const { data } = await http.post(endPoint, habit);
+      const response = await http.post(endPoint, habit);
 
       set((store) => ({
         habits: store.habits.map((h) =>
-          h.tempId === tempId ? { ...data } : h
+          h.tempId === tempId ? { ...(response?.data || {}) } : h
         ),
       }));
-
-      return { success: true, msg: "Habit added successfully !" };
     } catch (ex) {
       set((store) => ({
         habits: store.habits.filter((h) => h.tempId != tempId),
       }));
 
-      return { success: false, msg: ex };
+      throw ex;
     }
   },
 
-  editHabit: async (habitId, fields) => {
-    let url = endPoint + "/" + habitId;
-    if (fields.completed) url = `${endPoint}/complete/${habitId}`;
+  editHabit: async (habitId, fields = null) => {
+    const url = !!fields
+      ? `${endPoint}/${habitId}`
+      : `${endPoint}/complete/${habitId}`;
 
     const orgHabit = get().habits.find((h) => h.id === habitId);
 
+    if (!orgHabit) throw new Error("Habit not found !");
+
     set((store) => ({
       ...store,
-      habits: store.habits.map((habit) =>
-        habit.id === habitId ? { ...habit, ...fields } : habit
+      habits: store.habits.map((h) =>
+        h.id === habitId ? { ...h, ...fields } : h
       ),
     }));
 
@@ -58,21 +64,18 @@ const useHabitStore = create((set, get) => ({
       set((store) => ({
         ...store,
         habits: store.habits.map((h) =>
-          h.id === habitId ? { ...response.data } : h
+          h.id === habitId ? { ...response?.data } : h
         ),
       }));
-
-      return { success: true, msg: "Habit successfully updated !" };
     } catch (ex) {
       set((store) => ({
         ...store,
-        habits: store.habits.map((habit) =>
-          habit.id === habitId ? { ...orgHabit } : habit
+        habits: store.habits.map((h) =>
+          h.id === habitId ? { ...orgHabit } : h
         ),
       }));
 
-      if (typeof ex != "string") ex = "Error updating habit !";
-      return { success: false, msg: ex };
+      throw ex;
     }
   },
 
@@ -86,14 +89,9 @@ const useHabitStore = create((set, get) => ({
 
     try {
       await http.delete(`${endPoint}/${habitId}`);
-      await get().fetchHabits();
-
-      return { success: true, msg: "Habit successfully deleted" };
     } catch (ex) {
       set((store) => ({ ...store, habits: orgHabits }));
-
-      if (typeof ex != "string") ex = "Unable to delete habit !";
-      return { success: false, msg: ex };
+      throw ex;
     }
   },
 }));

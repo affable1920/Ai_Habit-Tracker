@@ -35,7 +35,7 @@ const Reminder = () => {
         <h4 className="italic text-md tracking-wider text-center bg-accent p-2 rounded-md shadow-lg">
           Repeat every ?
         </h4>
-        <div className="flex flex-col gap-2">
+        <div className="flex  gap-2">
           <Input
             name={"interval"}
             label="Interval"
@@ -52,7 +52,7 @@ const Reminder = () => {
           />
         </div>
         <div className="self-center mt-5">
-          <button className="btn btn__accent w-full">Set</button>
+          <button className="button button-accent w-full">Set</button>
         </div>
       </form>
     </>

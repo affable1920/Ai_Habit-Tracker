@@ -1,33 +1,27 @@
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 
-const NavLinks = ({ showLinks, onNavLinkToggle }) => {
-  const { pathname: route } = useLocation();
+const navLinks = [
+  { label: "Home", route: "/" },
+  { label: "Dashboard", route: "/dashboard" },
+  { label: "Track", route: "/tracker" },
+  { label: "Stats", route: "/stats" },
+];
 
-  const navLinks = [
-    { page: "Home", path: "/" },
-    { page: "Dashboard", path: "/dashboard" },
-    { page: "Track", path: "/tracker" },
-    { page: "Stats", path: "/stats" },
-  ];
+const NavLinks = ({ showLinks, onRouteChange }) => {
+  const { pathname } = useLocation();
+  React.useEffect(() => onRouteChange(), [pathname]);
 
   return (
-    <ul
-      className={`nav__links ${showLinks && "opacity-100 pointer-events-auto"}`}
-    >
-      {navLinks.map((link) => (
-        <Link
-          onClick={onNavLinkToggle}
-          to={link.path}
-          className={`nav__link ${
-            route === link.path &&
-            `w-fit bg-light-darker shadow-inner shadow-black/10 dark:shadow-black md:active__link 
-            dark:bg-secondary-lighter/50 ring-1 ring-light-darkest dark:bg-secondary dark:ring-secondary-lighter 
-            pointer-events-none opacity-75`
-          }`}
-          key={link.path}
+    <ul className={`navlinks ${showLinks ? "show" : ""}`}>
+      {navLinks.map(({ label, route }) => (
+        <NavLink
+          to={route}
+          key={label}
+          className={`navlink ${(route === pathname && "active") ?? ""}`}
         >
-          <li>{link.page}</li>
-        </Link>
+          <li>{label}</li>
+        </NavLink>
       ))}
     </ul>
   );

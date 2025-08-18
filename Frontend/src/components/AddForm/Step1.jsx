@@ -1,4 +1,4 @@
-import Input from "../common/Input";
+import Input from "../Input";
 import { useFormContext } from "react-hook-form";
 
 const Step1 = () => {
@@ -8,11 +8,11 @@ const Step1 = () => {
     <>
       <Input name="title" register={register} errors={formState.errors} />
       <Input
+        large
+        optional
         name="description"
         register={register}
         errors={formState.errors}
-        large
-        optional
       />
     </>
   );

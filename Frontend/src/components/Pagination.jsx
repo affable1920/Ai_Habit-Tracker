@@ -1,29 +1,33 @@
-import queryStore from "../stores/queryStore";
+import React from "react";
+import useQueryStore from "../stores/queryStore";
 import { IoArrowForwardOutline, IoArrowBackOutline } from "react-icons/io5";
+import Button from "./Button";
 
-const Pagination = () => {
-  const query = queryStore((s) => s.query);
-  const setPage = queryStore((s) => s.setPage);
+const Pagination = React.memo(() => {
+  const page = useQueryStore((s) => s.query.page);
+  const setPage = useQueryStore((s) => s.setPage);
+
+  const handleNext = React.useCallback(() => setPage(page + 1), [page]);
+  const handlePrev = React.useCallback(() => setPage(page - 1), [page]);
+
+  const iconConfig =
+    "group-hover:translate-x-1 transition-transform duration-[220ms]";
 
   return (
-    <div className="flex items-center gap-3 justify-end">
-      {query.page > 1 && (
-        <button
-          className={`btn btn__accent btn__small flex gap-1 items-end`}
-          onClick={() => setPage(query.page - 1)}
-        >
-          <IoArrowBackOutline />
-          <span>Back</span>
-        </button>
+    <div className="flex items-center gap-4 justify-end">
+      {page > 1 && (
+        <Button className={`group gap-1`} onClick={handlePrev}>
+          Back
+          <IoArrowBackOutline className={iconConfig} />
+        </Button>
       )}
-      <button
-        className="btn btn__accent btn__small flex gap-1 items-end"
-        onClick={() => setPage(query.page + 1)}
-      >
-        <span>Next</span> <IoArrowForwardOutline />
-      </button>
+
+      <Button className={`group gap-1`} onClick={handleNext}>
+        <span>Next</span>
+        <IoArrowForwardOutline className={iconConfig} />
+      </Button>
     </div>
   );
-};
+});
 
 export default Pagination;

@@ -47,6 +47,7 @@ def update(habit_id: str, fields: model.UpdateHabit, CRUD: CRUD = Depends(get_CR
 # Completion route.
 @router.put("/complete/{habit_id}")
 def mark_complete(habit_id: str, CRUD: CRUD = Depends(get_CRUD)):
+    print("Completion route called.")
     completed_habit = CRUD.mark_complete(habit_id)
     return JSONResponse(completed_habit.model_dump(), 201)
 

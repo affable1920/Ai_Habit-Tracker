@@ -12,7 +12,6 @@ import HabitsTracker from "./HabitsTracker";
 import AuthRoutes from "./AuthRoutes";
 import Logout from "./Logout";
 import Profile from "./Profile";
-import Chat from "./Chat";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +28,6 @@ const router = createBrowserRouter([
         children: [
           { path: "profile", element: <Profile /> },
           { path: "add", element: <AddHabitComponent /> },
-          { path: "chat", element: <Chat /> },
         ],
       },
       {

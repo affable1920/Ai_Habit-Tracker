@@ -2,30 +2,27 @@ import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import StatusFilter from "./StatusFilter";
 import { RiResetLeftFill } from "react-icons/ri";
-import queryStore from "../stores/queryStore";
-import IconComponent from "./IconComponent";
+import useQueryStore from "../stores/queryStore";
+import Button from "./Button";
 
 const HabitFilterButtons = () => {
-  const reset = queryStore((s) => s.reset);
-  const query = queryStore((s) => s.query);
+  const reset = useQueryStore((s) => s.reset);
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2 w-full justify-start">
+      <div className="flex items-center gap-2">
         <Link to="/add">
-          <button className="btn btn__primary">Add</button>
+          <Button>Add</Button>
         </Link>
         <SearchBar />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <StatusFilter />
         <div className="flex items-center gap-1">
-          <IconComponent
-            Icon={RiResetLeftFill}
-            bg
-            fn={() => reset(query.max)}
-          />
+          <Button bg onClick={reset}>
+            <RiResetLeftFill />
+          </Button>
         </div>
       </div>
     </div>

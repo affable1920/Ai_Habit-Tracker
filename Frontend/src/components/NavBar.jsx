@@ -1,31 +1,26 @@
-import { useState } from "react";
+import React from "react";
 import NavLinks from "./NavLinks";
-import IconComponent from "./IconComponent";
+import Button from "./Button";
 import AuthActions from "./AuthActions";
 import { HiMenuAlt2 } from "react-icons/hi";
 
 const Logo = ({ toggleFn }) => {
   return (
-    <IconComponent
-      Icon={HiMenuAlt2}
-      bg={true}
-      fn={toggleFn}
-      pClass={"lg:hidden"}
-    />
+    <Button bg onClick={toggleFn} className="lg:hidden">
+      <HiMenuAlt2 />
+    </Button>
   );
 };
 
 const NavBar = () => {
-  const [showLinks, setShowLinks] = useState(false);
+  const [showLinks, setShowLinks] = React.useState(false);
+  const onRouteChange = () => setShowLinks(false);
 
   return (
     <>
       <nav className="navbar">
-        <Logo toggleFn={() => setShowLinks(!showLinks)} />
-        <NavLinks
-          showLinks={showLinks}
-          onNavLinkToggle={() => setShowLinks(false)}
-        />
+        <Logo toggleFn={() => setShowLinks((p) => !p)} />
+        <NavLinks showLinks={showLinks} onRouteChange={onRouteChange} />
         <AuthActions />
       </nav>
     </>

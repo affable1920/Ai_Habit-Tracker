@@ -18,10 +18,10 @@ const UserActions = () => {
   ];
 
   return (
-    <ul className={`profile__features`}>
+    <ul className={`profile-features`}>
       {profileFeatures.map(({ icon, label }) => (
         <li key={label}>
-          <Link to={`/${label}`} className={`profile__feature`} key={label}>
+          <Link to={`/${label}`} className={`profile-feature`} key={label}>
             {capitalise(label)}
             <span>{icon}</span>
           </Link>

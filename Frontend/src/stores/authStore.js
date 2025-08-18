@@ -6,20 +6,25 @@ import http from "../services/httpService";
 const endPoint = "/auth";
 const tokenKey = "token";
 
+const authHeader = "x-auth-token";
+
 const useAuthStore = create()(
   persist(
     (set, get) => ({
       user: null,
       token: null,
 
-      // Helper Func
+      // Helper Fns
       getUser: (jwt) => jwtDecode(jwt),
 
-      login: async (userCred) => {
-        try {
-          const response = await http.post(endPoint + "/login", userCred);
+      isAuthenticated: () => !!get().token,
+      userType: () => get().user?.role ?? "Guest",
 
-          const token = response.headers["x-auth-token"];
+      login: async (credentials) => {
+        try {
+          const response = await http.post(endPoint + "/login", credentials);
+          const token = response.headers[authHeader];
+
           set({ user: response.data, token });
         } catch (ex) {
           throw ex;
@@ -29,8 +34,8 @@ const useAuthStore = create()(
       register: async (user) => {
         try {
           const response = await http.post(endPoint + "/register", user);
+          const token = response.headers[authHeader];
 
-          const token = respnse.headers["x-auth-token"];
           set({ user: get().getUser(token), token });
         } catch (ex) {
           throw ex;
@@ -40,11 +45,11 @@ const useAuthStore = create()(
       logout: () => set({ user: null, token: null }),
 
       getProfile: async () => {
-        if (!get().token) return;
+        if (!get().isAuthenticated) return;
 
         try {
           const response = await http.get(endPoint + "/profile");
-          return response.data;
+          return response?.data;
         } catch (ex) {
           throw ex;
         }

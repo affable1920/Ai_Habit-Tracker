@@ -1,0 +1,93 @@
+@import "./config.css";
+
+/* Default app css utilities. */
+@utility o-none {
+  outline: none;
+}
+
+@utility pointer {
+  cursor: pointer;
+}
+
+@utility container {
+  width: 100%;
+  max-width: calc(100% - 3rem);
+  margin: auto;
+
+  @variant md {
+    max-width: calc(100% - 6rem);
+  }
+
+  @variant lg {
+    max-width: calc(100% - 8rem);
+  }
+}
+
+@utility app-shadow {
+  @apply shadow-md shadow-black/10 dark:shadow-black/75;
+}
+
+@utility app-header {
+  @apply bg-slate-50 dark:bg-primary-dark app-shadow text-center text-sm relative z-[5];
+}
+
+@utility navbar {
+  @apply container;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  height: calc(theme(--spacing) * 14.5);
+}
+
+@utility label {
+  font-weight: 600;
+  font-style: italic;
+  color: theme(--color-primary);
+
+  @variant dark {
+    color: inherit;
+  }
+}
+
+@utility input-box {
+  display: flex;
+  gap: 0.7rem;
+  flex-direction: column;
+}
+
+@utility link {
+  @apply o-none hover:underline hover:font-medium active:scale-95;
+}
+
+@utility overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  inset: 0;
+  z-index: 999;
+  background: --alpha(theme(--color-primary) / 50%);
+}
+
+@utility text-error {
+  @apply text-red-400 text-center tracking-wider italic text-sm;
+}
+
+@utility link {
+  font-size: theme(--text-xs);
+  font-weight: medium;
+  padding: calc(theme(--spacing) * 1);
+  border-radius: 6px;
+
+  @variant hover {
+    background: theme(--color-slate-200);
+  }
+
+  @variant dark {
+    &:hover {
+      background: theme(--color-primary);
+    }
+  }
+}

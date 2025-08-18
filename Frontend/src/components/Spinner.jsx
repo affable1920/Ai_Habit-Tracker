@@ -1,17 +1,16 @@
-import React from "react";
-import { createPortal } from "react-dom";
-import Overlay from "./Overlay";
-import loadingStore from "../stores/loadingStore";
+import { motion } from "motion/react";
+import useLoadingStore from "../stores/loadingStore";
 
 const Spinner = () => {
-  const { loading } = loadingStore();
-
+  const loading = useLoadingStore((s) => s.loading);
   if (!loading) return null;
-  return createPortal(
-    <Overlay>
-      <div className={`spinner`}></div>
-    </Overlay>,
-    document.getElementById("portal")
+
+  return (
+    <motion.circle
+      className="w-7 h-7 rounded-full ring-4 ring-accent inline-flex justify-center 
+      items-center self-center justify-self-center"
+      animate={{ rotate: 360 }}
+    />
   );
 };
 

@@ -1,23 +1,20 @@
-import { Navigate } from "react-router-dom";
+import Spinner from "./Spinner";
 import Pagination from "./Pagination";
 import HabitsList from "./HabitsList";
-import useAuthStore from "../stores/authStore";
 import HabitFilterButtons from "./HabitFilterButtons";
 
-const HabitsTracker = () => {
-  const token = useAuthStore((s) => s.token);
+import useLoadingStore from "../stores/loadingStore";
 
-  if (!token) return <Navigate to="/login" />;
+const HabitsTracker = () => {
+  const loading = useLoadingStore((s) => s.loading);
 
   return (
-    <section className={`flex flex-col gap-6 p-6 box__shadow rounded-sm`}>
-      <div className="flex flex-col gap-5">
+    <section className={``}>
+      <section className="flex flex-col gap-5 mb-3">
         <HabitFilterButtons />
-        <HabitsList />
-      </div>
-      <div>
-        <Pagination />
-      </div>
+        {loading ? <Spinner /> : <HabitsList />}
+      </section>
+      <Pagination />
     </section>
   );
 };

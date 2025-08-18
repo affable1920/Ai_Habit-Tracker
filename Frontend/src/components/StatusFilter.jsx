@@ -1,24 +1,16 @@
-import queryStore from "../stores/queryStore";
+import useQueryStore from "../stores/queryStore";
 import { LuListTodo } from "react-icons/lu";
 import { MdPendingActions } from "react-icons/md";
-import IconComponent from "./IconComponent";
+import Button from "./Button";
 
 const StatusFilter = () => {
-  const query = queryStore((s) => s.query);
-  const setStatus = queryStore((s) => s.setStatus);
-
-  const handleSetStatus = () => {
-    setStatus(query.status ? false : true);
-  };
+  const status = useQueryStore((s) => s.status);
+  const setStatus = useQueryStore((s) => s.setStatus);
 
   return (
-    <>
-      <IconComponent
-        fn={handleSetStatus}
-        bg
-        Icon={query.status ? MdPendingActions : LuListTodo}
-      />
-    </>
+    <Button bg onClick={setStatus}>
+      {status ? <MdPendingActions /> : <LuListTodo />}
+    </Button>
   );
 };
 

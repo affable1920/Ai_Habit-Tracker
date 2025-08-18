@@ -2,22 +2,22 @@ import Joi from "joi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import Input from "./common/Input";
+import Input from "./Input";
 import loadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
-import IconComponent from "./IconComponent";
-import Form from "./common/Form";
+import Button from "./Button";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { FaGithub } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
 import { RiNotionFill } from "react-icons/ri";
+import FormWrapper from "./FormWrapper";
 
 const LoginForm = () => {
-  const setLoading = loadingStore((s) => s.setLoading);
   const navigate = useNavigate();
-
   const login = useAuthStore((s) => s.login);
+
+  const setLoading = loadingStore((s) => s.setLoading);
 
   const schema = Joi.object({
     email: Joi.string()
@@ -32,7 +32,7 @@ const LoginForm = () => {
     formState: { errors },
   } = form;
 
-  const onSubmit = async (data) => {
+  const onLogin = async (data) => {
     setLoading(true);
     try {
       await login(data);
@@ -40,68 +40,52 @@ const LoginForm = () => {
       navigate("/");
       toast.success("Successfully logged in.");
     } catch (ex) {
-      console.log(ex);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const googleSignIn = async () => {
-    setLoading(true);
-
-    try {
-      await login();
-
-      navigate("/");
-      toast.success("Successfully logged in.");
-    } catch (error) {
-      toast.error(err?.message);
+      let msg = "msg" in ex ? ex.msg : "Failed to log in !";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="wrapper__full">
-      <div className="pad__box" />
-      <div className="mid__box p-8 flex flex-col gap-4">
-        <h2 className="heading__md">Login</h2>
-        <Form onSubmit={form.handleSubmit(onSubmit)}>
-          <Input name="email" register={form.register} errors={errors} />
-          <Input
-            name="password"
-            register={form.register}
-            errors={errors}
-            type="password"
-          />
-          <button className="btn btn__accent w-full mt-1 mb-2">Login</button>
-        </Form>
+    <FormWrapper form={form} header="Login" submitFn={onLogin}>
+      <div className="flex flex-col">
+        <Input name="email" register={form.register} errors={errors} />
+        <Input
+          name="password"
+          type="password"
+          errors={errors}
+          register={form.register}
+        />
+        <Button className="">Login</Button>
+      </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between">
-            <Link className="link" to="/register">
-              New Joinee ?
-            </Link>
-            <Link className="link" to="/">
-              Forgot password ?
-            </Link>
+      {/* <div className="flex gap-2">
+        <div className="flex items-center justify-between">
+          <Link className="link" to="/register">
+            New Joinee ?
+          </Link>
+          <Link className="link" to="/">
+            Forgot password ?
+          </Link>
+        </div>
+
+        <div className="flex gap-6">
+          <div className="flex italic text-xs font-semibold justify-center tracking-widest items-center gap-6 mt-2 opacity-80">
+            <div className="ring-1 ring-slate-300/50 dark:ring-primary-light w-full"></div>
+            <div>OR</div>
+            <div className="ring-1 ring-slate-300/50 dark:ring-primary-light w-full"></div>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="flex italic text-xs font-semibold justify-center tracking-widest items-center gap-6 mt-2 opacity-80">
-              <div className="ring-1 ring-light-darker/50 dark:ring-secondary-lighter w-full"></div>
-              <div>OR</div>
-              <div className="ring-1 ring-light-darker/50 dark:ring-secondary-lighter w-full"></div>
-            </div>
-            <div className="flex gap-8 justify-center">
-              <IconComponent bg Icon={FcGoogle} fn={googleSignIn} />
-              <IconComponent bg Icon={FaGithub} />
-              <IconComponent bg Icon={SiOpenai} />
-              <IconComponent bg Icon={RiNotionFill} />
-            </div>
+          <div className="flex gap-8 justify-center">
+            {[FcGoogle, FaGithub, SiOpenai, RiNotionFill].map((Platform) => (
+              <Button>
+                <Platform />
+              </Button>
+            ))}
           </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </FormWrapper>
   );
 };
 

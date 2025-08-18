@@ -1,36 +1,30 @@
 import { create } from "zustand";
 
 const init = {
-  page: 1,
-  search_query: "",
-  status: null,
   max: 5,
+  page: 1,
+  status: null,
+  searchQuery: "",
 };
 
-const queryStore = create((set) => ({
+const useQueryStore = create((set, get) => ({
   query: init,
 
-  setSearchQuery: (searchQuery) => {
-    set((state) => ({
-      query: {
-        ...state.query,
-        search_query: searchQuery,
-        status: null,
-      },
-    }));
-  },
+  setSearchQuery: (sq) =>
+    set((get) => ({
+      query: { ...get.query, searchQuery: sq, status: null },
+    })),
 
-  setMax: (max) => set((state) => ({ query: { ...state.query, max } })),
+  setMax: (max) => set(() => ({ query: { ...get.query, max } })),
 
-  setStatus: (status) =>
-    set((state) => ({ query: { ...state.query, status } })),
+  setStatus: () =>
+    set(() => ({ query: { ...get().query, status: !get().query?.status } })),
 
-  setPage: (page) => set((state) => ({ query: { ...state.query, page } })),
+  setPage: (page) => set((get) => ({ query: { ...get.query, page } })),
 
-  reset: (max) => set({ query: { ...init, max } }),
+  reset: () => set({ query: { ...init } }),
 
-  setQuery: (updates) =>
-    set((state) => ({ query: { ...state.query, ...updates } })),
+  setQuery: (updates) => set(() => ({ query: { ...updates } })),
 }));
 
-export default queryStore;
+export default useQueryStore;

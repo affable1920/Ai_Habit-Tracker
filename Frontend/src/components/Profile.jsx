@@ -1,5 +1,5 @@
 import React from "react";
-import { capitalize } from "./Habitdetails";
+import { capitalise } from "../Utils/utilFns";
 import useAuthStore from "../stores/authStore";
 import useLoadingStore from "../stores/loadingStore";
 
@@ -43,7 +43,7 @@ const Profile = () => {
             className="flex justify-between gap-3 items-center italic tracking-wider"
             key={key}
           >
-            <div>{capitalize(key)}</div>
+            <div>{capitalise(key)}</div>
             <div>{value}</div>
           </div>
         ))}

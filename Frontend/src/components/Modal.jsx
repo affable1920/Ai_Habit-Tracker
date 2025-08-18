@@ -1,52 +1,33 @@
 import { createPortal } from "react-dom";
+import Button from "./Button";
 import Overlay from "./Overlay";
-import useHabitStore from "../stores/habitStore";
 import { RxCross2 } from "react-icons/rx";
-import { TiTick } from "react-icons/ti";
-import IconComponent from "./IconComponent";
-import UserActions from "./UserActions";
+
+import modalRegistry from "./modalRegistry";
 import useModalStore from "../stores/modalStore";
 
 const Modal = () => {
-  const { currentModal, closeModal } = useModalStore();
+  const closeModal = useModalStore((s) => s.closeModal);
+  const modalProps = useModalStore((s) => s.modalProps);
 
-  const editHabit = useHabitStore((s) => s.editHabit);
-  const deleteHabit = useHabitStore((s) => s.deleteHabit);
+  const currentModal = useModalStore((s) => s.currentModal);
 
   if (!currentModal) return null;
-
-  const modalMap = {
-    userActions: <UserActions />,
-    editHabit: (
-      <button
-        onClick={editHabit}
-        className="btn btn__accent flex items-center gap-2"
-      >
-        Mark Complete <TiTick />
-      </button>
-    ),
-    deleteModal: (
-      <button onClick={deleteHabit} className="btn btn__accent">
-        Confirm Deletion ?
-      </button>
-    ),
-  };
+  const ModalElement = modalRegistry[currentModal];
 
   return createPortal(
     <Overlay>
-      <div className="wrapper__full">
-        <div className="pad__box" />
-        <div className="modal flex flex-col gap-4" style={{ zIndex: 100000 }}>
-          <div className="self-end">
-            <IconComponent
-              bg
-              Icon={RxCross2}
-              fn={closeModal}
-              pClass="ring-secondary-lighter/60"
-              chClass="icon__small font-bold text-light"
-            />
-          </div>
-          {modalMap[currentModal]}
+      <div className="-full">
+        <div className="padding-box-sm mb-3.5" />
+        <div className="modal  items-center">
+          <span className="self-end">
+            <Button bg onClick={closeModal} size="sm">
+              <RxCross2 />
+            </Button>
+          </span>
+          <section className="italic tracking-wider text-white">
+            {ModalElement && <ModalElement {...modalProps} />}
+          </section>
         </div>
       </div>
     </Overlay>,

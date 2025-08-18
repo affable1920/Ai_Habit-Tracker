@@ -1,39 +1,38 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { MdStart } from "react-icons/md";
+import React from "react";
 import Habit from "./Habit";
 import useHabitStore from "../stores/habitStore";
-import queryStore from "./../stores/queryStore";
-import IconComponent from "./IconComponent";
+import useQueryStore from "./../stores/queryStore";
 
 const HabitsList = () => {
+  const query = useQueryStore((s) => s.query);
+
   const habits = useHabitStore((store) => store.habits);
   const fetchHabits = useHabitStore((store) => store.fetchHabits);
 
-  const query = queryStore((s) => s.query);
-  const search_query = queryStore((s) => s.search_query);
+  React.useEffect(() => {
+    const getHabits = async () => {
+      try {
+        await fetchHabits(query);
+      } catch (ex) {
+      } finally {
+      }
+    };
 
-  useEffect(() => {
-    fetchHabits(query);
-  }, [query]);
+    getHabits();
+  }, [query, fetchHabits]);
 
+  const noHabits = !Array.isArray(habits) || habits.length === 0;
   return (
-    <section className={`flex gap-2 flex-col`}>
-      {habits?.length === 0 && (
-        <div className="flex items-center flex-col gap-2">
-          <p className="text-sm font-bold font-mono tracking-widest mt-4">
-            {search_query ? "No such habits found !" : "No Habits added yet"}
-          </p>
-          {!search_query && (
-            <Link to="/add">
-              <IconComponent Icon={MdStart} bg />
-            </Link>
-          )}
+    <section className={` gap-2`}>
+      {noHabits ? (
+        <div className="text-error text-red-800 py-4 font-semibold text-shadow-2xs text-sm">
+          {query?.searchQuery
+            ? "No matching habits found !"
+            : "No habits yet. Start Adding today !"}
         </div>
+      ) : (
+        habits.map((habit) => <Habit habit={habit} key={habit.id} />)
       )}
-
-      {Array.isArray(habits) &&
-        habits.map((habit) => <Habit habit={habit} key={habit.id} />)}
     </section>
   );
 };

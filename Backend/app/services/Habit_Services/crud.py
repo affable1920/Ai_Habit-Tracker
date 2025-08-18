@@ -56,8 +56,8 @@ class CRUD:
         start = (query["page"] - 1) * query["max"]
         end = query["max"] * query["page"]
 
-        if query["search_query"]:
-            sq = query["search_query"].lower()
+        if query["searchQuery"]:
+            sq = query["searchQuery"].lower()
             habits = [h for h in habits if h["title"].lower().startswith(sq)]
 
         if query["status"]:

@@ -1,9 +1,8 @@
 import { create } from "zustand";
 
-const loadingStore = create((set) => ({
+const useLoadingStore = create((set) => ({
   loading: false,
-
   setLoading: (action) => set(() => ({ loading: action })),
 }));
 
-export default loadingStore;
+export default useLoadingStore;

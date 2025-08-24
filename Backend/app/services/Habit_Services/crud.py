@@ -8,15 +8,11 @@ import logging
 from datetime import datetime
 
 from app.models import Habit
-from app.models import QueryParams
+from app.models.QueryParams import QueryParameters
 from app.variables.paths import habits_dir, logs_dir
-from app.services.Habit_Services.logger import Csv_Logger as Csv_Logger
 
 logger = logging.getLogger("service_habit")
 logging.basicConfig(level=logging.INFO)
-
-
-csv_logger = Csv_Logger()
 
 
 class CRUD:
@@ -54,7 +50,7 @@ class CRUD:
             raise HTTPException(500, "An internal server error occurred !")
 
 #
-    def read(self, query: QueryParams.QueryParameters) -> list:
+    def read(self, query: QueryParameters) -> list:
         habits = self.read_all()
         if len(habits) == 0:
             return

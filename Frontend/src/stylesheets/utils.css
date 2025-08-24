@@ -11,8 +11,8 @@
 
 @utility container {
   width: 100%;
-  max-width: calc(100% - 3rem);
-  margin: auto;
+  margin-inline: auto;
+  max-width: calc(100% - 4rem);
 
   @variant md {
     max-width: calc(100% - 6rem);
@@ -27,6 +27,11 @@
   @apply shadow-md shadow-black/10 dark:shadow-black/75;
 }
 
+/* Shadow for interactives */
+@utility shadow-ix {
+  @apply shadow-sm shadow-black/10 dark:shadow-md dark:shadow-black/80 active:shadow-inner;
+}
+
 @utility app-header {
   @apply bg-slate-50 dark:bg-primary-dark app-shadow text-center text-sm relative z-[5];
 }
@@ -35,10 +40,10 @@
   @apply container;
 
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
-  height: calc(theme(--spacing) * 14.5);
+  align-items: center;
+  justify-content: space-between;
+  height: calc(theme(--spacing) * 15);
 }
 
 @utility label {
@@ -53,12 +58,8 @@
 
 @utility input-box {
   display: flex;
-  gap: 0.7rem;
+  gap: 6px;
   flex-direction: column;
-}
-
-@utility link {
-  @apply o-none hover:underline hover:font-medium active:scale-95;
 }
 
 @utility overlay {
@@ -68,7 +69,6 @@
   left: 0;
   inset: 0;
   z-index: 999;
-  background: --alpha(theme(--color-primary) / 50%);
 }
 
 @utility text-error {
@@ -76,18 +76,20 @@
 }
 
 @utility link {
-  font-size: theme(--text-xs);
+  outline: none;
   font-weight: medium;
+  font-size: theme(--text-xs);
+  font-weight: bold;
   padding: calc(theme(--spacing) * 1);
-  border-radius: 6px;
 
-  @variant hover {
-    background: theme(--color-slate-200);
-  }
+  @apply focus:active:text-accent-dark hover:text-accent-dark hover:underline;
+}
 
-  @variant dark {
-    &:hover {
-      background: theme(--color-primary);
-    }
-  }
+@utility form-wrapper {
+  @apply flex flex-col gap-8 max-w-sm md:max-w-md mx-auto px-8 py-6
+      rounded-md app-shadow border-2 border-slate-300 dark:border-primary-lightest;
+}
+
+@utility form-content {
+  @apply flex flex-col gap-4;
 }

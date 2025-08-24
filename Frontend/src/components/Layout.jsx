@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
+import Spinner from "./Spinner";
 import useAuthStore from "../stores/authStore";
 import useModalStore from "../stores/modalStore";
 

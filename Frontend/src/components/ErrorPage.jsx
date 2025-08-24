@@ -6,7 +6,7 @@ const ErrorPage = () => {
   const user = useAuthStore((s) => s.user);
 
   return (
-    <div className="m-8 text-lg flex  font-medium tracking-wider">
+    <div className="m-8 text-lg flex font-medium tracking-wider">
       <header>
         <h3 className="headings-large">Oops ...</h3>
         <p>

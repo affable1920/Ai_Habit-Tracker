@@ -1,59 +1,49 @@
-from typing import Optional
 from uuid import uuid4
-from pydantic import BaseModel, Field
 from datetime import datetime
+from pydantic import BaseModel, Field
 
 
-class Query(BaseModel):
-    page: int = Field(gt=0, default=1)
-    searchQuery: Optional[str] = ""
-    status: Optional[bool] = None
-    max: int = Field(default=10, gt=0)
-
-
-class Defaults(BaseModel):
+class HabitDefaults(BaseModel):
     id: str = Field(..., default_factory=lambda: str(uuid4()))
     created_at: str = Field(default=datetime.now().isoformat())
 
     streak: int = 0
     status: str = "incomplete"
 
-    completed: bool = False
     archived: bool = False
+    completed: bool = False
 
-    last_completed: Optional[int | str] = None
+    progress: list | None = None
+    reminder_times: list | None = None
+    completion_log: list | None = None
+    last_completed: int | str | None = None
 
-    progress: list = []
-    reminder_times: list = []
-    completion_log: list = []
 
-
-class ClientData(BaseModel):
+class HabitClientSide(BaseModel):
     title: str = Field(...)
-    description: Optional[str] = None
+    description: str | None = None
 
-    category: Optional[str] = None
-    priority: Optional[str | int] = None
-    frequency: Optional[str] = None
+    category: str | None = None
+    frequency: str | None = None
 
-    interval: Optional[int | str] = None
-    interval_time: Optional[str] = None
+    interval_time: str | None = None
+    interval: int | str | None = None
+    priority: int | str | None = None
 
 
-class Habit(Defaults, ClientData):
+class FullHabit(HabitDefaults, HabitClientSide):
     pass
 
 
 class UpdateHabit(BaseModel):
-    title: Optional[str] = None
-    status: Optional[str] = None
+    title: str | None = None
+    status: str | None = None
 
-    priority: Optional[int] = None
-    description: Optional[str] = None
+    description: str | None = None
+    priority: int = Field(gt=0)
 
-    archived: Optional[bool] = None
-    completed: Optional[bool] = None
-    reminder_times: Optional[list] = None
+    archived: bool | None = False
+    reminder_times: list[str | int] = []
 
 
 class MarkCompleteHabit(BaseModel):

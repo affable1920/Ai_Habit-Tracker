@@ -10,15 +10,15 @@ const LoginModal = () => {
         onClick={closeModal}
         className="italic font-medium tracking-widest flex items-center gap-1 o-none appearance-none"
       >
-        <Link className="link-with-bg" to="/login">
+        <Link className="link-with-" to="/login">
           Login
         </Link>
         |
-        <Link className="link-with-bg" to="/register">
+        <Link className="link-with-" to="/register">
           Register
         </Link>
         to get access to all{" "}
-        <Link className="link-with-bg" to="/features">
+        <Link className="link-with-" to="/features">
           features!
         </Link>
       </button>

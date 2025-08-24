@@ -6,7 +6,7 @@ import { HiMenuAlt2 } from "react-icons/hi";
 
 const Logo = ({ toggleFn }) => {
   return (
-    <Button bg onClick={toggleFn} className="lg:hidden">
+    <Button onClick={toggleFn} className="lg:hidden">
       <HiMenuAlt2 />
     </Button>
   );

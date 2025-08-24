@@ -2,9 +2,12 @@ import React from "react";
 import Habit from "./Habit";
 import useHabitStore from "../stores/habitStore";
 import useQueryStore from "./../stores/queryStore";
+import useLoadingStore from "../stores/loadingStore";
+import { toast } from "sonner";
 
 const HabitsList = () => {
   const query = useQueryStore((s) => s.query);
+  const loading = useLoadingStore((s) => s.loading);
 
   const habits = useHabitStore((store) => store.habits);
   const fetchHabits = useHabitStore((store) => store.fetchHabits);
@@ -14,6 +17,11 @@ const HabitsList = () => {
       try {
         await fetchHabits(query);
       } catch (ex) {
+        const {
+          type = "UNKNOWN_ERROR",
+          msg = "An unexpected error occurred. Could not fetch habits !",
+        } = ex;
+        toast.error(type, { description: msg });
       } finally {
       }
     };
@@ -21,18 +29,23 @@ const HabitsList = () => {
     getHabits();
   }, [query, fetchHabits]);
 
-  const noHabits = !Array.isArray(habits) || habits.length === 0;
+  let infoText = "No Habits Found";
+
+  const noHabits = (!Array.isArray(habits) || habits.length === 0) && !loading;
+  const noneCompleted = noHabits && query.status === "completed";
+
+  if (noneCompleted) infoText = "No completed habits yet";
+
   return (
-    <section className={` gap-2`}>
-      {noHabits ? (
-        <div className="text-error text-red-800 py-4 font-semibold text-shadow-2xs text-sm">
-          {query?.searchQuery
-            ? "No matching habits found !"
-            : "No habits yet. Start Adding today !"}
+    <section className="flex flex-col gap-4">
+      {noHabits && (
+        <div className="text-error py-4 font-semibold text-shadow-2xs text-sm">
+          {infoText} !
         </div>
-      ) : (
-        habits.map((habit) => <Habit habit={habit} key={habit.id} />)
       )}
+      {habits.map((habit) => (
+        <Habit key={habit.id} habit={habit} />
+      ))}
     </section>
   );
 };

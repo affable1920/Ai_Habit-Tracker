@@ -17,8 +17,13 @@ const useQueryStore = create((set, get) => ({
 
   setMax: (max) => set(() => ({ query: { ...get.query, max } })),
 
-  setStatus: () =>
-    set(() => ({ query: { ...get().query, status: !get().query?.status } })),
+  setStatus: (status) =>
+    set(() => ({
+      query: {
+        ...get().query,
+        status,
+      },
+    })),
 
   setPage: (page) => set((get) => ({ query: { ...get.query, page } })),
 

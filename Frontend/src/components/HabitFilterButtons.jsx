@@ -12,7 +12,7 @@ const HabitFilterButtons = () => {
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <Link to="/add">
-          <Button>Add</Button>
+          <Button className="px-4 text-sm">Add</Button>
         </Link>
         <SearchBar />
       </div>
@@ -20,7 +20,7 @@ const HabitFilterButtons = () => {
       <div className="flex items-center gap-2">
         <StatusFilter />
         <div className="flex items-center gap-1">
-          <Button bg onClick={reset}>
+          <Button onClick={reset}>
             <RiResetLeftFill />
           </Button>
         </div>

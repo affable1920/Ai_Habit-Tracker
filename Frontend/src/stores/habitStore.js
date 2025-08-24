@@ -10,13 +10,12 @@ const useHabitStore = create((set, get) => ({
   fetchHabits: async (query) => {
     try {
       const response = await http.get(endPoint, {
-        params: { ...query },
+        params: query,
       });
 
       set(() => ({ habits: response?.data || [] }));
     } catch (ex) {
-      console.log(ex);
-      throw ex;
+      throw new Error(ex);
     }
   },
 
@@ -36,10 +35,10 @@ const useHabitStore = create((set, get) => ({
       }));
     } catch (ex) {
       set((store) => ({
-        habits: store.habits.filter((h) => h.tempId != tempId),
+        habits: store.habits.filter((h) => h?.tempId != tempId),
       }));
 
-      throw ex;
+      throw new Error(ex);
     }
   },
 
@@ -49,7 +48,6 @@ const useHabitStore = create((set, get) => ({
       : `${endPoint}/complete/${habitId}`;
 
     const orgHabit = get().habits.find((h) => h.id === habitId);
-
     if (!orgHabit) throw new Error("Habit not found !");
 
     set((store) => ({
@@ -60,12 +58,11 @@ const useHabitStore = create((set, get) => ({
     }));
 
     try {
-      const response = await http.put(url, fields);
+      const { data = {} } = await http.put(url, fields);
+
       set((store) => ({
         ...store,
-        habits: store.habits.map((h) =>
-          h.id === habitId ? { ...response?.data } : h
-        ),
+        habits: store.habits.map((h) => (h.id === habitId ? { ...data } : h)),
       }));
     } catch (ex) {
       set((store) => ({
@@ -75,7 +72,7 @@ const useHabitStore = create((set, get) => ({
         ),
       }));
 
-      throw ex;
+      throw new Error(ex);
     }
   },
 
@@ -91,7 +88,7 @@ const useHabitStore = create((set, get) => ({
       await http.delete(`${endPoint}/${habitId}`);
     } catch (ex) {
       set((store) => ({ ...store, habits: orgHabits }));
-      throw ex;
+      throw new Error(ex);
     }
   },
 }));

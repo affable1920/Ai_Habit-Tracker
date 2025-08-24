@@ -1,35 +1,31 @@
 import React from "react";
 import { capitalise } from "../Utils/utilFns";
 
-const TextBox = React.memo(({ large, isError, registerObj }) => {
+const TextBox = React.memo(({ large, registerObj, ...rest }) => {
   return large ? (
-    <textarea className={`input ${isError && "ring-error"}`} {...registerObj} />
+    <textarea className={`input`} {...registerObj} {...rest} />
   ) : (
-    <input className={`input ${isError && "ring-error"}`} {...registerObj} />
+    <input className={`input`} {...registerObj} {...rest} />
   );
 });
 
-const Input = ({ name, optional, errors, large, register }) => {
+const Input = React.memo(({ name, errors, large, register, ...rest }) => {
   const error = errors[name];
-  const errorMsg = error?.message
+  const errorMsg = !!error?.message
     ? capitalise(error.message.replaceAll('"', "")) + " !"
     : "";
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <div className="input-box">
         <label className="label" htmlFor={name}>
-          {capitalise(name)} {optional ? "" : "*"}
+          {capitalise(name)} {rest?.optional ? "" : "*"}
         </label>
-        <TextBox
-          large={large}
-          isError={!!errorMsg}
-          registerObj={register(name)}
-        />
+        <TextBox rest={rest} large={large} registerObj={register(name)} />
       </div>
       {errorMsg && <div className="text-error">{errorMsg}</div>}
     </div>
   );
-};
+});
 
 export default Input;

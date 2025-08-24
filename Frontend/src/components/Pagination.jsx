@@ -1,7 +1,7 @@
 import React from "react";
+import Button from "./Button";
 import useQueryStore from "../stores/queryStore";
 import { IoArrowForwardOutline, IoArrowBackOutline } from "react-icons/io5";
-import Button from "./Button";
 
 const Pagination = React.memo(() => {
   const page = useQueryStore((s) => s.query.page);
@@ -10,21 +10,18 @@ const Pagination = React.memo(() => {
   const handleNext = React.useCallback(() => setPage(page + 1), [page]);
   const handlePrev = React.useCallback(() => setPage(page - 1), [page]);
 
-  const iconConfig =
-    "group-hover:translate-x-1 transition-transform duration-[220ms]";
-
   return (
     <div className="flex items-center gap-4 justify-end">
       {page > 1 && (
-        <Button className={`group gap-1`} onClick={handlePrev}>
+        <Button className={`px-4`} onClick={handlePrev}>
           Back
-          <IoArrowBackOutline className={iconConfig} />
+          <IoArrowBackOutline />
         </Button>
       )}
 
-      <Button className={`group gap-1`} onClick={handleNext}>
-        <span>Next</span>
-        <IoArrowForwardOutline className={iconConfig} />
+      <Button className={`px-4`} onClick={handleNext}>
+        Next
+        <IoArrowForwardOutline />
       </Button>
     </div>
   );

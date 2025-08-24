@@ -18,10 +18,9 @@ api.interceptors.request.use(
   (config) => {
     try {
       const token = useAuthStore.getState()?.token;
-
       const isAuthenticated = !!token;
+
       if (!isAuthenticated) delete config.headers["Authorization"];
-      //
       else config.headers["Authorization"] = `Bearer ${token}`;
     } catch (ex) {
       delete config.headers["Authorization"];
@@ -32,30 +31,37 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(null, (ex) => {
-  // No response: Network Error
-  if (!ex?.response) {
-    if (ex.request.status == 0)
-      return Promise.reject({
-        type: "SERVER_ERROR",
-        msg: "Server down. Please check back later !",
-      });
-    //
-    else
-      return Promise.reject({
-        type: "NETWORK_ERROR",
-        msg: "Check your internet connection !",
-      });
+  const { request, response = null } = ex;
+
+  if (!response) {
+    switch (request?.status) {
+      case 0:
+        return Promise.reject({
+          type: "SERVER_ERROR",
+          msg: "Server down. Please check back later !",
+        });
+
+      case 500:
+        return Promise.reject({
+          type: "NETWORK_ERROR",
+          msg: "Check your internet connection !",
+        });
+    }
   }
 
-  const { response } = ex;
-
-  if (sessionExpiry in response.headers) {
+  if (response.headers?.[sessionExpiry]) {
     evEmitter.emit(sessionExpiry);
-    return Promise.reject(() => {});
+    return Promise.reject({
+      type: "SESSION_EXPIRED",
+      msg: "Please login again to continue !",
+    });
   }
 
-  console.log(ex);
-  return Promise.reject(() => {});
+  return Promise.reject({
+    type: "Client Side Error",
+    msg:
+      response.data?.detail ?? "An unknown error occurred on the user's end !",
+  });
 });
 
 export default api;

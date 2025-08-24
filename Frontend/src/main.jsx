@@ -22,6 +22,11 @@ createRoot(document.getElementById("root")).render(
     <SpeedInsights debug />
     <Analytics />
     <RouterProvider router={router} />
-    <Toaster position="top-center" duration={1000} visibleToasts={2} />
+    <Toaster
+      duration={1500}
+      visibleToasts={2}
+      position="top-center"
+      style={{ fontSize: "text-(--text-sm)", fontFamily: "serif" }}
+    />
   </StrictMode>
 );

@@ -7,7 +7,7 @@ export const step1 = Joi.object({
 
 export const step2 = Joi.object({
   category: Joi.string().optional().allow(""),
-  priority: Joi.string().optional().allow(""),
+  priority: Joi.number().optional().allow(null, ""),
   frequency: Joi.string().optional().allow("", null),
   target: Joi.number().min(1).optional().allow(null, ""),
 });

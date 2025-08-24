@@ -2,9 +2,10 @@ from typing import Annotated
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-import app.models.Habit as model
-from app.services.Habit_Services.crud import CRUD
+from app.models import Habit
 from app.services.auth_service import AuthService
+from app.services.Habit_Services.crud import CRUD
+from app.models.QueryParams import QueryParameters
 
 router = APIRouter()
 auth_service = AuthService()
@@ -16,14 +17,15 @@ def get_CRUD(token: Annotated[dict, Depends(auth_service.decode_access_token)]) 
         return CRUD(user_id)
 
     except KeyError:
-        raise HTTPException(401, "Unauthorized user. Missing attributes !")
+        raise HTTPException(
+            401, "Unauthorized user. Missing essential attributes !")
     except Exception:
         raise HTTPException(401, "Authorization failed !")
 
 
 @router.get("/")
 def get(
-    query: Annotated[model.Query, Query()],
+    query: Annotated[QueryParameters, Query()],
     CRUD: CRUD = Depends(get_CRUD),
 ):
     habits = CRUD.read(query)
@@ -31,23 +33,20 @@ def get(
 
 
 @router.post("/")
-def add(client_data: model.ClientData, CRUD: CRUD = Depends(get_CRUD)):
-    new_habit = {**model.Defaults().model_dump(), **client_data.model_dump()}
-    server_habit = CRUD.add_habit(new_habit)
+def add(client_data: Habit.HabitClientSide, CRUD: CRUD = Depends(get_CRUD)):
+    server_habit: Habit.FullHabit = CRUD.add_habit(client_data)
     return JSONResponse(server_habit.model_dump(), 201)
 
 
 @router.put("/{habit_id}")
-def update(habit_id: str, fields: model.UpdateHabit, CRUD: CRUD = Depends(get_CRUD)):
-    to_upd_fields = fields.model_dump(exclude_none=True, exclude_unset=True)
-    server_updated_habit = CRUD.update_Habit(habit_id, to_upd_fields)
+def update(habit_id: str, fields: Habit.UpdateHabit, CRUD: CRUD = Depends(get_CRUD)):
+    server_updated_habit = CRUD.update_Habit(habit_id, fields=fields)
     return JSONResponse(server_updated_habit.model_dump(), 201)
 
 
 # Completion route.
 @router.put("/complete/{habit_id}")
 def mark_complete(habit_id: str, CRUD: CRUD = Depends(get_CRUD)):
-    print("Completion route called.")
     completed_habit = CRUD.mark_complete(habit_id)
     return JSONResponse(completed_habit.model_dump(), 201)
 

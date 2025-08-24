@@ -2,35 +2,39 @@ import { useFormContext } from "react-hook-form";
 import Select from "../Select";
 import Button from "../Button";
 
-import { FcLowPriority, FcHighPriority } from "react-icons/fc";
 import { FcMediumPriority } from "react-icons/fc";
+import { FcLowPriority, FcHighPriority } from "react-icons/fc";
 import { FcReadingEbook, FcRegisteredTrademark } from "react-icons/fc";
-import useExtraStore from "../../stores/extraStore";
+
+const categories = [
+  "Productivity",
+  "Fitness",
+  "Work",
+  "Study",
+  "Skill",
+  "Health",
+];
+
+const levels = [
+  { icon: FcLowPriority, val: 1 },
+  { icon: FcReadingEbook, val: 2 },
+  { icon: FcMediumPriority, val: 3 },
+  { icon: FcRegisteredTrademark, val: 4 },
+  { icon: FcHighPriority, val: 5 },
+];
+const freqs = ["Daily", "Weekly", "Custom"];
 
 const Step2 = () => {
-  const { register, formState } = useFormContext();
+  const { register, formState, setValue, watch } = useFormContext();
+  let watcher = watch("priority");
 
-  const categories = [
-    "Productivity",
-    "Fitness",
-    "Work",
-    "Study",
-    "Skill",
-    "Health",
-  ];
-
-  const levels = [
-    { el: FcLowPriority, val: 1 },
-    { el: FcReadingEbook, val: 2 },
-    { el: FcMediumPriority, val: 3 },
-    { el: FcRegisteredTrademark, val: 4 },
-    { el: FcHighPriority, val: 5 },
-  ];
-  const freqs = ["Daily", "Weekly", "Custom"];
-  const setValues = useExtraStore((s) => s.setValues);
+  const setPriority = (val) => {
+    if (watcher && watcher === val) setPriority("priotit", 0);
+    else setValue("priority", val);
+  };
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <Select
         name="category"
         register={register}
@@ -39,18 +43,16 @@ const Step2 = () => {
         optional
       />
 
-      <div className="flex  gap-3">
+      <div className="flex flex-col gap-4">
         <h3 htmlFor="priority" className="label">
-          Priority
+          How important is this habit to you ?
         </h3>
 
-        <div className="flex gap-8">
-          {levels.map((level) => (
-            <Button
-              bg
-              icon={level.el}
-              onClick={() => setValues({ priority: level.val })}
-            />
+        <div className="flex justify-between">
+          {levels.map(({ icon: Icon, val }) => (
+            <Button type="button" onClick={() => setPriority(val)}>
+              <Icon />
+            </Button>
           ))}
         </div>
       </div>
@@ -62,7 +64,7 @@ const Step2 = () => {
         options={freqs}
         optional
       />
-    </>
+    </div>
   );
 };
 

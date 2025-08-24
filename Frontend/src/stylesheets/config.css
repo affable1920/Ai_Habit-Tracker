@@ -15,20 +15,36 @@ and variant for applying variants
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* primary: Black-Gray */
-  --color-primary: #242424;
+  /* Primary: Black-Gray */
+  --color-primary: #202020;
   --color-primary-dark: #141414;
-  --color-primary-light: #373737;
+  --color-primary-light: #343434;
+  --color-primary-lightest: #454545;
 
-  /* Cyan - accent */
-  --color-accent: var(--color-cyan-400);
+  /* Accent. Cyan */
+  --color-accent: var(--color-cyan-600);
   --color-accent-dark: var(--color-cyan-700);
-  --color-accent-light: var(--color-cyan-100);
+  --color-accent-light: var(--color-cyan-500);
+  --color-accent-lightest: var(--color-cyan-400);
+
+  /* Accent second. Amber */
+  --color-amber: var(--color-amber-600);
+  --color-amber-dark: var(--color-amber-700);
+  --color-amber-light: var(--color-amber-500);
+  --color-amber-lightest: var(--color-amber-400);
 
   /* Alerts */
-  --color-error: var(--color-red-400);
-  --color-success: var(--color-green-400);
-  --color-warning: var(--color-yellow-400);
+  --color-error: var(--color-red-600);
+  --color-error-dark: var(--color-red-700);
+  --color-error-light: var(--color-red-500);
+
+  --color-success: var(--color-green-600);
+  --color-success-dark: var(--color-green-700);
+  --color-success-light: var(--color-green-500);
+
+  --color-warning: var(--color-yellow-600);
+  --color-warning-dark: var(--color-yellow-700);
+  --color-warning-light: var(--color-yellow-500);
 
   /* Defaults */
   --default-transition-duration: 240ms;
@@ -57,6 +73,14 @@ and variant for applying variants
 
 /* Default DOM tag styles */
 @layer base {
+  *,
+  *::after,
+  *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   html {
     width: 100vw;
     height: 100vh;

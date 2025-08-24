@@ -1,7 +1,9 @@
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
+import { RxCross2 } from "react-icons/rx";
+
 import Button from "./Button";
 import Overlay from "./Overlay";
-import { RxCross2 } from "react-icons/rx";
 
 import modalRegistry from "./modalRegistry";
 import useModalStore from "../stores/modalStore";
@@ -17,19 +19,12 @@ const Modal = () => {
 
   return createPortal(
     <Overlay>
-      <div className="-full">
-        <div className="padding-box-sm mb-3.5" />
-        <div className="modal  items-center">
-          <span className="self-end">
-            <Button bg onClick={closeModal} size="sm">
-              <RxCross2 />
-            </Button>
-          </span>
-          <section className="italic tracking-wider text-white">
-            {ModalElement && <ModalElement {...modalProps} />}
-          </section>
-        </div>
-      </div>
+      <motion.div className="modal">
+        <Button onClick={closeModal} className="self-end p-0.5">
+          <RxCross2 />
+        </Button>
+        {ModalElement && <ModalElement {...modalProps} />}
+      </motion.div>
     </Overlay>,
     document.getElementById("portal")
   );

@@ -1,13 +1,14 @@
 import json
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 from fastapi import HTTPException
 from pydantic import ValidationError
 
 import logging
 from datetime import datetime
 
-import app.models.Habit as model
+from app.models import Habit
+from app.models import QueryParams
 from app.variables.paths import habits_dir, logs_dir
 from app.services.Habit_Services.logger import Csv_Logger as Csv_Logger
 
@@ -21,57 +22,64 @@ csv_logger = Csv_Logger()
 class CRUD:
     def __init__(self, user_id: str):
         self.user_id = user_id
-        self.filename = habits_dir / f"user{user_id}_habits.json"
-        self.logs = logs_dir / f"user{user_id}_logs.csv"
+        self.logs: Path = logs_dir / f"user{user_id}_logs.csv"
+        self.filename: Path = habits_dir / f"user{user_id}_habits.json"
 
     #
 
     def ensure_file(self):
         file = self.filename
-        if not file.exists() or file.stat().st_size == 0:
-            with open(file, "w") as f:
-                json.dump([], f)
+
+        try:
+            if not file.exists() or file.stat().st_size == 0:
+                with open(file, "w") as f:
+                    json.dump([], f)
+
+        except (PermissionError, Exception) as ex:
+            print(ex)
+
+#
 
     def read_all(self) -> list:
         self.ensure_file()
 
         try:
             with open(self.filename, "r") as f:
-                habits = json.load(f)
+                habits: list = json.load(f)
                 return habits
 
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError as ex:
+            print(ex)
             logger.error("An internal 500 server error occurred.")
             raise HTTPException(500, "An internal server error occurred !")
 
-        except FileNotFoundError:
-            return []
-
-    def read(self, query) -> list:
-        if not isinstance(query, dict):
-            query = query.model_dump()
-
+#
+    def read(self, query: QueryParams.QueryParameters) -> list:
         habits = self.read_all()
+        if len(habits) == 0:
+            return
 
-        start = (query["page"] - 1) * query["max"]
-        end = query["max"] * query["page"]
-
-        if query["searchQuery"]:
-            sq = query["searchQuery"].lower()
+        if query.searchQuery:
+            sq = query.searchQuery.lower()
             habits = [h for h in habits if h["title"].lower().startswith(sq)]
 
-        if query["status"]:
-            habits = [h for h in habits if h["completed"] == True]
+        if query.status:
+            st = query.status.lower()
+            habits = [h for h in habits if h["status"].lower() == st]
 
-        if query["status"] == False:
-            habits = [h for h in habits if h["completed"] == False]
+        start = (query.page - 1) * query.max
+        end = min(start + query.max, len(habits))
 
         habits = habits[start:end]
         return habits
 
-    def add_habit(self, new_habit) -> model.Habit:
+#
+
+    def add_habit(self, new_habit: Habit.HabitClientSide) -> Habit.FullHabit:
         try:
-            server_habit = model.Habit(**new_habit)
+            habit_to_add = {**new_habit.model_dump(), **
+                            Habit.HabitDefaults().model_dump()}
+            server_habit = Habit.FullHabit(**habit_to_add)
 
         except ValidationError:
             raise HTTPException(
@@ -96,24 +104,20 @@ class CRUD:
 
     #
 
-    def get_habit(self, habit_id) -> model.Habit:
+    def get_habit(self, habit_id) -> Habit.FullHabit | None:
         habits = self.read_all()
-        for habit in habits:
-            if habit["id"] == habit_id:
-                return model.Habit(**habit)
-
-        else:
-            raise HTTPException(404, "Habit Not Found !")
+        habit = next((h for h in habits if h["id"] == habit_id), None)
+        return Habit.FullHabit(**habit) if habit else None
 
     #
 
-    def update_Habit(self, habit_id, fields) -> model.Habit:
+    def update_Habit(self, habit_id, fields) -> Habit.FullHabit:
         habits = self.read_all()
         to_upd_habit = self.get_habit(habit_id).model_dump()
 
         to_upd_habit.update(**fields)
+        updated_habit = Habit.FullHabit(**to_upd_habit)
 
-        updated_habit = model.Habit(**to_upd_habit)
         upd_habits = [
             updated_habit.model_dump() if h["id"] == habit_id else h for h in habits
         ]
@@ -133,30 +137,26 @@ class CRUD:
     #
 
     # Completion Route.
-    def mark_complete(self, habit_id) -> model.Habit:
-        to_complete_habit = self.get_habit(habit_id)
+    def mark_complete(self, habit_id) -> Habit.FullHabit:
+        habit = self.get_habit(habit_id)
+        today_str = datetime.now().isoformat()
 
-        to_complete_habit.completed = True
-        to_complete_habit.status = "complete"
-
-        today = datetime.now()
-        today_str = today.isoformat()
-
-        to_complete_habit.last_completed = today_str
-        to_complete_habit.completion_log = [
-            *to_complete_habit.completion_log,
-            today_str,
-        ]
+        completed_habit = habit.model_copy(update={
+            "completed": True,
+            "status": "complete",
+            "last_completed": today_str,
+            "completion_log": [*(habit.completion_log or []), today_str]
+        })
 
         habits = self.read_all()
         habits = [
-            to_complete_habit.model_dump() if h["id"] == habit_id else h for h in habits
+            completed_habit.model_dump() if h["id"] == habit_id else h for h in habits
         ]
 
         try:
             with open(self.filename, "w") as f:
                 json.dump(habits, f)
-                return to_complete_habit
+                return completed_habit
 
         except ValidationError:
             raise HTTPException(500, "An internal server error occurred !")
@@ -165,7 +165,7 @@ class CRUD:
 
     def delete_habit(self, habit_id) -> None:
         habits = self.read_all()
-        upd_habits = list(filter(lambda h: h["id"] != habit_id, habits))
+        upd_habits = [h for h in habits if h["id"] != habit_id]
 
         try:
             with open(self.filename, "w") as f:

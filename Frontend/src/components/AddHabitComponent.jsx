@@ -1,9 +1,10 @@
 import React from "react";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useForm, FormProvider } from "react-hook-form";
 
 import Button from "./Button";
-import Spinner from "./Spinner";
+import FormWrapper from "./FormWrapper";
 import habitSchema from "../schemas/habitSchema";
 
 import useHabitStore from "../stores/habitStore";
@@ -12,10 +13,9 @@ import useModalStore from "../stores/modalStore";
 
 import { toast } from "sonner";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
-import FormWrapper from "./FormWrapper";
 
-const Step1 = React.lazy(() => import("./AddForm/Step1"));
-const Step2 = React.lazy(() => import("./AddForm/Step2"));
+import Step1 from "./AddForm/Step1";
+import Step2 from "./AddForm/Step2";
 
 const AddHabitComponent = () => {
   const steps = [Step1, Step2];
@@ -49,20 +49,22 @@ const AddHabitComponent = () => {
 
   const handleNext = React.useCallback(
     async (formData) => {
-      if (lastStep) {
+      if (!lastStep) setStep((st) => st + 1);
+      else {
         if (extra) formData = { ...formData, ...extra };
+
         try {
           await addHabit(formData);
-          toast.success("Habit Added Successfully !");
-
           form.reset();
-          setStep(1);
+
+          toast.success("Habit Added Successfully !");
         } catch (ex) {
-          console.log(ex);
           const msg = ex?.msg ?? "Failed to add Habit !";
           toast.error(msg);
+        } finally {
+          setStep(0);
         }
-      } else setStep((st) => st + 1);
+      }
     },
     [step]
   );
@@ -71,25 +73,32 @@ const AddHabitComponent = () => {
 
   return (
     <FormWrapper header="Start Tracking !" submitFn={handleNext} form={form}>
-      <React.Suspense fallback={<Spinner />}>
-        <CurrentStep />
-      </React.Suspense>
+      <motion.section className="flex flex-col gap-6">
+        <motion.div
+          key={step}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+        >
+          <CurrentStep />
+        </motion.div>
 
-      <div
-        className={`flex items-center ${
-          firstStep ? "justify-end" : "justify-between"
-        }`}
-      >
-        {!firstStep && (
-          <Button onClick={handleBack}>
-            <MdArrowBack />
+        <div
+          className={`flex items-center ${
+            firstStep ? "justify-end" : "justify-between"
+          }`}
+        >
+          {!firstStep && (
+            <Button onClick={handleBack} className="italic">
+              <MdArrowBack />
+            </Button>
+          )}
+          <Button className="italic px-2">
+            {lastStep ? "Submit" : "Next"}
+            <MdArrowForward />
           </Button>
-        )}
-        <Button>
-          {lastStep ? "Submit" : "Next"}
-          <MdArrowForward />
-        </Button>
-      </div>
+        </div>
+      </motion.section>
     </FormWrapper>
   );
 };

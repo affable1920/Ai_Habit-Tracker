@@ -14,7 +14,7 @@ const ThemeToggler = () => {
   }, [dark]);
 
   return (
-    <Button onClick={toggle} bg>
+    <Button onClick={toggle}>
       {dark ? <FaRegLightbulb /> : <MdDarkMode />}
     </Button>
   );

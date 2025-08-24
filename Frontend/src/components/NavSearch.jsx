@@ -13,7 +13,7 @@ const NavSearch = () => {
   };
 
   return (
-    <Button bg onClick={generateModal} size="sm">
+    <Button className="py-0.5 px-2" onClick={generateModal}>
       Ctrl K <IoMdSearch />
     </Button>
   );

@@ -40,6 +40,7 @@ const LoginForm = () => {
       navigate("/");
       toast.success("Successfully logged in.");
     } catch (ex) {
+      console.log(ex);
       let msg = "msg" in ex ? ex.msg : "Failed to log in !";
       toast.error(msg);
     } finally {
@@ -49,34 +50,35 @@ const LoginForm = () => {
 
   return (
     <FormWrapper form={form} header="Login" submitFn={onLogin}>
-      <div className="flex flex-col">
-        <Input name="email" register={form.register} errors={errors} />
-        <Input
-          name="password"
-          type="password"
-          errors={errors}
-          register={form.register}
-        />
-        <Button className="">Login</Button>
-      </div>
-
-      {/* <div className="flex gap-2">
-        <div className="flex items-center justify-between">
-          <Link className="link" to="/register">
-            New Joinee ?
-          </Link>
-          <Link className="link" to="/">
-            Forgot password ?
-          </Link>
+      <section className="form-content">
+        <div className="flex flex-col gap-6">
+          <Input name="email" register={form.register} errors={errors} />
+          <Input
+            name="password"
+            type="password"
+            errors={errors}
+            register={form.register}
+          />
+          <Button className="py-2">Login</Button>
         </div>
 
-        <div className="flex gap-6">
-          <div className="flex italic text-xs font-semibold justify-center tracking-widest items-center gap-6 mt-2 opacity-80">
-            <div className="ring-1 ring-slate-300/50 dark:ring-primary-light w-full"></div>
-            <div>OR</div>
-            <div className="ring-1 ring-slate-300/50 dark:ring-primary-light w-full"></div>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center">
+            <Link className="link" to="/register">
+              New Joinee ?
+            </Link>
+            <Link className="link" to="/">
+              Forgot password ?
+            </Link>
           </div>
-          <div className="flex gap-8 justify-center">
+
+          <div className="flex justify-between text-sm">
+            <div />
+            <div>OR</div>
+            <div />
+          </div>
+
+          <div className="flex justify-between">
             {[FcGoogle, FaGithub, SiOpenai, RiNotionFill].map((Platform) => (
               <Button>
                 <Platform />
@@ -84,7 +86,7 @@ const LoginForm = () => {
             ))}
           </div>
         </div>
-      </div> */}
+      </section>
     </FormWrapper>
   );
 };

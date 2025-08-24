@@ -3,35 +3,68 @@
 
 /* Interactive utils and components layer. */
 
-@utility p-ix {
-  padding: calc(theme(--spacing) * 1) calc(theme(--spacing) * 2);
+@utility btn {
+  @apply rounded-md flex justify-center items-center gap-1.5 font-semibold
+  active:scale-90 border-2 shadow-ix px-4 py-1
+  /* Default btn-primary */
+  bg-slate-50 text-primary border-slate-300 hover:bg-slate-100 
+  dark:bg-primary dark:hover:bg-primary-light dark:text-slate-300 dark:border-primary-light
+  dark:hover:border-primary-lightest;
 }
 
-/* padding: calc(theme(--spacing) * 1) calc(theme(--spacing) * 2); */
-@utility p-ix-sm {
-  padding: calc(theme(--spacing) * 2) calc(theme(--spacing) * 4);
+@utility btn-accent {
+  @apply bg-accent hover:bg-accent-light border-accent-dark text-white;
+}
+@utility btn-amber {
+  @apply bg-amber hover:bg-amber-light border-amber-dark text-white;
+}
+@utility btn-warning {
+  @apply bg-yellow-400 hover:bg-yellow-300 text-black border-transparent font-bold;
+}
+@utility btn-success {
+  @apply bg-success hover:bg-green-700 border-green-700 hover:border-green-800 text-white 
+  hover:scale-x-90 transition-transform duration-100;
+}
+@utility btn-error {
+  @apply bg-error text-slate-100 hover:active:text-white hover:bg-red-800 border-red-800 
+  hover:scale-x-90 transition-transform duration-100;
+}
+
+@utility btn-icon {
+  @apply p-1;
 }
 
 @layer components {
   .input {
-    @apply w-full rounded-md text-sm tracking-widest o-none p-ix-sm bg-inherit 
-    ring-2 ring-slate-300 dark:ring-primary-light focus:ring-accent dark:focus:ring-accent-dark 
-    shadow-inner focus:shadow-md shadow-black/20 dark:shadow-black placeholder:italic placeholder:scale-90 
-    placeholder:text-xs;
+    @apply w-full rounded-md o-none bg-inherit border-2 px-4 py-2 border-slate-300
+    shadow-sm dark:shadow-md shadow-black/10 dark:shadow-black/70 italic focus:border-accent/50
+    dark:focus:border-accent-dark/50 dark:border-primary-lightest;
   }
 
-  .button {
-    /* Default - primary */
-    @apply rounded-md flex justify-center items-center gap-1.5 font-medium app-shadow 
-    active:scale-90 p-ix;
+  .spinner {
+    @apply w-8 h-8 rounded-full border-4 border-primary-dark self-center 
+    justify-self-center border-t-transparent;
+  }
+}
 
-    &.primary {
-      @apply bg-slate-50 active:bg-slate-100 text-primary dark:text-slate-300 border-[1.4px] 
-      border-slate-300 dark:border-primary-light dark:active:bg-primary-light 
-      dark:bg-primary dark:border-2;
-    }
+@utility modal {
+  @apply bg-slate-50 w-full max-w-xs md:max-w-sm mx-auto p-2 
+      rounded-lg shadow-lg shadow-black/20 dark:shadow-black/80 my-40 flex flex-col gap-4;
+}
 
-    &.accent {
-    }
+@utility modal-content {
+  @apply flex flex-col gap-4;
+}
+
+@utility modal-btn-* {
+  @apply text-sm text-slate-200 hover:text-white 
+  transition-transform duration-200 border-2 font-bold;
+
+  background: --value(--color- *);
+  border-color: --value(--color- * -dark);
+
+  &:hover {
+    transform: scaleX(0.925);
+    background: --value(--color- * -dark);
   }
 }

@@ -6,17 +6,13 @@ import Button from "./Button";
 import { TbUserDown } from "react-icons/tb";
 import ThemeToggler from "./ThemeToggler";
 
+const authRoutes = { login: true, register: true };
+
 const AuthActions = () => {
   const openModal = useModalStore((s) => s.openModal);
-  const closeModal = useModalStore((s) => s.closeModal);
-
-  const currentModal = useModalStore((s) => s.currentModal);
 
   const user = useAuthStore((s) => s.user);
   const { pathname: route } = useLocation();
-
-  const toggleModal = () =>
-    currentModal === "USER_ACTIONS" ? closeModal() : openModal("USER_ACTIONS");
 
   return (
     <div className="flex items-center gap-6">
@@ -25,15 +21,16 @@ const AuthActions = () => {
         <ThemeToggler />
       </div>
 
-      {route != "/login" && !user && (
-        <Link to="/login">
-          <button className="button bg-amber-600">Log in</button>
-        </Link>
-      )}
-
-      <div className=" gap-3">
+      <div className="flex items-center gap-3">
+        {!user && authRoutes[route] && (
+          <Link>
+            <Button className="px-2" color="accent">
+              Login
+            </Button>
+          </Link>
+        )}
         {user && (
-          <Button bg onClick={toggleModal}>
+          <Button onClick={() => openModal("USER_ACTIONS")}>
             <TbUserDown />
           </Button>
         )}

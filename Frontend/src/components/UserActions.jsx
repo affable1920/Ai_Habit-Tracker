@@ -1,31 +1,40 @@
-import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { MdSettings } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
-import { capitalise } from "../Utils/utilFns";
+import { Navigate } from "react-router-dom";
 
 const UserActions = () => {
-  const profileFeatures = [
+  const features = [
     {
-      icon: <CgProfile />,
+      icon: CgProfile,
       label: "profile",
     },
-    { icon: <MdSettings />, label: "settings" },
+    { icon: MdSettings, label: "settings" },
     {
-      icon: <LuLogOut />,
+      icon: LuLogOut,
       label: "logout",
     },
   ];
 
+  const onRouteChange = (gotoRoute) => {
+    try {
+      return <Navigate to={`/${gotoRoute}`} />;
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   return (
     <ul className={`profile-features`}>
-      {profileFeatures.map(({ icon, label }) => (
-        <li key={label}>
-          <Link to={`/${label}`} className={`profile-feature`} key={label}>
-            {capitalise(label)}
-            <span>{icon}</span>
-          </Link>
-        </li>
+      {features.map(({ icon: Icon, label }) => (
+        <button
+          key={label}
+          className="profile-feature gap-4"
+          onClick={() => onRouteChange(label)}
+        >
+          <h2 className="capitalize italic font-bold">{label}</h2>
+          <Icon />
+        </button>
       ))}
     </ul>
   );

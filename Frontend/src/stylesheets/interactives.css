@@ -5,11 +5,11 @@
 
 @utility btn {
   @apply rounded-md flex justify-center items-center gap-1.5 font-semibold
-  active:scale-90 border-2 shadow-ix px-4 py-1
+  active:scale-90 border-2 shadow-ix px-4 py-1 hover:scale-105 transition-transform duration-150
   /* Default btn-primary */
   bg-slate-50 text-primary border-slate-300 hover:bg-slate-100 
-  dark:bg-primary dark:hover:bg-primary-light dark:text-slate-300 dark:border-primary-light
-  dark:hover:border-primary-lightest;
+  dark:bg-primary-light dark:hover:bg-primary dark:text-slate-300 dark:border-primary-lightest
+  disabled:pointer-events-none disabled:opacity-50;
 }
 
 @utility btn-accent {
@@ -19,7 +19,7 @@
   @apply bg-amber hover:bg-amber-light border-amber-dark text-white;
 }
 @utility btn-warning {
-  @apply bg-yellow-400 hover:bg-yellow-300 text-black border-transparent font-bold;
+  @apply bg-yellow-400 hover:bg-yellow-300 text-black border-transparent font-black;
 }
 @utility btn-success {
   @apply bg-success hover:bg-green-700 border-green-700 hover:border-green-800 text-white 
@@ -32,6 +32,10 @@
 
 @utility btn-icon {
   @apply p-1;
+}
+
+@utility btn-icon-lg {
+  @apply p-1.5;
 }
 
 @layer components {
@@ -48,8 +52,8 @@
 }
 
 @utility modal {
-  @apply bg-slate-50 w-full max-w-xs md:max-w-sm mx-auto p-2 
-      rounded-lg shadow-lg shadow-black/20 dark:shadow-black/80 my-40 flex flex-col gap-4;
+  @apply bg-slate-50 dark:bg-primary border-2 border-slate-300 dark:border-primary-light w-full max-w-xs 
+  md:max-w-sm mx-auto p-2 rounded-lg shadow-lg shadow-black/20 dark:shadow-black/80 my-40 flex flex-col gap-4;
 }
 
 @utility modal-content {

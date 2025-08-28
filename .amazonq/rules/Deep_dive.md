@@ -71,3 +71,16 @@ const userName = user?.profile?.name ?? 'Guest';
 
 // Advanced: Function chaining
 const processUser = user?.getData?.()?.then?.(data => data.process());
+
+<!-- Debounce -->
+
+// Here clg is an immediately called func
+// so clg is callws before even debounce is, and the fn inside debounce becomes
+// undefined which is the result of the clg
+debounce(console.log("hi"), 100);
+
+// clearTimeout(timeoutId) if called on an expired timer, does nothing because
+// the timer has already gone out of scope, timeout still contains the old timer's id
+
+// This works because this is an actual function, not the result of one.
+debounce(() => console.log("hi"), 100);

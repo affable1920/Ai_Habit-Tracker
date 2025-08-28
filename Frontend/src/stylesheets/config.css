@@ -91,7 +91,7 @@ and variant for applying variants
 
     @variant dark {
       background: theme(--color-primary);
-      color: theme(--color-slate-200);
+      color: theme(--color-gray-300);
     }
   }
 
@@ -106,7 +106,7 @@ and variant for applying variants
 
   main {
     flex: 1;
-    padding: calc(theme(--spacing) * 6.5) 0;
+    /* padding: calc(theme(--spacing) * 6.5) 0; */
   }
 
   button,

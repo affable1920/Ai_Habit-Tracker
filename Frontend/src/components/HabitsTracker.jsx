@@ -4,8 +4,8 @@ import HabitFilterButtons from "./HabitFilterButtons";
 
 const HabitsTracker = () => {
   return (
-    <section className="flex flex-col gap-4 bg-inherit app-shadow p-8">
-      <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-6 bg-inherit app-shadow p-8">
+      <section className="flex flex-col gap-8">
         <HabitFilterButtons />
         <HabitsList />
       </section>

@@ -4,10 +4,13 @@ import useHabitStore from "../stores/habitStore";
 import useQueryStore from "./../stores/queryStore";
 import useLoadingStore from "../stores/loadingStore";
 import { toast } from "sonner";
+import Spinner from "./Spinner";
 
 const HabitsList = () => {
   const query = useQueryStore((s) => s.query);
+
   const loading = useLoadingStore((s) => s.loading);
+  const setLoading = useLoadingStore((s) => s.setLoading);
 
   const habits = useHabitStore((store) => store.habits);
   const fetchHabits = useHabitStore((store) => store.fetchHabits);
@@ -15,6 +18,7 @@ const HabitsList = () => {
   React.useEffect(() => {
     const getHabits = async () => {
       try {
+        setLoading();
         await fetchHabits(query);
       } catch (ex) {
         const {
@@ -23,21 +27,23 @@ const HabitsList = () => {
         } = ex;
         toast.error(type, { description: msg });
       } finally {
+        setLoading(false);
       }
     };
 
     getHabits();
-  }, [query, fetchHabits]);
+  }, [query]);
 
   let infoText = "No Habits Found";
 
-  const noHabits = (!Array.isArray(habits) || habits.length === 0) && !loading;
+  const noHabits = !Array.isArray(habits) || habits.length === 0;
   const noneCompleted = noHabits && query.status === "completed";
 
   if (noneCompleted) infoText = "No completed habits yet";
 
   return (
     <section className="flex flex-col gap-4">
+      {loading && <Spinner />}
       {noHabits && (
         <div className="text-error py-4 font-semibold text-shadow-2xs text-sm">
           {infoText} !

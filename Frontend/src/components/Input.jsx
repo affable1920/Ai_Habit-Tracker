@@ -1,5 +1,5 @@
 import React from "react";
-import { capitalise } from "../Utils/utilFns";
+import { capitalise } from "../utilityFns/utils";
 
 const TextBox = React.memo(({ large, registerObj, ...rest }) => {
   return large ? (
@@ -11,9 +11,7 @@ const TextBox = React.memo(({ large, registerObj, ...rest }) => {
 
 const Input = React.memo(({ name, errors, large, register, ...rest }) => {
   const error = errors[name];
-  const errorMsg = !!error?.message
-    ? capitalise(error.message.replaceAll('"', "")) + " !"
-    : "";
+  const errorMsg = capitalise(error?.message);
 
   return (
     <div className="flex flex-col gap-2">

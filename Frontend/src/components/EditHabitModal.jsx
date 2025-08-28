@@ -4,11 +4,13 @@ import { TiTick } from "react-icons/ti";
 import { MdCancel } from "react-icons/md";
 import useModalStore from "../stores/modalStore";
 import useHabitStore from "../stores/habitStore";
+import useLoadingStore from "../stores/loadingStore";
 
 const maxLength = 7;
 
 const EditHabitModal = () => {
   const editHabit = useHabitStore((s) => s.editHabit);
+  const setLoading = useLoadingStore((s) => s.setLoading);
 
   const closeModal = useModalStore((s) => s.closeModal);
   const modalProps = useModalStore((s) => s.modalProps);

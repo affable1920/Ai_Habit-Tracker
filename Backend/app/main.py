@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, status
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 # Custom modules.
 from app.routes import auth
@@ -31,8 +32,8 @@ async def root(app: FastAPI):
     except PermissionError as ex:
         print(ex)
 
-    yield
     # yield seperates app startup from shutdown
+    yield
 
     # The code below runs when our app stops.
     print("App is shutting down !")
@@ -40,6 +41,7 @@ async def root(app: FastAPI):
 
 app = FastAPI(lifespan=root)
 auth_service = AuthService()
+
 
 app.add_middleware(
     CORSMiddleware,

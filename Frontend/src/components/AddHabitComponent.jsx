@@ -4,11 +4,11 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 import Button from "./Button";
+import Spinner from "./Spinner";
 import FormWrapper from "./FormWrapper";
 import habitSchema from "../schemas/habitSchema";
 
 import useHabitStore from "../stores/habitStore";
-import useExtraStore from "../stores/extraStore";
 import useModalStore from "../stores/modalStore";
 
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 import Step1 from "./AddForm/Step1";
 import Step2 from "./AddForm/Step2";
+import useLoadingStore from "../stores/loadingStore";
 
 const AddHabitComponent = () => {
   const steps = [Step1, Step2];
@@ -24,21 +25,17 @@ const AddHabitComponent = () => {
   const firstStep = step === 0;
   const lastStep = step === steps.length - 1;
 
-  const extra = useExtraStore((s) => s.extra);
   const addHabit = useHabitStore((s) => s.addHabit);
-
   const openModal = useModalStore((s) => s.openModal);
+
+  const loading = useLoadingStore((s) => s.loading);
+  const setLoading = useLoadingStore((s) => s.setLoading);
 
   const form = useForm({ resolver: joiResolver(habitSchema) });
   let freq = form.watch("frequency");
 
   React.useEffect(() => {
-    const userSetfreq = !!String(freq);
-
-    if (!userSetfreq) return;
-    const freqCustom = freq?.toLowerCase() == "custom";
-
-    if (userSetfreq && freqCustom) {
+    if (freq && freq == "Custom") {
       openModal("REMINDER");
     }
   }, [freq]);
@@ -51,8 +48,7 @@ const AddHabitComponent = () => {
     async (formData) => {
       if (!lastStep) setStep((st) => st + 1);
       else {
-        if (extra) formData = { ...formData, ...extra };
-
+        setLoading(true, { props: { type: "btn" } });
         try {
           await addHabit(formData);
           form.reset();
@@ -62,6 +58,7 @@ const AddHabitComponent = () => {
           const msg = ex?.msg ?? "Failed to add Habit !";
           toast.error(msg);
         } finally {
+          setLoading(false);
           setStep(0);
         }
       }
@@ -93,9 +90,9 @@ const AddHabitComponent = () => {
               <MdArrowBack />
             </Button>
           )}
-          <Button className="italic px-2">
-            {lastStep ? "Submit" : "Next"}
-            <MdArrowForward />
+          <Button disabled={loading} className="italic px-2">
+            {loading ? "" : lastStep ? "Submit" : "Next"}
+            {loading ? <Spinner /> : <MdArrowForward />}
           </Button>
         </div>
       </motion.section>

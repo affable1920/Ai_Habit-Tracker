@@ -1,16 +1,14 @@
 import Input from "./common/Input";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import Select from "./common/Select";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import useExtraStore from "./../stores/extraStore";
 import useModalStore from "../stores/modalStore";
 
 const Reminder = () => {
   const closeModal = useModalStore((s) => s.closeModal);
 
-  const extra = useExtraStore((s) => s.extra);
-  const setValues = useExtraStore((s) => s.setValues);
+  const { setValue } = useFormContext();
 
   const schema = Joi.object({
     interval: Joi.number().optional().min(1).default(0),
@@ -23,7 +21,7 @@ const Reminder = () => {
   } = form;
 
   const onSubmit = (data) => {
-    setValues(data);
+    setValue(data);
     closeModal();
   };
 

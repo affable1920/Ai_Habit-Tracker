@@ -7,17 +7,16 @@ const useModalStore = create((set, get) => ({
   openModal: (name, payload) => {
     set(() => ({
       ...get(),
-      modalProps: payload?.props ?? {},
       currentModal: name,
+      modalProps: payload?.props ?? { ...(get().modalProps || {}) },
     }));
   },
 
-  // Later add keep props state parameter
   closeModal: (keepProps = false) => {
     set(() => ({
       ...get(),
-      modalProps: keepProps ? get()?.modalProps : {},
       currentModal: null,
+      modalProps: keepProps ? get()?.modalProps : {},
     }));
   },
 }));

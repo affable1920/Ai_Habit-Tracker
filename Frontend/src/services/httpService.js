@@ -6,32 +6,32 @@ const url = import.meta.env.VITE_API_URL;
 
 export const api = axios.create({
   baseURL: url,
+  timeout: 10000, // 10 seconds
 });
 
 console.log("API_URL in use ", url);
 console.log("ENV_MODE in use ", import.meta.env.MODE);
 
 // Header event.
-const sessionExpiry = "x-session-expire";
+const SESSION_EXPIRE = "x-session-expire";
 
 api.interceptors.request.use(
   (config) => {
-    try {
-      const token = useAuthStore.getState()?.token;
-      const isAuthenticated = !!token;
+    const token = useAuthStore.getState()?.token;
+    const isAuthenticated = !!token;
 
-      if (!isAuthenticated) delete config.headers["Authorization"];
-      else config.headers["Authorization"] = `Bearer ${token}`;
-    } catch (ex) {
-      delete config.headers["Authorization"];
-    }
+    if (isAuthenticated) config.headers["Authorization"] = `Bearer ${token}`;
+    else delete config.headers["Authorization"];
+
     return config;
   },
   (ex) => Promise.reject(ex)
 );
 
 api.interceptors.response.use(null, (ex) => {
-  const { request, response = null } = ex;
+  const { request, response } = ex;
+
+  console.log(request, response);
 
   if (!response) {
     switch (request?.status) {
@@ -49,8 +49,8 @@ api.interceptors.response.use(null, (ex) => {
     }
   }
 
-  if (response.headers?.[sessionExpiry]) {
-    evEmitter.emit(sessionExpiry);
+  if (response.headers?.[SESSION_EXPIRE]) {
+    evEmitter.emit(SESSION_EXPIRE);
     return Promise.reject({
       type: "SESSION_EXPIRED",
       msg: "Please login again to continue !",

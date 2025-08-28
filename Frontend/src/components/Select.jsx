@@ -1,8 +1,8 @@
-import { capitalise } from "../Utils/utilFns";
+import { capitalise } from "../utilityFns/utils";
 
 const Select = ({ name, register, errors, optional, options }) => {
   const error = errors[name];
-  const errorMsg = error ? capitalise(error?.message) + " !" : "";
+  const errorMsg = error?.message;
 
   return (
     <div className="flex flex-col gap-2">

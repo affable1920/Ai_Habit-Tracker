@@ -1,5 +1,5 @@
 import React from "react";
-import { capitalise } from "../Utils/utilFns";
+import { capitalise } from "../utilityFns/utils";
 import useAuthStore from "../stores/authStore";
 import useLoadingStore from "../stores/loadingStore";
 

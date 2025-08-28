@@ -4,11 +4,14 @@ import { MdChevronRight } from "react-icons/md";
 import Button from "./Button";
 import useModalStore from "../stores/modalStore";
 import { IoMdArrowDropdown } from "react-icons/io";
+import Spinner from "./Spinner";
+import useLoadingStore from "../stores/loadingStore";
 
 const tags = new Set(["button", "a", "span", "i", "svg", "path", "input"]);
 
 const Habit = React.memo(({ habit }) => {
   const openModal = useModalStore((s) => s.openModal);
+  const loading = useLoadingStore((s) => s.loading);
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const handleToggle = (ev) => {
@@ -26,7 +29,7 @@ const Habit = React.memo(({ habit }) => {
   return (
     <article onClick={handleToggle} className="habit" key={id}>
       <div className="flex justify-between items-start">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-sm tracking-wider">
           <h6 className="capitalize font-semibold">{title}</h6>
           <IoMdArrowDropdown className="opacity-40 hover:opacity-80 dark:opacity-30 dark:hover:opacity-60" />
         </div>
@@ -36,7 +39,7 @@ const Habit = React.memo(({ habit }) => {
             onClick={onEdit}
             disabled={completed}
             color={completed ? "success" : "warning"}
-            className="py-0.5 px-1 italic disabled:pointer-events-none disabled:opacity-50"
+            className="py-0.5 px-1 italic"
           >
             {status} <MdChevronRight />
           </Button>
@@ -50,7 +53,7 @@ const Habit = React.memo(({ habit }) => {
         }`}
       >
         <p>{description}</p>
-        <p className="italic">Streak: {habit.streak}</p>
+        <p>Streak: {habit.streak}</p>
       </div>
     </article>
   );

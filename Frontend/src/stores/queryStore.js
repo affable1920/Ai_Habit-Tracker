@@ -10,10 +10,11 @@ const init = {
 const useQueryStore = create((set, get) => ({
   query: init,
 
-  setSearchQuery: (sq) =>
+  setSearchQuery: (sq) => {
     set((get) => ({
       query: { ...get.query, searchQuery: sq, status: null },
-    })),
+    }));
+  },
 
   setMax: (max) => set(() => ({ query: { ...get.query, max } })),
 

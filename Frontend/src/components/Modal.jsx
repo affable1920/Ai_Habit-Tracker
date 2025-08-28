@@ -17,14 +17,18 @@ const Modal = () => {
   if (!currentModal) return null;
   const ModalElement = modalRegistry[currentModal];
 
+  document.addEventListener("click", (ev) => {
+    if (currentModal && ev.target?.classList?.contains("overlay")) closeModal();
+  });
+
   return createPortal(
-    <Overlay>
-      <motion.div className="modal">
+    <Overlay alpha="A">
+      <div className="modal">
         <Button onClick={closeModal} className="self-end p-0.5">
           <RxCross2 />
         </Button>
         {ModalElement && <ModalElement {...modalProps} />}
-      </motion.div>
+      </div>
     </Overlay>,
     document.getElementById("portal")
   );

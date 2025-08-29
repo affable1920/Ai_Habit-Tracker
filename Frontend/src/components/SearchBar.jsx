@@ -44,9 +44,9 @@ const SearchBar = () => {
         className="input pr-4 placeholder:font-black placeholder:text-sm py-1"
         name="searchQuery"
         value={localSearch}
+        onChange={handleSearch}
         placeholder={"Search ..."}
         disabled={searchBarDisabled}
-        onChange={handleSearch}
       />
       {searchQuery && (
         <Button

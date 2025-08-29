@@ -72,8 +72,9 @@
   z-index: 999;
 }
 
-@utility text-error {
-  @apply text-red-400 text-center tracking-wider italic text-sm;
+@utility error-text {
+  @apply text-error dark:text-error-dark text-shadow-2xs text-shadow-error-light dark:text-shadow-error
+   text-center tracking-wider italic text-sm;
 }
 
 @utility link {

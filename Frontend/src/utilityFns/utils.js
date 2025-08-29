@@ -28,13 +28,10 @@ export function throttle(fn, intervalMS) {
   let delay = intervalMS ?? 100;
 
   return function (...args) {
-    console.log(args);
     cache = [...cache, ...args];
 
     args = [];
     clearInterval(intervalId);
-
-    console.log(cache);
 
     intervalId = setInterval(() => {
       fn(...cache);

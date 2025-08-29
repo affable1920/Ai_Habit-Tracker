@@ -10,8 +10,8 @@ const TextBox = React.memo(({ large, registerObj, ...rest }) => {
 });
 
 const Input = React.memo(({ name, errors, large, register, ...rest }) => {
-  const error = errors[name];
-  const errorMsg = capitalise(error?.message);
+  const error = errors?.[name]?.message;
+  let errorMsg = error && capitalise(error.replaceAll('"', "")) + "!";
 
   return (
     <div className="flex flex-col gap-2">
@@ -21,7 +21,7 @@ const Input = React.memo(({ name, errors, large, register, ...rest }) => {
         </label>
         <TextBox rest={rest} large={large} registerObj={register(name)} />
       </div>
-      {errorMsg && <div className="text-error">{errorMsg}</div>}
+      {errorMsg && <div className="error-text">{errorMsg}</div>}
     </div>
   );
 });

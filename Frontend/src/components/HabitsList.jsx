@@ -21,11 +21,9 @@ const HabitsList = () => {
         setLoading();
         await fetchHabits(query);
       } catch (ex) {
-        const {
-          type = "UNKNOWN_ERROR",
-          msg = "An unexpected error occurred. Could not fetch habits !",
-        } = ex;
-        toast.error(type, { description: msg });
+        console.log(ex);
+        const { type = "", msg = "Could not fetch habits!" } = ex || {};
+        toast.error(type ?? msg, msg ?? { description: msg });
       } finally {
         setLoading(false);
       }

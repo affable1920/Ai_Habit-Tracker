@@ -16,7 +16,7 @@ const Select = ({ name, register, errors, optional, options }) => {
             <option
               key={i}
               value={option}
-              className="bg-slate-100 dark:bg-primary-light hover:pointer"
+              className="bg-slate-100 dark:bg-primary-light pointer"
             >
               {option}
             </option>

@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { create } from "zustand";
-import http from "../services/httpService";
+import api from "../services/api";
 
 const endPoint = "/habits";
 
@@ -9,13 +9,13 @@ const useHabitStore = create((set, get) => ({
 
   fetchHabits: async (query) => {
     try {
-      const response = await http.get(endPoint, {
+      const response = await api.get(endPoint, {
         params: query,
       });
 
       set(() => ({ habits: response?.data || [] }));
     } catch (ex) {
-      throw new Error(ex);
+      throw ex;
     }
   },
 
@@ -26,7 +26,7 @@ const useHabitStore = create((set, get) => ({
     set((store) => ({ habits: [tempHabit, ...store.habits] }));
 
     try {
-      const response = await http.post(endPoint, habit);
+      const response = await api.post(endPoint, habit);
 
       set((store) => ({
         habits: store.habits.map((h) =>
@@ -38,7 +38,7 @@ const useHabitStore = create((set, get) => ({
         habits: store.habits.filter((h) => h?.tempId != tempId),
       }));
 
-      throw new Error(ex);
+      throw ex;
     }
   },
 
@@ -58,7 +58,7 @@ const useHabitStore = create((set, get) => ({
     }));
 
     try {
-      const { data = {} } = await http.put(url, fields);
+      const { data = {} } = await api.put(url, fields);
 
       set((store) => ({
         ...store,
@@ -72,7 +72,7 @@ const useHabitStore = create((set, get) => ({
         ),
       }));
 
-      throw new Error(ex);
+      throw ex;
     }
   },
 
@@ -85,10 +85,10 @@ const useHabitStore = create((set, get) => ({
     }));
 
     try {
-      await http.delete(`${endPoint}/${habitId}`);
+      await api.delete(`${endPoint}/${habitId}`);
     } catch (ex) {
       set((store) => ({ ...store, habits: orgHabits }));
-      throw new Error(ex);
+      throw ex;
     }
   },
 }));

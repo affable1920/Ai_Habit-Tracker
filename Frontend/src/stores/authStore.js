@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
 import { persist } from "zustand/middleware";
-import http from "../services/httpService";
+import http from "../services/api";
 
 const endPoint = "/auth";
 const tokenKey = "token";

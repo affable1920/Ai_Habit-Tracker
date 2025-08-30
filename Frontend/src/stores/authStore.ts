@@ -2,18 +2,19 @@ import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
 import { persist } from "zustand/middleware";
 import http from "../services/api.js";
+import type { User } from "../types/genericTypes.js";
 
 interface AuthStore {
   user: any;
   token: string | null;
 
-  login: (credentials: { [key: string]: string }) => void;
-  register: (user: { [key: string]: string }) => void;
   logout: () => void;
   getProfile: () => void;
+  register: (user: User) => Promise<void>;
+  login: (credentials: { [key: string]: string }) => Promise<void>;
 
-  getUser: (jwt: string) => void;
   userType: () => void;
+  getUser: (jwt: string) => void;
   isAuthenticated: () => boolean;
 }
 

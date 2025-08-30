@@ -1,5 +1,5 @@
 export function debounce(
-  fn: (arg: string | string[]) => void,
+  fn: (...arg: string[]) => void,
   ms: number,
   { leading = false } = {}
 ) {
@@ -47,7 +47,7 @@ export function throttle(
   };
 }
 
-export function capitalise(string: string, indices: number[]) {
+export function capitalise(string: string, indices: number[] | null = null) {
   // Checks if string is empty, i.e falsy or a different type altogether.
   if (!(string || typeof string === "string")) return;
 

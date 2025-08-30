@@ -1,17 +1,20 @@
 import Joi from "joi";
-import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { joiResolver } from "@hookform/resolvers/joi";
-import Input from "./Input";
+
+import Input from "./Interactives/Input";
+import FormWrapper from "./FormWrapper";
+import Button from "./Interactives/Button";
+
 import loadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
-import Button from "./Button";
+
 import { FcGoogle } from "react-icons/fc";
-import { toast } from "sonner";
 import { FaGithub } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
 import { RiNotionFill } from "react-icons/ri";
-import FormWrapper from "./FormWrapper";
 
 const LoginForm = () => {
   const navigate = useNavigate();

@@ -11,8 +11,8 @@ const Reminder = () => {
   const { setValue } = useFormContext();
 
   const schema = Joi.object({
-    interval: Joi.number().optional().min(1).default(0),
-    interval_time: Joi.string().optional(),
+    interval: Joi.number().required().min(1).default(0),
+    interval_time: Joi.string().required(),
   });
 
   const form = useForm({ resolver: joiResolver(schema) });

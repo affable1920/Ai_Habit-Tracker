@@ -8,11 +8,11 @@ const endPoint = "/habits";
 interface HabitStore {
   habits: Array<Habit>;
 
-  fetchHabits: (query: Query) => void;
-  addHabit: (habit: Habit) => void;
+  fetchHabits: (query: Query) => Promise<void>;
+  addHabit: (habit: Habit) => Promise<void>;
 
-  editHabit: (habitId: string, fields: {} | null) => void;
-  deleteHabit: (habitId: string) => void;
+  editHabit: (habitId: string, fields?: {} | null) => Promise<void>;
+  deleteHabit: (habitId: string) => Promise<void>;
 }
 
 const useHabitStore = create<HabitStore>((set, get) => ({

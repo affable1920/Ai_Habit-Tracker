@@ -1,4 +1,4 @@
-import Button from "./Button";
+import Button from "./Interactives/Button.js";
 import { IoMdSearch } from "react-icons/io";
 import useAuthStore from "../stores/authStore";
 import useModalStore from "../stores/modalStore";

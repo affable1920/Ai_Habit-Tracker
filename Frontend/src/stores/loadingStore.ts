@@ -2,10 +2,10 @@ import { create } from "zustand";
 
 interface LoadingStore {
   loading: boolean;
-  loaderProps: {};
+  loaderProps?: { [key: string]: any };
 
-  loadingStates: {};
-  setLoading: (action: boolean, payload: { [key: string]: {} | any }) => void;
+  loadingStates: { [key: string]: any };
+  setLoading: (action?: boolean, payload?: { [key: string]: any }) => void;
 }
 
 const useLoadingStore = create<LoadingStore>((set) => ({
@@ -17,10 +17,10 @@ const useLoadingStore = create<LoadingStore>((set) => ({
     app: "",
   },
 
-  setLoading: (action, payload) => {
+  setLoading: (action?: boolean, payload?) => {
     set(() => ({
       loading: action ?? true,
-      loaderProps: payload?.props ?? {},
+      loaderProps: payload?.props ?? null,
     }));
   },
 }));

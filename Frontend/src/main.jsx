@@ -5,9 +5,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
-import Modal from "./components/Modal";
-import router from "./components/routes";
 import { Toaster } from "sonner";
+import Modal from "./components/Modal";
+import router from "./components/routes.tsx";
 
 injectSpeedInsights();
 import "./stylesheets/config.css";

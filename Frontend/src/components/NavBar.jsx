@@ -1,6 +1,6 @@
 import React from "react";
 import NavLinks from "./NavLinks";
-import Button from "./Button";
+import Button from "./Interactives/Button";
 import AuthActions from "./AuthActions";
 import { HiMenuAlt2 } from "react-icons/hi";
 

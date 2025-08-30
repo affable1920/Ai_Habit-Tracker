@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const useThemeStore = create()(
+interface ThemeStore {
+  dark: boolean;
+  toggle: () => void;
+}
+
+const useThemeStore = create<ThemeStore>()(
   persist(
     (set) => ({
       dark: true,

@@ -1,10 +1,19 @@
+import type React from "react";
 import { create } from "zustand";
 
-const useModalStore = create((set, get) => ({
+interface ModalStore {
+  modalProps: {};
+  currentModal: string | null | React.ReactNode;
+
+  closeModal: (keepProps: boolean) => void;
+  openModal: (name: string, payload: { [key: string]: {} | any }) => void;
+}
+
+const useModalStore = create<ModalStore>((set, get) => ({
   modalProps: {},
   currentModal: null,
 
-  openModal: (name, payload) => {
+  openModal: (name: string, payload) => {
     set(() => ({
       ...get(),
       currentModal: name,

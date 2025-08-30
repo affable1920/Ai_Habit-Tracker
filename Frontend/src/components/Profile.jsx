@@ -1,6 +1,6 @@
 import React from "react";
-import { capitalise } from "../utilityFns/utils";
 import useAuthStore from "../stores/authStore";
+import { capitalise } from "../utilityFns/utils";
 import useLoadingStore from "../stores/loadingStore";
 
 const Profile = () => {
@@ -20,7 +20,6 @@ const Profile = () => {
 
         if (userProfile)
           setProfile(() => {
-            // Object.entries -> an array so must keep a seperate obj.
             return Object.entries(userProfile).filter(([key, value]) => {
               if (unwanted.includes(key)) return;
               return [key, value];

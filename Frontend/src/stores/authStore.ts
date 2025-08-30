@@ -1,21 +1,35 @@
 import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
 import { persist } from "zustand/middleware";
-import http from "../services/api";
+import http from "../services/api.js";
+
+interface AuthStore {
+  user: any;
+  token: string | null;
+
+  login: (credentials: { [key: string]: string }) => void;
+  register: (user: { [key: string]: string }) => void;
+  logout: () => void;
+  getProfile: () => void;
+
+  getUser: (jwt: string) => void;
+  userType: () => void;
+  isAuthenticated: () => boolean;
+}
 
 const endPoint = "/auth";
 const tokenKey = "token";
 
 const authHeader = "x-auth-token";
 
-const useAuthStore = create()(
+const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
       user: null,
       token: null,
 
       // Helper Fns
-      getUser: (jwt) => jwtDecode(jwt),
+      getUser: (jwt: string) => jwtDecode(jwt),
 
       isAuthenticated: () => !!get().token,
       userType: () => get().user?.role ?? "Guest",

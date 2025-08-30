@@ -56,8 +56,9 @@ class CRUD:
             return
 
         if query.searchQuery:
-            sq = query.searchQuery.lower()
-            habits = [h for h in habits if h["title"].lower().startswith(sq)]
+            sq = query.searchQuery.lower().strip()
+            habits = [
+                h for h in habits if h["title"].lower().strip().startswith(sq)]
 
         if query.status:
             st = query.status.lower()

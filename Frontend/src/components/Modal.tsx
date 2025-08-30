@@ -1,12 +1,11 @@
 import { createPortal } from "react-dom";
-import { motion } from "framer-motion";
 import { RxCross2 } from "react-icons/rx";
 
-import Button from "./Button";
-import Overlay from "./Overlay";
+import Button from "./Button.js";
+import Overlay from "./Overlay.jsx";
 
-import modalRegistry from "./modalRegistry";
-import useModalStore from "../stores/modalStore";
+import modalRegistry from "./modalRegistry.js";
+import useModalStore from "../stores/modalStore.js";
 
 const Modal = () => {
   const closeModal = useModalStore((s) => s.closeModal);
@@ -17,9 +16,8 @@ const Modal = () => {
   if (!currentModal) return null;
   const ModalElement = modalRegistry[currentModal];
 
-  document.addEventListener("click", (ev) => {
-    if (currentModal && ev.target?.classList?.contains("overlay")) closeModal();
-  });
+  const portal = document.getElementById("portal");
+  if (!portal) return;
 
   return createPortal(
     <Overlay alpha="A">
@@ -30,7 +28,7 @@ const Modal = () => {
         {ModalElement && <ModalElement {...modalProps} />}
       </div>
     </Overlay>,
-    document.getElementById("portal")
+    portal
   );
 };
 

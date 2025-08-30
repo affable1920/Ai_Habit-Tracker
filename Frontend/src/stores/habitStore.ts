@@ -1,10 +1,21 @@
 import { v4 } from "uuid";
 import { create } from "zustand";
-import api from "../services/api";
+import api from "../services/api.js";
+import type { Habit, Query } from "../types/genericTypes.js";
 
 const endPoint = "/habits";
 
-const useHabitStore = create((set, get) => ({
+interface HabitStore {
+  habits: Array<Habit>;
+
+  fetchHabits: (query: Query) => void;
+  addHabit: (habit: Habit) => void;
+
+  editHabit: (habitId: string, fields: {} | null) => void;
+  deleteHabit: (habitId: string) => void;
+}
+
+const useHabitStore = create<HabitStore>((set, get) => ({
   habits: [],
 
   fetchHabits: async (query) => {
@@ -76,7 +87,7 @@ const useHabitStore = create((set, get) => ({
     }
   },
 
-  deleteHabit: async (habitId) => {
+  deleteHabit: async (habitId: string) => {
     const orgHabits = [...get().habits];
 
     set((store) => ({

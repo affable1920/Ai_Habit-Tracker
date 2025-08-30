@@ -1,10 +1,14 @@
-export function debounce(fn, ms, { leading = false } = {}) {
+export function debounce(
+  fn: (arg: string | string[]) => void,
+  ms: number,
+  { leading = false } = {}
+) {
   let cache = "";
-  let timerId;
+  let timerId: number;
 
   const delay = ms ?? 200;
 
-  return function (...args) {
+  return function (...args: string[]) {
     clearTimeout(timerId);
     cache = args.join("");
 
@@ -22,25 +26,28 @@ export function debounce(fn, ms, { leading = false } = {}) {
   };
 }
 
-export function throttle(fn, intervalMS) {
-  let cache = [];
-  let intervalId;
+export function throttle(
+  fn: (arg: string | string[]) => void,
+  intervalMS: number
+) {
+  let cache: Array<string> = [];
+  let intervalId: number;
   let delay = intervalMS ?? 100;
 
-  return function (...args) {
+  return function (...args: string[]) {
     cache = [...cache, ...args];
 
     args = [];
     clearInterval(intervalId);
 
     intervalId = setInterval(() => {
-      fn(...cache);
+      fn(cache);
       cache = [];
     }, delay);
   };
 }
 
-export function capitalise(string, indices = null) {
+export function capitalise(string: string, indices: number[]) {
   // Checks if string is empty, i.e falsy or a different type altogether.
   if (!(string || typeof string === "string")) return;
 

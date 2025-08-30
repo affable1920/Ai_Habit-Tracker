@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { Query } from "../types/genericTypes.js";
 
 const init = {
   max: 5,
@@ -7,7 +8,20 @@ const init = {
   searchQuery: "",
 };
 
-const useQueryStore = create((set, get) => ({
+interface QueryStore {
+  query: Query;
+
+  reset: () => void;
+  setMax: (max: number) => void;
+
+  setStatus: (status: string | null) => void;
+  setSearchQuery: (searchQuery: string) => void;
+
+  setPage: (page: number) => void;
+  setQuery: (updates: Query) => void;
+}
+
+const useQueryStore = create<QueryStore>((set, get) => ({
   query: init,
 
   setSearchQuery: (sq) => {
@@ -16,7 +30,7 @@ const useQueryStore = create((set, get) => ({
     }));
   },
 
-  setMax: (max) => set(() => ({ query: { ...get.query, max } })),
+  setMax: (max) => set(() => ({ query: { ...get().query, max } })),
 
   setStatus: (status) =>
     set(() => ({

@@ -12,5 +12,5 @@ export const step2 = Joi.object({
   target: Joi.number().min(1).optional().allow(null, ""),
 });
 
-const habitSchema = step1.concat(step2);
-export default habitSchema;
+const HabitSchema = step1.concat(step2);
+export default HabitSchema;

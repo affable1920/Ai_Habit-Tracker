@@ -1,8 +1,23 @@
 import React from "react";
 import { motion } from "framer-motion";
 
+interface BtnProps {
+  color?: string;
+  variant?: string;
+  className?: string;
+  children?: React.ReactNode;
+
+  onClick?: (...args: any) => void;
+}
+
 const Button = React.memo(
-  ({ children, variant, color, className, ...rest }) => {
+  ({
+    children,
+    variant = "icon",
+    color = "",
+    className = "",
+    ...rest
+  }: BtnProps) => {
     //
     const variants = {
       icon: "btn-icon",
@@ -16,12 +31,7 @@ const Button = React.memo(
       success: "btn-success",
     };
 
-    const classConfig = [
-      "btn",
-      variants[variant] ?? variants.icon,
-      colors[color] ?? "",
-      className ?? "",
-    ]
+    const classConfig = ["btn", variants[variant], colors[color], className]
       .filter(Boolean)
       .join(" ");
 

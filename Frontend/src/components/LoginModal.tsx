@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useModalStore from "../stores/modalStore";
+import useModalStore from "../stores/modalStore.js";
 
 const LoginModal = () => {
   const closeModal = useModalStore((s) => s.closeModal);

@@ -1,7 +1,7 @@
 import Button from "./Interactives/Button.js";
 import { IoMdSearch } from "react-icons/io";
-import useAuthStore from "../stores/authStore";
-import useModalStore from "../stores/modalStore";
+import useAuthStore from "../stores/authStore.js";
+import useModalStore from "../stores/modalStore.js";
 
 const NavSearch = () => {
   const user = useAuthStore((s) => s.user);

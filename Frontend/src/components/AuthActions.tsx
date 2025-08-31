@@ -1,7 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import useModalStore from "../stores/modalStore.js";
 import useAuthStore from "../stores/authStore.js";
-import NavSearch from "./NavSearch.jsx";
+import NavSearch from "./NavSearch.js";
 import Button from "./Interactives/Button.js";
 import { TbUserDown } from "react-icons/tb";
 import ThemeToggler from "./ThemeToggler.js";

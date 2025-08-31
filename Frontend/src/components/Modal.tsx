@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import { RxCross2 } from "react-icons/rx";
 
 import Button from "./Interactives/Button.js";
-import Overlay from "./Overlay.jsx";
+import Overlay from "./Overlay.js";
 
 import modalRegistry from "./modalRegistry.js";
 import useModalStore from "../stores/modalStore.js";

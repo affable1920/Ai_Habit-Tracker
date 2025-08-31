@@ -37,7 +37,6 @@ const AddHabitComponent = () => {
 
   React.useEffect(() => {
     if (freq && freq == "Custom") {
-      openModal("REMINDER");
     }
   }, [freq]);
 

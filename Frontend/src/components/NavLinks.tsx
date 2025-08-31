@@ -8,7 +8,12 @@ const navLinks = [
   { label: "Stats", route: "/stats" },
 ];
 
-const NavLinks = ({ showLinks, onRouteChange }) => {
+interface NavLinksProps {
+  showLinks: boolean;
+  onRouteChange: () => void;
+}
+
+const NavLinks = ({ showLinks, onRouteChange }: NavLinksProps) => {
   const { pathname } = useLocation();
   React.useEffect(() => onRouteChange(), [pathname]);
 

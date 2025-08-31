@@ -25,3 +25,10 @@ export interface User {
   username: string;
   password?: string;
 }
+
+export interface ErrorAPI {
+  msg: string;
+  type: string;
+  status: number;
+  details?: { [key: string]: unknown };
+}

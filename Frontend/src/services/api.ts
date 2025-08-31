@@ -8,32 +8,33 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import evEmitter from "./eventEmiiter.js";
 import useAuthStore from "../stores/authStore.js";
+import { type ErrorAPI } from "../types/genericTypes.js";
 
 const url = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
-const statusMap = new Map();
+const statusMap: Record<number, ErrorAPI> = {};
 statusMap[0] = {
+  status: 501,
   type: "Server Error",
   msg: "Server Down ! Please check back later.",
-  status: "501",
 };
 statusMap[500] = {
+  status: 500,
   type: "Network Error",
   msg: "NO connection. Please check your network connection.",
-  status: "500",
 };
 statusMap[401] = {
-  type: "Auth Error",
+  status: 401,
+  type: "Authentication Error",
   msg: "You are not authenticated. Please log in or sign up.",
-  status: "000",
 };
 statusMap[403] = {
-  type: "Forbidden",
-  msg: "You are not authenticated. Please log in or sign up.",
-  status: "000",
+  status: 403,
+  type: "Forbidden Error",
+  msg: "You don't have enough permissions to access this resource.",
 };
 
 const api = axios.create({
@@ -60,10 +61,10 @@ api.interceptors.request.use(
   }
 );
 
-api.interceptors.response.use(null, (ex) => {
+api.interceptors.response.use(null, (ex: AxiosError) => {
   const { request, response } = ex;
 
-  if (!response) return Promise.reject(statusMap[request?.status]);
+  if (!response) return Promise.reject(statusMap[request.status]);
   const { headers = {} } = response;
 
   if (HDR_SESSION_EXP in headers) {
@@ -74,7 +75,7 @@ api.interceptors.response.use(null, (ex) => {
   return Promise.reject(
     statusMap[response?.status] ?? {
       type: "Unknown Error",
-      msg: response?.data?.detail ?? "An unknown error occurred !",
+      msg: response?.data ?? "An unknown error occurred !",
       status: response?.status,
     }
   );

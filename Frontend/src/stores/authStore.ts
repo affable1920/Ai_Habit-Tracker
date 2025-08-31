@@ -9,7 +9,7 @@ interface AuthStore {
   token: string | null;
 
   logout: () => void;
-  getProfile: () => void;
+  getProfile: () => Promise<User>;
   register: (user: User) => Promise<void>;
   login: (credentials: { [key: string]: string }) => Promise<void>;
 

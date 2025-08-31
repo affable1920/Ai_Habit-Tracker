@@ -4,17 +4,18 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import Input from "./Interactives/Input";
-import FormWrapper from "./FormWrapper";
-import Button from "./Interactives/Button";
+import Input from "./Interactives/Input.js";
+import FormWrapper from "./FormWrapper.js";
+import Button from "./Interactives/Button.js";
 
-import loadingStore from "../stores/loadingStore";
-import useAuthStore from "../stores/authStore";
+import loadingStore from "../stores/loadingStore.js";
+import useAuthStore from "../stores/authStore.js";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
 import { RiNotionFill } from "react-icons/ri";
+import { type ErrorAPI } from "../types/genericTypes.js";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -23,10 +24,7 @@ const LoginForm = () => {
   const setLoading = loadingStore((s) => s.setLoading);
 
   const schema = Joi.object({
-    email: Joi.string()
-      .email({ tlds: ["gmail.com", "domain.com", "*"] })
-      .required()
-      .label("Email"),
+    email: Joi.string().email({ tlds: false }).required().label("Email"),
     password: Joi.string().required().label("Password"),
   });
 
@@ -43,8 +41,7 @@ const LoginForm = () => {
       navigate("/");
       toast.success("Successfully logged in.");
     } catch (ex) {
-      console.log(ex);
-      let msg = "msg" in ex ? ex.msg : "Failed to log in !";
+      let msg = (ex as ErrorAPI).msg ?? "Couldn't login";
       toast.error(msg);
     } finally {
       setLoading(false);

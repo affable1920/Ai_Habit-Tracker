@@ -1,11 +1,10 @@
-import type React from "react";
 import { create } from "zustand";
 
 interface ModalStore {
   modalProps: { [key: string]: any };
-  currentModal: string | null | React.ReactNode;
+  currentModal: string | null;
 
-  closeModal: (keepProps?: boolean) => void;
+  closeModal: () => void;
   openModal: (name: string, payload?: { [key: string]: any }) => void;
 }
 
@@ -21,7 +20,7 @@ const useModalStore = create<ModalStore>((set, get) => ({
     }));
   },
 
-  closeModal: (keepProps = false) => {
+  closeModal: (keepProps?: boolean) => {
     set(() => ({
       ...get(),
       currentModal: null,

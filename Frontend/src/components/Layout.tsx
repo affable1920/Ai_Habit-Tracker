@@ -1,9 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import NavBar from "./NavBar";
-import Spinner from "./Spinner";
-import useAuthStore from "../stores/authStore";
-import useModalStore from "../stores/modalStore";
+import NavBar from "./NavBar.js";
+import useAuthStore from "../stores/authStore.js";
+import useModalStore from "../stores/modalStore.js";
 
 const Layout = () => {
   const { token, user } = useAuthStore();
